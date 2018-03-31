@@ -1,0 +1,159 @@
+{load href="/static/js/jq.js" /}
+{load href="/static/js/admin/event/index.js" /}
+{load href="/adminStatic/style/custom/table-layout.css" /}
+
+<ol class="breadcrumb bc-3">
+    <li>
+        <a href="/admin/management"><i class="entypo-home"></i>首页</a>
+    </li>
+    <li class="active">
+        <strong>赛事管理</strong>
+    </li>
+</ol>
+
+<h2>赛事管理</h2>
+
+<div class="dataTables_wrapper form-inline">
+    <div class="row screen-sm">
+        <div class="col-md-12 col-left">
+            <div class="col-md-10" style="padding: 0px;">
+                <form action="" method="get" class="form-inline">
+                    <div class="form-group">
+                        <i class="entypo-search"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="name" value="<?php echo empty($name)?'':$name;?>" placeholder="请输入赛事名称" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="address" value="<?php echo empty($address)?'':$address;?>" placeholder="请输入地区" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="search">查询</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped custom-table-font-size">
+        <thead class="th-color">
+            <tr>
+                <th>ID</th>
+                <th>赛事名称</th>
+                <th>比赛地区</th>
+                <th>赛制</th>
+                <th>创建人</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>审核状态</th>
+                <th>创建时间</th>
+                <th><span class="spanPage">操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="td-color" id="dataTable">
+        <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$value):?>
+                <tr>
+                    <td><?php echo $value['Id'];?></td>
+                    <td><?php echo $value['name'];?></td>
+                    <td><?php echo $value['address'];?></td>
+                    <td><?php echo $types[$value['type']];?></td>
+                    <td><?php echo $value['create_user'];?></td>
+                    <td><?php echo $value['start_time'];?></td>
+                    <td><?php echo $value['end_time'];?></td>
+                    <td><?php echo $eventStatus[$value['status']];?></td>
+                    <td><?php echo date('Y-m-d H:i:s',$value['create_time']);?></td>
+                    <td>
+                        <a href="javascript:;" class="btn btn-default  btn-xs  auditEvent"  data-id="<?php echo $value['Id'];?>">审核</a>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        <?php else:?>
+            <td colspan="17"><center>没有找到赛事</center></td>
+        <?php endif;?>
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- 用户详情 start -->
+<div class="modal fade" id="modelUser">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">个人信息</h4>
+            </div>
+            <div class="modal-body">
+                <p>用户Id:<strong class="userId"></strong></p>
+                <p>姓名：<strong class="naem"></strong></p>
+                <p>身份证：<strong class="idcard"></strong></p>
+                <p>邮箱：<strong class="email"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 用户详情 end -->
+<!-- 初审 显示信息 start -->
+<div class="modal fade" id="moadlAudit">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">审核</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-groups-bordered form-static" id="addClubForm">
+                    <div class="form-group">
+                        <label for="auditName" class="control-label col-md-2">赛事名称</label>
+                        <div class="col-md-4">
+                            <input type="text" name="auditName" id="auditName" class="form-control" disabled>
+                        </div>
+                        <label for="auditAddress" class="control-label col-md-2">地区</label>
+                        <div class="col-md-4">
+                            <input type="text" name="auditAddress" id="auditAddress" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="auditCreateUser" class="control-label col-md-2">创建人</label>
+                        <div class="col-md-4">
+                            <input type="text" name="auditCreateUser" id="auditCreateUser" class="form-control" disabled>
+                        </div>
+                        <label for="auditCreateUserID" class="control-label col-md-2">证件号</label>
+                        <div class="col-md-4">
+                            <input type="text" name="auditCreateUserID" id="auditCreateUserID" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="auditType" class="control-label col-md-2">赛制</label>
+                        <div class="col-md-4">
+                            <input type="text" name="auditType" id="auditType" class="form-control" disabled>
+                        </div>
+                        <label for="time" class="control-label col-md-2">比赛时间</label>
+                        <div class="col-md-4">
+                            <input type="text" name="time" id="time" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amountFauditing" class="control-label col-md-4">海报</label>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <img id="posters" src="" width="200">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" name="" value="通过审核" class="btn btn-green auditPass" data-id="">
+                <input type="button" name="" value="拒绝通过" class="btn btn-red auditNoPass" data-id="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 初审 显示信息 end -->

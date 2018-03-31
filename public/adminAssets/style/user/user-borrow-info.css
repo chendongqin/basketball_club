@@ -1,0 +1,37 @@
+.row .tile-stats .custom-num{
+	font-size: 20px;
+  	font-weight: bold;
+  	position: relative;
+  	z-index: 5;
+	margin: 0;
+	padding: 0;
+}
+.row .tile-white-primary .custom-num{
+	color:#303641;
+}
+.row .tile-white-red .custom-num{
+	color:#f56954;
+}
+.row .tile-stats .custom-num span{
+
+}
+.row .tile-stats .custom-num + p{
+
+}
+.custom-col-lg-1{
+	width: 11%;
+	float: left;
+	position:relative;
+	min-height:1px;
+	padding-left:15px;
+	padding-right:15px
+}
+.p-fontsize{
+	font-size: 15px;
+}
+.table-fontsize{
+	font-size: 14px !important;
+}
+.tile-fontsize p{
+	font-size: 14px !important;
+}

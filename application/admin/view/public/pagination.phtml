@@ -1,0 +1,66 @@
+<?php if($this->pager->getPageCount()>1):?>
+    <?php $pageUrl = $this->uri(array());?>
+    <div class="row">
+        <div class="col-xs-6 col-left" >
+            <div class="dataTables_info">总<?php echo $this->pager->getItemTotal();?>条数据，共<?php echo $this->pager->getPageCount();?>页
+                
+            </div>
+        </div>
+        <div class="col-xs-6 col-right">
+            <div class="dataTables_paginate paging_bootstrap pull-right">
+                <ul class="pagination pagination-sm" style="margin: 0px; padding: 0px;">
+                    <?php if($this->pager->getPage()>1):?>
+                    <li class="">
+                      <a href="<?php echo $this->uri(array('page'=>$this->pager->getPage()-1));?>" aria-label="Previous">
+                        <i class="entypo-left-open"></i>
+                      </a>
+                    </li>
+                <?php endif;?>
+                <?php foreach ($this->pager->getRangList() as $key => $num):?>
+                    <?php if($num == $this->pager->getPage()):?>
+                    <li class="active"><a href="#"><?php echo $num;?></a></li>
+                <?php else: ?>
+                    <li><a href="<?php echo $this->uri(array('page'=>$num));?>"><?php echo $num;?></a></li>
+                <?php endif;?>
+                <?php endforeach;?>
+                    <?php if($this->pager->getPage()<$this->pager->getPageCount()):?>
+                    <li>
+                      <a href="<?php echo $this->uri(array('page'=>$this->pager->getPage()+1));?>" aria-label="Next" class="i-height">
+                        <i class="entypo-right-open"></i>
+                      </a>
+                    </li>
+                    <?php endif;?>
+                    <li class="pagination-li">
+                        <sapn class="pagination-span-front">转到第</sapn><input class="pagination-input" name="inputPage" id="inputPage"><sapn class="pagination-span-back">页</sapn>
+                        <a href="" data-url="<?php echo $pageUrl;?>" class="btn btn-default pageButton" id="pagination-a">确定</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <?php else:?>
+    <div class="row">
+        <div class="col-xs-6 col-left">
+            <div class="dataTables_info">总<?php echo $this->pager->getItemTotal();?>条数据，共<?php echo $this->pager->getPageCount();?>页
+                
+            </div>
+        </div>
+    </div>
+<?php endif;?>
+
+<script type="text/javascript">
+    /* 跳转页数 start */
+    (function(){
+        $(".pageButton").click(function () {
+            var inputPage = $("#inputPage").val();
+            if(inputPage == ''){
+                inputPage = 1;
+            }
+            var url = $(this).attr('data-url')+'&page='+inputPage;
+            $(this).attr('href',url);
+        });
+    })();
+    /* 跳转页数 end */
+</script>
+
+

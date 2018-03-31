@@ -1,0 +1,75 @@
+<style>
+    .bg-index-1{
+        background: url(/assets/i/bg/game1.jpg);
+        width:970px;
+        height:307px ;
+        background-size:970px;
+        background-repeat:no-repeat;
+    }
+    .bg-index-2{
+        background: url(/assets/i/bg/game2.jpg);
+        width:970px;
+        height:307px ;
+        background-size:970px;
+        background-repeat:no-repeat;
+    }
+    .bg-index-3{
+        background: url(/assets/i/bg/game3.jpg);
+        width:970px;
+        height:307px ;
+        background-size:970px;
+        background-repeat:no-repeat;
+    }
+    .bg-index-4{
+        background: url(/assets/i/bg/game4.jpg);
+        width:970px;
+        height:307px ;
+        background-size:970px;
+        background-repeat:no-repeat;
+    }
+    .am-font-35{
+        font-size:35px;
+    }
+    .am-font-60{
+        font-size:60px;
+        color:red;
+    }
+    .am-center{
+        text-align: center;
+    }
+</style>
+<br/>
+<div class="border-box am-container am-vertical-align">
+    <div class=" am-avg-lg-2 am-thumbnails">
+        <form role="form">
+            <div class="am-form-group">
+                <input type="text" id="eventName" class="am-form-field" placeholder="赛事名称">
+                <button type="submit" class="am-btn am-btn-default">搜索</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class=" border-box am-container am-vertical-align">
+    <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-1 am-thumbnails">
+        <?php if(!empty($events['data'])):?>
+            <?php foreach ($events['data'] as $key =>$value):?>
+                <li>
+                    <a href="/index/event/?id=<?php echo $value['Id'];?>">
+                        <div class="bg-index-<?php echo $key%4+1;?>">
+                            <p class="am-font-35 am-center"><?php echo $value['name']?></p><br />
+                        </div>
+                    </a>
+                </li>
+            <?php endforeach;?>
+        <?php endif;?>
+        <li>
+            <a href="/user/event/add">
+                <div class="bg-index-1">
+                    <p class="am-font-35 am-center">创建赛事</p><br />
+                    <p class="am-font-60 am-center">火热进行中~</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+</div>

@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+.zjs{padding:20px; *padding:10px 20px;margin-bottom:10px;}
+.zjs span {clear:both;width:860px;height:30px;margin:10px 0 0;padding-top:10px;border-top:1px dashed #999;color:#c50; display:block;}
+.zjs ul { clear:both;width:860px; line-height:24px; margin-bottom:10px;}
+.zjs li{display:block;float:left; width:200px; height:18px;line-height:24px;}

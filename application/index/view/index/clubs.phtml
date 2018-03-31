@@ -1,0 +1,49 @@
+<a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">添加球队</a><br>
+<?php var_dump($clubs);?>
+
+{load href="/static/css/model.css" /}
+{load href="/static/js/jq.js" /}
+{load href="/static/js/index/model.js" /}
+{load href="/static/js/index/index/addclub.js" /}
+<div class="modal fade" id="modelAddClub">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建球队</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-groups-bordered form-static" id="fauditingForm">
+                    <label class="am-color" for="name">赛事名称：</label>
+                    <input type="text" placeholder="请输入队伍名称" name="name" id="name">
+                    <br />
+                    <label class="am-color" for="name">地区：</label>
+                    <select  id="province" >
+                        <option value="0">选择省区</option>
+                        <?php foreach ($provinces as $key=>$value):?>
+                            <option value="<?php echo $key;?>" ><?php echo $value;?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <select  id="city" >
+                        <option value="0">选择市区</option>
+                    </select>
+                    <select  id="area" >
+                        <option value="0">选择县区</option>
+                    </select>
+                    <br />
+                    <label class="am-color" for="code">邀请码：</label>
+                    <input type="text" placeholder="设置邀请码" name="code" id="code">
+                    <br />
+                    <label class="am-color" for="name">队伍标志：</label>
+                    <input type="file" name="clubMark"  id="clubMark">
+                    <input type="hidden" id="mark" name="mark">
+                    <br/>
+                    <img src="" width="100" id="markImg"><br />
+                </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="addClubButton" data-dismiss="modal">创建</button>
+            </div>
+        </div>
+    </div>
+</div>

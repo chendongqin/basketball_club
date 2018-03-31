@@ -1,0 +1,13 @@
+用户中心 <a href="/user/logout">登出</a><br />
+<label>账号：<?php echo $user['email']?></label><br />
+<?php if($user['certification'] === 1):?>
+    <label>姓名：<?php echo $user['name']?></label><br />
+<?php else:?>
+    <label>姓名：    <input type="button" value="身份认证" id="idcardVirefy"></label><br />
+<?php endif;?>
+<form name="saveUserForm" id="saveUserForm">
+    <label>身高：<input type="text" name="height" value="<?php echo $user['height']?>"></label><br />
+    <label>体重：<input type="text" name="weight" value="<?php echo $user['weight']?>"></label><br />
+    <label>城市：<input type="text" name="city" value="<?php echo $user['city']?>"></label><br />
+    <input type="button" id="saveUser" value="保存">
+</form>

@@ -1,0 +1,7 @@
+.page-width{
+	padding-left: 230px;
+}
+.page-container .sidebar-width{
+	width: 230px;
+	position: fixed !important;
+}
