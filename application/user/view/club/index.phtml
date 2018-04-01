@@ -1,0 +1,29 @@
+<ul class="list">
+    <li>
+        <img src="<?php echo empty($club['mark'])?'/assets/i/logo/logogif.gif':$club['mark'];?>" width="100">
+    </li>
+    <li>
+        队名：<?php echo $club['name'];?>
+    </li>
+    <li>
+        队长：<a href="/user/club/player?id=<?php echo $club['captain'];?>"><?php echo $club['captain'];?></a>
+    </li>
+    <li>
+        地区：<?php echo $club['area'];?>
+    </li>
+    <li>
+        <div>
+            球队日志：
+            <?php $log =  json_decode($club['log'],true);?>
+            <?php foreach ($log as $value):?>
+                <ol><?php echo $value;?></ol>
+            <?php endforeach;?>
+        </div>
+    </li>
+    <li>
+        队员列表：
+        <?php foreach ($players as $userId=>$name):?>
+        <a herf="/user/club/player?id=<?php echo $userId;?>"><ol><?php echo $name;?></ol></a>
+        <?php endforeach;?>
+    </li>
+</ul>

@@ -18,6 +18,10 @@ class Index extends Userbase{
         return $this->fetch('index');
     }
 
+    public function head(){
+
+    }
+
 
     //身份验证
     public function virefy(){
@@ -58,6 +62,9 @@ class Index extends Userbase{
         if(!$updateRes){
             return $this->returnJson('更新数据库失败');
         }
+        Session::delete('user');
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::push('user',$user);
         return $this->returnJson('验证通过',true,1);
     }
 
@@ -66,14 +73,14 @@ class Index extends Userbase{
         $clubIds = json_decode($user['club'],true);
         $in = implode(',',$clubIds);
         $clubs = Db::name('club')->where('Id','in',$in)->select();
-        foreach ($clubs  as $key=>$club){
-            $players = json_decode($club['players'],true);
-            $userId = array_keys($players);
-            $in = implode(',',$userId);
-            $players = Db::name('user')->where('Id','in',$in)->select();
-            $clubs[$key]['players'] = $players;
-        }
-        $this->assign('clubs');
+//        foreach ($clubs  as $key=>$club){
+//            $players = json_decode($club['players'],true);
+//            $userId = array_keys($players);
+//            $in = implode(',',$userId);
+//            $players = Db::name('user')->where('Id','in',$in)->select();
+//            $clubs[$key]['players'] = $players;
+//        }
+        $this->assign('clubs',$clubs);
         return $this->fetch();
     }
 
@@ -95,23 +102,27 @@ class Index extends Userbase{
             for ($i=0;$i<4;$i++)
                 $code .= str_shuffle($string){0};
         }
-        $area =  $request->param('area','','string');
+        $area =  $request->param('areas','','string');
         $virefyName = Db::name('club')->where('name',$name)->find();
         if(!empty($virefyName))
             return $this->returnJson('队名已被使用');
         $players = json_encode([$user['Id']=>$user['name']]);
+        $log = array();
+        $log[] = date('Y-m-d H:i:s').'  '.$user['name'].'创建球队';
         Db::startTrans();
         $add = [
             'create_user'=>$user['Id'],'name'=>$name,
             'mark'=>$mark,'virefy_code'=>$code,
             'create_time'=>time(),'captain'=>$user['Id'],
             'area'=>$area,'log'=>'','players'=>$players,
+            'log'=>json_encode($log),
             ];
         $res = Db::name('club')->insert($add);
         if(!$res)
             return $this->returnJson('创建球队失败');
         $clubId = Db::name('club')->getLastInsID();
         $club = json_decode($user['club'],true);
+        $club = empty($club)?array():$club;
         $club[] = $clubId;
         $updateUser = ['Id'=>$user['Id'],'club'=>json_encode($club)];
         $upRes = Db::name('user')->update($updateUser);

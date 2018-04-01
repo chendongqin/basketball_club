@@ -351,6 +351,42 @@ class Tool {
         return $result;
     }
 
+    /**等比处理图片
+     * @param $fileName
+     * @param $save_path
+     * @param int $size
+     * @return bool
+     */
+    public static function sizeImage($fileName,$save_path,$size=100){
+        $imageInfo = getimagesize($fileName);
+        $width = $imageInfo[0];
+        $height = $imageInfo[1];
+        $type = $imageInfo[2];
+        $heightSize = $height/$width*$size;
+        $thumb = imagecreatetruecolor($size,$heightSize);
+        $white = imagecolorallocate($thumb, 255, 255, 255);
+        imagefilledrectangle($thumb,0,0,$size,$heightSize,$white);
+        $source = null;
+        //1 = GIF，2 = JPG，3 = PNG
+        switch ($type){
+            case 1:
+                $source = imagecreatefromgif($fileName);
+                break;
+            case 2:
+                $source = imagecreatefromjpeg($fileName);
+                break;
+            case 3:
+                $source = imagecreatefrompng($fileName);
+                break;
+            default:
+                break;
+        }
+        imagecopyresized($thumb,$source,0,0,0,0,$size,$heightSize,$width,$height);
+        $result = imagejpeg($thumb,$save_path,100);
+        return $result;
+    }
+
+
     public static function captcha($length,$width,$height,$channel){
         $image = imagecreatetruecolor($width,$height);
         $white = imagecolorallocate($image,255,255,255);
