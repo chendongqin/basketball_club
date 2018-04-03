@@ -22,7 +22,7 @@ class Event extends Base{
         $types = Config::get('basketball.event_types');
         $statusStrs = Config::get('basketball.event_status');
         $this->assign('event',$event);
-        $this->assign('user',$user);
+        $this->assign('createUser',$user);
         $this->assign('types',$types);
         $this->assign('statusStrs',$statusStrs);
         $this->assign('joinClubs',$joinClubs);

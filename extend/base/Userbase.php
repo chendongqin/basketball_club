@@ -9,10 +9,10 @@ namespace base;
 use think\Session;
 class Userbase extends Base {
     protected $_ec = array(
-        'user'=>array( 'index'),
+//        'user'=>array( 'index'),
     );
     protected $_ac = array(
-        'index'=>'*',
+//        'index'=>'*',
     );
     private  $_user = '';
     protected function _initialize() {

@@ -1,3 +1,6 @@
+<?php if($user['Id'] == $club['captain']):?>
+    <button id="changeCaptain">更换队长</button>
+<?php endif;?>
 <ul class="list">
     <li>
         <img src="<?php echo empty($club['mark'])?'/assets/i/logo/logogif.gif':$club['mark'];?>" width="100">
@@ -27,3 +30,35 @@
         <?php endforeach;?>
     </li>
 </ul>
+
+{load href="/static/css/model.css" /}
+{load href="/static/js/jq.js" /}
+{load href="/static/js/index/model.js" /}
+{load href="/static/js/user/club/index.js" /}
+<div class="modal fade" id="modelChangeCaptain">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">更换队长</h4>
+            </div>
+            <div id="error" style="display: none">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form class="" id="changeCaptainForm">
+                    <input type="hidden" id="clubId" value="<?php echo $club['Id'];?>">
+                    <label >成员：</label>
+                    <select id="playerId">
+                        <?php foreach ($players as $key=>$player):?>
+                            <option value="<?php echo $key?>"><?php echo $player;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button"  id="changeCaptainButton" value="更换" >
+            </div>
+        </div>
+    </div>
+</div>

@@ -14,12 +14,31 @@ use ku\Tool;
 class Index extends Userbase{
 
     public function index(){
+        $provinces = Db::name('provinces')->select();
+        $proData = array();
+        foreach ($provinces as $item){
+            $proData[$item['provinceid']] = $item['province'];
+        }
+        $this->assign('provinces',$proData);
         $this->assign('title','用户中心');
         return $this->fetch('index');
     }
 
-    public function head(){
-
+    public function save(){
+        $user = $this->getUser();
+        $weight = $this->request->param('weight','','string');
+        $height = $this->request->param('height','','string');
+        if(!is_numeric($weight) or !is_numeric($height))
+            return $this->returnJson('参数错误，请检查');
+        $address = $this->request->param('address','','string');
+        $update = ['Id'=>$user['Id'],'weight'=>$weight,'height'=>$height,'city'=>$address];
+        $res = Db::name('user')->update($update);
+        if(!$res)
+            return $this->returnJson('保存失败，请重试');
+        Session::delete('user');
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::push('user',$user);
+        return $this->returnJson('保存成功',true,1);
     }
 
 

@@ -1,4 +1,37 @@
 <?php var_dump($event);?>
-<?php var_dump($user);?>
+<?php var_dump($createUser);?>
 <?php var_dump($joinClubs);?>
 <a href="/index/event/schedule?id=<?php echo $event['Id'];?>">查看赛程</a>
+<a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?>">加入比赛</a><br>
+
+
+{load href="/static/css/model.css" /}
+{load href="/static/js/jq.js" /}
+{load href="/static/js/index/model.js" /}
+{load href="/static/js/index/event/add_game.js" /}
+<div class="modal fade" id="modelAddGame">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">加入比赛</h4>
+            </div>
+            <div id="error" style="display: none">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form class="" id="joinGameForm">
+                    <input type="hidden" name="eventId" id="eventId" value="<?php echo $event['Id'];?>">
+                    <label class="" for="code">邀请码：</label>
+                    <input type="text"  name="code" id="code">
+                    <br>
+                    <div class="chooseClub">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button"  id="addGameButton" value="加入" >
+            </div>
+        </div>
+    </div>
+</div>

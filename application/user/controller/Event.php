@@ -68,7 +68,7 @@ class Event extends Userbase{
         if($data['start_time']<time()+3600*24)
             return $this->returnJson('开始时间不能小于当前时间一天');
         if(!empty($data['posters']) and !file_exists(PUBLIC_PATH.$data['posters']))
-            return $this->returnJson('上传海拔有错误');
+            return $this->returnJson('上传海报有错误');
         $data['start_time'] = date('Y-m-d',$data['start_time']);
         $data['end_time'] = date('Y-m-d',$data['end_time']);
         $strings = $string = join('',array_merge(range(0,9),range('a','z'),range('A','Z')));

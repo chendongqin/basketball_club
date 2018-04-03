@@ -90,6 +90,4 @@ class Uploads extends Userbase{
         return $this->returnJson('上传成功',true,1,array('fileName'=>$fileName));
     }
 
-
-
 }

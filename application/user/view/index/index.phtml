@@ -1,13 +1,10 @@
 {load href="/static/js/jq.js" /}
 {load href="/static/js/user/index/index.js" /}
+{load href="/static/js/index/area.js" /}
 <label>账号：<?php echo $user['email']?></label><br />
 <label>头像：</label>
-<?php if(!empty($user['head'])):?>
-    <img src="<?php echo $user['head']?>" id="userHeadChange">
-    <input type="file" id="userHead" name="userHead" style="display:none">
-<?php else:?>
-    <input type="file" id="userHead" name="userHead">
-<?php endif;?>
+<img src="<?php echo empty($user['head'])?'/uploads/user/default.jpg':$user['head'];?>" id="userHeadChange">
+<input type="file" id="userHead" name="userHead" style="display:none">
 <br>
 <?php if($user['certification'] === 1):?>
     <label>姓名：<?php echo $user['name']?></label><br />
@@ -15,8 +12,28 @@
     <label>姓名：    <input type="button" value="身份认证" id="idcardVirefy"></label><br />
 <?php endif;?>
 <form name="saveUserForm" id="saveUserForm">
-    <label>身高：<input type="text" name="height" value="<?php echo $user['height']?>"></label><br />
-    <label>体重：<input type="text" name="weight" value="<?php echo $user['weight']?>"></label><br />
-    <label>城市：<input type="text" name="city" value="<?php echo $user['city']?>"></label><br />
+    <label>身高：<input type="text" id="height" name="height" value="<?php echo $user['height']?>"></label><br />
+    <label>体重：<input type="text" id="weight" name="weight" value="<?php echo $user['weight']?>"></label><br />
+    <label>城市：
+        <div class="city">
+            <?php echo $user['city'];?>  <button id="changeCity">更换</button>
+        </div>
+    </label>
+    <input type="hidden" name="address" id="address" value="<?php echo $user['city'];?>">
+    <div class="changeCity" style="display:none">
+        <select  id="province" >
+            <option value="0">选择省区</option>
+            <?php foreach ($provinces as $key=>$value):?>
+                <option value="<?php echo $key;?>" ><?php echo $value;?></option>
+            <?php endforeach;?>
+        </select>
+        <select  id="city" >
+            <option value="0">选择市区</option>
+        </select>
+        <select  id="area" >
+            <option value="0">选择县区</option>
+        </select>
+    </div>
+    <br />
     <input type="button" id="saveUser" value="保存">
 </form>
