@@ -1,4 +1,19 @@
 $(function () {
+   var type = $('#type').val();
+   if(type ==0){
+       $('#promotionDiv').show();
+   }
+   $('#type').change(function () {
+       var type = $('#type').val();
+       if(type ==0){
+           $('#promotionDiv').show();
+       }else{
+           $('#promotionDiv').hide();
+       }
+   });
+});
+
+$(function () {
     $("#addEvent").click(function () {
         var address = $('#province').find("option:selected").text()+
             $('#city').find("option:selected").text()+

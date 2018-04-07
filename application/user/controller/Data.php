@@ -24,4 +24,24 @@ class Data extends Userbase{
         return $this->returnJson('获取成功',true,1,$user);
     }
 
+    //通过姓名获取球队
+    public function clubsOfname(){
+        $name = $this->request->param('name','','string');
+        if(empty($name))
+            $clubs = [];
+        else
+            $clubs = Db::name('club')->where('name','like','%'.$name);
+        return $this->returnJson('获取成功',true,1,$clubs);
+    }
+
+    //通过姓名获取球队
+    public function userOfname(){
+        $name = $this->request->param('name','','string');
+        if(empty($name))
+            $users = [];
+        else
+            $users = Db::name('user')->where('name','like','%'.$name);
+        return $this->returnJson('获取成功',true,1,$users);
+    }
+
 }

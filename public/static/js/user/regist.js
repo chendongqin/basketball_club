@@ -22,7 +22,7 @@ $(function () {
             success: function (returndata) {
                 alert(returndata.msg);
                 if(returndata.status==true){
-                   window.location.href = '/';
+                   window.location.href = '/user/login';
                 }
             },
             error: function () {

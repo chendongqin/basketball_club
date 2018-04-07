@@ -105,6 +105,8 @@ class Index extends Userbase{
 
     public function createClub(){
         $user = $this->getUser();
+        if ($user['certification'] !=1)
+            return $this->returnJson('身份未认证');
         $clubNum = Db::name('club')->where('create_user',$user['Id'])->count();
         if($clubNum >5)
             return $this->returnJson('每人至多只能创建五个队伍');
@@ -151,6 +153,50 @@ class Index extends Userbase{
         }
         Db::commit();
         return $this->returnJson('创建球队成功',true,1);
+    }
+
+    public function joinClub(){
+        $user =$this->getUser();
+        if($user['certification']!==1)
+            return $this->returnJson('您还未进行身份认证');
+        $id = $this->request->param('id','','int');
+        $code = $this->request->param('code','','string');
+        $club  = Db::name('club')->where('Id',$id)->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        if(strcmp($code,$club['virefy_code'])!==0)
+            return $this->returnJson('邀请码不正确');
+        $players = json_decode($club['players'],true);
+        if(isset($players[$user['Id']]))
+            return $this->returnJson('已经加入球队，无需重复操作');
+        $players[$user['Id']] = $user['name'];
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].' 加入球队';
+        array_unshift($logs,$log);
+        $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
+        $res = Db::name('club')->update($update);
+        if(!$res)
+            return $this->returnJson('加入失败，请重试');
+        return $this->returnJson('加入成功',true,1);
+    }
+
+    public function applyJoin(){
+        $user =$this->getUser();
+        if($user['certification']!==1)
+            return $this->returnJson('您还未进行身份认证');
+        $id = $this->request->param('id','','int');
+        $reason = $this->request->param('reason','','string');
+        $club  = Db::name('club')->where('Id',$id)->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $virefy = Db::name('club_apply')->where(['user_id'=>$user['Id'],'club_id'=>$id])->find();
+        if(!empty($virefy))
+            return $this->returnJson('您已经申请过加入该球队，请不要重复操作');
+        $add = ['user_id'=>$user['Id'],'reason'=>$reason,'club_id'=>$id];
+        $res = Db::name('club_apply')->insert($add);
+        if(!$res)
+            return $this->returnJson('申请失败，请重试!');
+        return $this->returnJson('申请成功',true,1);
     }
 
 }

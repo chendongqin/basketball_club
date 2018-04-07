@@ -1,0 +1,98 @@
+{load href="/static/js/jq.js" /}
+{load href="/static/js/user/event/manage.js" /}
+<ul>
+    <li><?php echo $event['name'];?></li>
+    <li><input type="text" value="<?php echo $event['virefy_code'];?>" id="code"><button data-id="<?php echo $event['Id'];?>" id="changeCode">修改</button></li>
+    <li><?php echo $event['address'];?></li>
+    <li><input type="text" id="startTime" value="<?php echo $event['start_time'];?>">——<input type="text" id="endTime" value="<?php echo $event['end_time'];?>"><button data-id="<?php echo $event['Id'];?>" id="changeTime">修改</button></li>
+    <li><?php echo $types[$event['type']];?></li>
+</ul>
+
+<table border="1">
+    <tr>
+        <th>队徽</th>
+        <th>队名</th>
+        <th>队长</th>
+        <th>人数</th>
+        <th>地区</th>
+        <th>创建时间</th>
+        <th>操作</th>
+    </tr>
+    <?php if (!empty($joins)):?>
+    <?php foreach ($joins as $key =>$join):?>
+        <tr>
+            <td><img src="<?php echo $join['mark'];?>" width="100"></td>
+            <td><?php echo $join['name'];?></td>
+            <td><?php echo $join['captain'];?></td>
+            <td><?php echo count(json_decode($join['players'],true));?></td>
+            <td><?php echo $join['area'];?></td>
+            <td><?php echo date('Y-m-d H:i:s',$join['create_time']);?></td>
+            <td><button data-eventId="<?php echo $event['Id'];?>" data-id="<?php echo $join['Id'];?>" class="delJoins">删除</button></td>
+        </tr>
+    <?php endforeach;?>
+    <?php else:?>
+        <td colspan="16"><center>没有球队加入</center></td>
+    <?php endif;?>
+</table>
+
+<?php if(!empty($schedules)):?>
+    <?php foreach ($schedules as $key=>$schedule):?>
+    <?php var_dump($schedule);?>
+    <?php endforeach;?>
+<?php else:?>
+    <button id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</button>
+    <button id="importSchedules" data-id="<?php $event['Id']?>">导入赛程</button>
+<?php endif;?>
+
+
+
+{load href="/static/css/model.css" /}
+{load href="/static/js/index/model.js" /}
+<div class="modal fade" id="modelSchendule">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程安排</h4>
+            </div>
+            <div id="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" action="/user/schedule/group" class="" name="scheduleForm" id="scheduleForm">
+                    <input type="hidden" name="id" value="<?php echo $event['Id'];?>">
+                    <label >每组晋级：</label>
+                    <select id="promotion" name="promotion">
+                        <?php $count= count($joins);$end = $count<4?$count:4?>
+                        <?php ;for ($i=1;$i<=$end;$i++):?>
+                            <option value="<?php echo $i?>"><?php echo $i.'队';?></option>
+                        <?php endfor;?>
+                        <?php if($count>=6):?>
+                            <option value="6">6队</option>
+                        <?php endif;?>
+                        <?php if($count>=8):?>
+                            <option value="8">8队</option>
+                        <?php endif;?>
+                    </select>
+                    <label >赛程安排：</label>
+                    <select id="divideTime" name="divideTime">
+                        <?php ;for ($i=1;$i<=6;$i++):?>
+                            <option value="<?php echo $i?>"><?php echo $i.'天一赛程';?></option>
+                        <?php endfor;?>
+                        <option value="7">1周一赛程</option>
+                        <option value="14">2周一赛程</option>
+                        <option value="30">1月一赛程</option>
+                    </select>
+                    <br>
+                    <label >每组一日最多<input type="text" id="dayTimes" name="dayTimes">赛</label>
+                    <br>
+                    <label >分<input type="text" id="num" name="num">组</label>
+                    <div class="modal-footer">
+                        <input type="submit"  value="安排赛程" >
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

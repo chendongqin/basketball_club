@@ -1,0 +1,101 @@
+.logo{
+    width: 1024px;
+    height: 80px;
+    margin: 3px auto;
+    /*background: #AFAF61;*/
+}
+.logo-left{
+    width: 450px;
+    float: left;
+    line-height: 80px;
+}
+.logo-right{
+    width: 440px;
+    float: right;
+    line-height: 80px;
+}
+.logo-left img,.logo-right img{
+    vertical-align: middle;
+}
+.logo-left img{
+    margin-left: 200px;
+}
+.logo-right img{
+    margin-right: 30px;
+}
+.logo-left span{
+    font-size: 20px;
+    color: #00e36f;
+}
+.logo-right span:nth-child(2){
+    font-size: 12px;
+    color: grey;
+    margin-right: 10px;
+}
+.logo-right span:nth-child(3){
+    font-size: 16px;
+    color: red;
+}
+.ad-box{
+      width: 100%;
+}
+#boxID{
+    width: 960px;
+    height: 450px;
+    margin: auto;
+}
+.present{
+    width: 100%;
+    height: 400px;
+    margin-top:30px;
+    background: url("/static/image/bk/index-bk.jpg");
+}
+.present-left{
+    float: left;
+ }
+.present-main{
+    float: left;
+}
+.present-right{
+    float: right;
+}
+.present-left,.present-right,.present-main{
+    width: 30%;
+    height: 350px;
+    margin-right:1%;
+    margin-left: 2%;
+}
+.present-title{
+    height: 100px;
+    margin-top:40px;
+}
+.present-title img{
+    float: left;
+    margin-left:50px;
+}
+.present-title h2{
+    line-height: 100px;
+    width: 220px;
+    float: right;
+    margin:auto;
+    padding-left:30px;
+    color: white;
+}
+.present-content-1{
+    height: 140px;
+}
+.present-content-1 li{
+    list-style-image: url("/static/image/small/article.png");
+    color: #dedede;
+    font-size: 16px;
+    margin: 5px 80px;
+}
+.present-content-2{
+    height:80px;
+    color: #dedede;
+    font-size: 16px;
+    padding: 15px;
+}
+.present-content-2 div{
+    margin: 5px 20px;
+}

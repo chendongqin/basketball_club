@@ -1,0 +1,14 @@
+<?php if(!empty($schedules)):?>
+<ul>
+    <?php foreach ($schedules as $key=>$schedule):?>
+    <?php echo $key;?>组赛程：
+    <li>
+        <label>比赛时间:<?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></label>
+        <label>主队:<?php echo $joins[$schedule['home_team']];?></label>
+        <label>客队:<?php echo $joins[$schedule['visiting_team']];?></label>
+    </li>
+    <?php endforeach;?>
+</ul>
+<?php else:?>
+没有赛程
+<?php endif;?>

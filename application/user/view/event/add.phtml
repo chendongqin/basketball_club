@@ -2,24 +2,30 @@
 {load href="/static/js/index/area.js" /}
 {load href="/static/js/user/event/add.js" /}
 <form name="addEventForm" id="addEventForm"  enctype="multipart/form-data" >
+    <div>
     <label class="am-color" for="name">赛事名称：</label>
     <input type="text" placeholder="请输入赛事名称" name="name" id="name">
-    <br />
+    </div>
     <label class="am-color" for="text">赛制：</label>
     <select  id="type" name="type">
         <?php foreach ($types as $key=>$value):?>
             <option value="<?php echo $key;?>" ><?php echo $value;?></option>
         <?php endforeach;?>
     </select>
-    <br />
+    <div id="promotionDiv" style="display: none">
+        <label  class="am-color" for="promotion">晋级队伍数:</label><input type="text" id="promotion" name="promotion">
+    </div>
+    <div>
     <label class="am-color" for="startTime">开始日期：</label>
     <i class="am-icon-calendar"></i>
     <input type="text"  placeholder="开始日期" name="startTime" id="startTime">
-    <br />
+    </div>
+    <div >
     <label class="am-color" for="endTime">结束日期：</label>
     <i class="am-icon-calendar"></i>
     <input type="text"  placeholder="结束日期" name="endTime" id="endTime">
-    <br />
+    </div>
+    <div >
     <label class="am-color" for="text">地区：</label>
     <input type="hidden" name="address" id="address">
     <select  id="province" >
@@ -34,10 +40,11 @@
     <select  id="area" >
         <option value="0">选择县区</option>
     </select>
-    <br />
-    <label >比赛海报:</label><input type="file" name="postersFile"  id="postersFile">
-    <input type="hidden" id="posters" name="posters">
-    <br/>
-    <img src="" width="200" id="postersImg"><br />
+    </div>
+    <div>
+        <label >比赛海报:</label><input type="file" name="postersFile"  id="postersFile">
+        <input type="hidden" id="posters" name="posters">
+        <img src="" width="200" id="postersImg">
+    </div>
     <input type="button" id="addEvent" value="添加赛事">
 </form>

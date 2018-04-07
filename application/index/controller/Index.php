@@ -12,6 +12,7 @@ use think\Db;
  class Index extends Base{
 
      public function index(){
+         $this->assign('title','首页');
          return $this->fetch();
      }
 
@@ -20,7 +21,7 @@ use think\Db;
          $eventModel = Db::name('event');
          $where = array(
              'audit'=>1,
-             'start_time'=>array('<=',date('Y-m-d')),
+//             'start_time'=>array('<=',date('Y-m-d')),
              'status'=>array('<>',2),
          );
          $request = $this->request;

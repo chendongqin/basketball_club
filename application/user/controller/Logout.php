@@ -13,7 +13,7 @@ class Logout extends Base{
     public function index(){
         $sission = new Session();
         $sission->delete('user');
-        return $this->returnJson('登出成功',true,1);
+        $this->redirect($this->request->server('HTTP_REFERER'));
     }
 
 }

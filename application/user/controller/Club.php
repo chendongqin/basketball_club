@@ -8,6 +8,7 @@
 namespace app\user\controller;
 use base\Userbase;
 use think\Db;
+use ku\Email;
 
 class Club extends Userbase{
 
@@ -22,6 +23,8 @@ class Club extends Userbase{
             return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'您未加入该球队']);
         $this->assign('club',$myClub);
         $this->assign('players',$players);
+        $applys = Db::name('club_apply')->where(['club_id'=>$id])->select();
+        $this->assign('applys',$applys);
         return $this->fetch();
     }
 
@@ -50,6 +53,9 @@ class Club extends Userbase{
             return $this->returnJson('您不是队长，没有权限加入比赛');
         if(strcmp($code,$event['virefy_code'])!==0)
             return $this->returnJson('邀请码错误，请重新确认');
+//        $playerNum = count(json_decode($club['join_clubs'],true));
+//        if($playerNum<7)
+//            return $this->returnJson('球队人数小于7人无法参加比赛');
         $joins = json_decode($event['join_clubs'],true);
         if(isset($joins[$clubId]))
             return $this->returnJson('已经加入比赛，无需重复操作');
@@ -98,7 +104,61 @@ class Club extends Userbase{
         if(!$res)
             return $this->returnJson('操作失败，请重试');
         return $this->returnJson('更换成功',true,1);
+    }
 
+    public function dealApply(){
+        $user =$this->getUser();
+        $id = $this->request->param('id','','int');
+        $deal = (int)$this->request->param('deal','','int');
+        if(in_array($deal,[0,1]))
+            return $this->returnJson('处理参数不正确');
+        $apply = Db::name('club_apply')->where('Id',$id)->find();
+        if(empty($apply))
+            return $this->returnJson('申请列表不存在');
+        $club = Db::name('club')->where('Id',$apply['club_id'])->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        if($user['Id']!= $club['captain'])
+            return $this->returnJson('您不是队长，无法处理申请');
+        $subject = '来战吧篮球通知';
+        $applyUser = Db::name('user')->where('Id',$apply['user_id'])->find();
+        if(empty($applyUser)){
+            Db::name('club_apply')->where('Id',$id)->delete();
+            return $this->returnJson('申请用户存在');
+        }
+        Db::startTrans();
+        if($deal === 0){
+            $body = '您申请加入"'.$club['name'].'"拒绝了你的申请';
+            $logs = json_decode($club['log'],true);
+            $log = date('Y-m-d H:i:s').' '.$user['name'].'拒绝了'.$applyUser['name'].' 加入球队';
+            array_unshift($logs,$log);
+            $update= ['Id'=>$club['Id'],'players'=>json_encode($players),'log'=>json_encode($logs)];
+            $res = Db::name('club')->update($update);
+            if(!$res)
+                return $this->returnJson('操作失败，请重试!');
+        }
+        else{
+            $body = '您申请加入"'.$club['name'].'"通过了你的申请';
+            $players = json_decode($club['players'],true);
+            if(!isset($players[$applyUser['Id']])){
+                $players[$applyUser['Id']] = $applyUser['name'];
+                $logs = json_decode($club['log'],true);
+                $log = date('Y-m-d H:i:s').' '.$user['name'].'同意了'.$applyUser['name'].' 加入球队';
+                array_unshift($logs,$log);
+                $update= ['Id'=>$club['Id'],'players'=>json_encode($players),'log'=>json_encode($logs)];
+                $res = Db::name('club')->update($update);
+                if(!$res)
+                    return $this->returnJson('操作失败，请重试!');
+            }
+        }
+        Email::sendEmail($applyUser['email'],$subject,$body);
+        $res = Db::name('club_apply')->where('Id',$id)->delete();
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('操作失败，请重试!');
+        }
+        Db::commit();
+        return $this->returnJson('处理成功',true,1);
     }
 
 }
