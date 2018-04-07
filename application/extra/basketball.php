@@ -26,9 +26,19 @@ return[
         4=>'再申请失败'
     ],
 
+    'show_eventStatus' =>[
+        0=>'火热报名中~',
+        1=>'激情对战~',
+        2=>'已结束~' ,
+    ],
+    'eventStatus' =>[
+        0=>'报名中',
+        1=>'进行中',
+        2=>'已结束' ,
+    ],
     'email'=>[
         'email'=>'913294974@qq.com',
-        'name'=>'来战吧篮球',
+        'name'=>'BasketballClubs',
         'password'=>'zmffdroymnjkbbai'
     ],
 

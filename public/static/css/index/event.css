@@ -1,0 +1,145 @@
+.event-seacher{
+    height: 70px;
+    width: 960px;
+    margin: 15px auto 0 auto;
+    background: url("/static/image/bk/search.png");
+}
+.event-seacher,.seacher-select,.seacher-logo,.seacher-text{
+    height: 70px;
+}
+.seacher-logo{
+    width: 100px;
+    float: left;
+    margin-left: 30px;
+}
+.seacher-select{
+    margin-left: 30px;
+    float: left;
+    width: 500px;
+}
+
+.seacher-select li{
+    list-style-type: none;
+    float: left;
+    width: 150px;
+}
+
+.seacher-select select{
+    color: #271f18;
+    font-family: "Century Gothic", Consolas, "Liberation Mono", Courier, Verdana;
+    background: transparent;
+    width: 140px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    height: 34px;
+    -webkit-appearance: none;
+}
+
+.seacher-text{
+    float: left;
+    width: 300px;
+}
+.search-bk{
+    margin-top: 16px;
+    margin-left: 25px;
+    height: 32px;
+    background: url("/static/image/bk/search_box.png") no-repeat right center;
+    padding-right:30px;
+}
+.search-text-1{
+    height: 26px;
+}
+.search-text-1,.search-bk{
+    width: 190px;
+}
+
+
+.event-list{
+    height: 300px;
+    width: 960px;
+    margin: 10px auto;
+
+}
+
+.list-main{
+    width: 660px;
+    height: 300px;
+    float: left;
+    margin: auto;
+    background: url("/static/image/bk/juanzhou2.png") no-repeat center;
+}
+.list-image{
+    width: 150px;
+    height: 300px;
+    overflow: hidden;
+    float: left;
+}
+.list-image-right{
+    float: right;
+}
+.list-main-top{
+    height: 240px;
+    width: 430px;
+    float: left;
+    overflow: hidden;
+}
+.list-main-silder-r{
+    height: 240px;
+    width: 230px;
+    float: right;
+    background: url("/static/image/bk/juanzhou.jpg") no-repeat center;
+}
+.list-main-silder-r ul{
+    width: 160px;
+    height: 160px;
+    margin-top:40px;
+}
+.list-main-silder-r li{
+    list-style-type: none;
+    text-align: center;
+    color: #000088;
+    float: left;
+    line-height: 32px;
+}
+#event-hot{
+    color: red;
+    font-size: 20px;
+}
+.list-main-top img{
+    width: 430px;
+    height: 300px;
+}
+.list-main-bottom-l{
+    height: 60px;
+    width: 430px;
+    margin: auto;
+}
+.list-main-bottom-r{
+    height: 60px;
+    width: 230px;
+    float: right;
+    margin: auto;
+}
+.list-main-bottom-l span{
+    line-height: 60px;
+    font-size: 20px;
+    color: #000088;
+}
+.list-main-bottom-r a:link,.list-main-bottom-r a:visited{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    border: 3px green;
+    margin:15px 0 0 70px;
+    border-radius: 15px;
+    background:green;
+}
+
+.list-main-bottom-r a:hover,.list-main-bottom-r a:active{
+    font-size: 0;
+    background:url("/static/image/bk/into.png")no-repeat center;
+}

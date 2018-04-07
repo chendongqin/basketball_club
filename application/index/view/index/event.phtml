@@ -1,75 +1,108 @@
-<style>
-    .bg-index-1{
-        background: url(/assets/i/bg/game1.jpg);
-        width:970px;
-        height:307px ;
-        background-size:970px;
-        background-repeat:no-repeat;
-    }
-    .bg-index-2{
-        background: url(/assets/i/bg/game2.jpg);
-        width:970px;
-        height:307px ;
-        background-size:970px;
-        background-repeat:no-repeat;
-    }
-    .bg-index-3{
-        background: url(/assets/i/bg/game3.jpg);
-        width:970px;
-        height:307px ;
-        background-size:970px;
-        background-repeat:no-repeat;
-    }
-    .bg-index-4{
-        background: url(/assets/i/bg/game4.jpg);
-        width:970px;
-        height:307px ;
-        background-size:970px;
-        background-repeat:no-repeat;
-    }
-    .am-font-35{
-        font-size:35px;
-    }
-    .am-font-60{
-        font-size:60px;
-        color:red;
-    }
-    .am-center{
-        text-align: center;
-    }
-</style>
-<br/>
-<div class="border-box am-container am-vertical-align">
-    <div class=" am-avg-lg-2 am-thumbnails">
-        <form role="form">
-            <div class="am-form-group">
-                <input type="text" id="eventName" class="am-form-field" placeholder="赛事名称">
-                <button type="submit" class="am-btn am-btn-default">搜索</button>
-            </div>
-        </form>
+{load href="/static/css/index/event.css"}
+
+<div class="event-seacher">
+    <div class="seacher-logo"><img src="/static/image/logo.png" height="70px"></div>
+    <div class="seacher-select">
+        <ul>
+            <li>
+                <select id="areaSearch">
+                    <option value="" <?php echo empty($myarea)?'selected':'';?>>地区</option>
+                    <?php foreach ($areas as $key=>$value):?>
+                        <option value="<?php echo $value?>" <?php echo $myarea == $value?'selected':'';?>><?php echo $value?></option>
+                    <?php endforeach;?>
+                </select>
+            </li>
+            <li>
+                <select id="typeSearch">
+                    <option value="-1" <?php echo $mytype == -1?'selected':'';?>>类型</option>
+                    <?php foreach ($types as $key=>$value):?>
+                        <option value="<?php echo $key?>" <?php echo $mytype == $key?'selected':'';?>><?php echo $value?></option>
+                    <?php endforeach;?>
+                </select>
+            </li>
+            <li>
+                <select id="statusSearch">
+                    <option value="-1" <?php echo $mystatus == -1?'selected':'';?>>状态</option>
+                    <?php foreach ($status as $key=>$value):?>
+                        <option value="<?php echo $key?>" <?php echo $mystatus == $key?'selected':'';?>><?php echo $value?></option>
+                    <?php endforeach;?>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <div class="seacher-text">
+        <div class="search-bk">
+            <form action="" method="get">
+                <input type="hidden" value="" id="formType" name="type">
+                <input type="hidden" value="" id="formArea" name="area">
+                <input type="hidden" value="" id="formStatus" name="status">
+                <input type="text" name="name"  class="search-text-1">
+            </form>
+        </div>
     </div>
 </div>
-<div class=" border-box am-container am-vertical-align">
-    <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-1 am-thumbnails">
-        <?php if(!empty($events['data'])):?>
-            <?php foreach ($events['data'] as $key =>$value):?>
-                <li>
-                    <a href="/index/event/?id=<?php echo $value['Id'];?>">
-                        <div class="bg-index-<?php echo $key%4+1;?>">
-                            <p class="am-font-35 am-center"><?php echo $value['name']?></p><br />
-                        </div>
-                    </a>
-                </li>
-            <?php endforeach;?>
-        <?php endif;?>
-        <li>
-            <a href="/user/event/add">
-                <div class="bg-index-1">
-                    <p class="am-font-35 am-center">创建赛事</p><br />
-                    <p class="am-font-60 am-center">火热进行中~</p>
+<?php if(!empty($pager['data'])):?>
+    <?php foreach ($pager['data'] as $key =>$value):?>
+        <?php if($key%2 ==0):?>
+            <div class="event-list">
+                <div class="list-image">
+                    <img src="/static/image/event/kobe_left1.png" height="300px">
                 </div>
-            </a>
-        </li>
-    </ul>
+                <div class="list-main">
+                    <div class="list-main-top">
+                        <img src="<?php echo empty($value['posters'])?'':$value['posters'];?>" >
+                    </div>
+                    <div class="list-main-silder-r">
+                        <ul>
+                            <li id="event-hot"><?php echo $showStatus[$value['status']];?></li>
+                            <li><?php echo $value['name'];?></li>
+                            <li><?php echo $types[$value['type']];?></li>
+                            <li><?php echo $value['address'];?></li>
+                        </ul>
+                    </div>
+                    <div class="list-main-bottom-l">
+                        <span>时间：<?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
+                    </div>
+                    <div class="list-main-bottom-r">
+                        <a href="/index/event?id=<?php echo $value['Id'];?>">详情查看</a>
+                    </div>
+                </div>
+                <div class="list-image">
+                    <img src="/static/image/event/jordan_right1.png" height="300px" class="list-image-right">
+                </div>
+            </div>
+        <?php else:?>
+            <div class="event-list">
+                <div class="list-image">
+                    <img src="/static/image/event/jordan_left1.png" height="300px">
+                </div>
+                <div class="list-main">
+                    <div class="list-main-top">
+                        <img src="<?php echo empty($value['posters'])?'':$value['posters'];?>" >
+                    </div>
+                    <div class="list-main-silder-r">
+                        <ul>
+                            <li id="event-hot"><?php echo $showStatus[$value['status']];?></li>
+                            <li><?php echo $value['name'];?></li>
+                            <li><?php echo $types[$value['type']];?></li>
+                            <li><?php echo $value['address'];?></li>
+                        </ul>
+                    </div>
+                    <div class="list-main-bottom-l">
+                        <span>时间：<?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
+                    </div>
+                    <div class="list-main-bottom-r">
+                        <a href="/index/event?id=<?php echo $value['Id'];?>">详情查看</a>
+                    </div>
+                </div>
+                <div class="list-image">
+                    <img src="/static/image/event/kobe_right1.png" height="300px" class="list-image-right">
+                </div>
+            </div>
+        <?php endif;?>
+    <?php endforeach;?>
+<?php else:?>
 
-</div>
+<?php endif;?>
+
+
