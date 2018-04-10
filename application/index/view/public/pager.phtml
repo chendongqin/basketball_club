@@ -1,0 +1,27 @@
+{load href="/static/css/pager.css"}
+<div class="pager">
+    <div class="pager-total">总条数：<span ><?php echo $pager['total'];?></span></div>
+    <div class="pager-list">
+        <?php if($pager['last_page']!=1):?>
+            <?php if($pager['current_page']!=1):?>
+                <a href="<?php echo uri(['page'=>1]);?>">首页</a>
+                <a href="<?php echo uri(['page'=>$pager['current_page']-1]);?>">上一页</a>
+            <?php endif;?>
+            <?php if($pager['current_page']-2>=1):?>
+                <a href="<?php echo uri(['page'=>$pager['current_page']-2]);?>"><?php echo $pager['current_page']-2;?></a>
+                <a href="<?php echo uri(['page'=>$pager['current_page']-1]);?>"><?php echo $pager['current_page']-1;?></a>
+            <?php elseif($pager['current_page'] == 2):?>
+                <a href="<?php echo uri(['page'=>$pager['current_page']-1]);?>"><?php echo $pager['current_page']-1;?></a>
+            <?php endif;?>
+            <span><?php echo $pager['current_page'];?></span>
+            <?php $end = $pager['last_page']-2>$pager['current_page']?$pager['current_page']+2:$pager['last_page'];?>
+            <?php for ($i=$pager['current_page']+1;$i<=$end;$i++):?>
+                <a href="<?php echo uri(['page'=>$i]);?>"><?php echo $i;?></a>
+            <?php endfor;?>
+            <?php if($pager['current_page']!=$pager['last_page']):?>
+                <a href="<?php echo uri(['page'=>$pager['current_page']+1]);?>">下一页</a>
+                <a href="<?php echo uri(['page'=>$pager['last_page']]);?>">尾页</a>
+            <?php endif;?>
+        <?php endif;?>
+    </div>
+</div>

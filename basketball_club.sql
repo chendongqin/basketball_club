@@ -1,5 +1,5 @@
 ﻿# Host: 127.0.0.1  (Version: 5.5.53)
-# Date: 2018-04-08 00:17:47
+# Date: 2018-04-10 21:41:15
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -23,7 +23,7 @@ CREATE TABLE `admin` (
 # Data for table "admin"
 #
 
-INSERT INTO `admin` VALUES (1,'13023913185','admin','a759fb1212ff39a9948a0d325d5638d39eb62fa3',1519565829,1522584134);
+INSERT INTO `admin` VALUES (1,'13023913185','admin','a759fb1212ff39a9948a0d325d5638d39eb62fa3',1519565829,1523251480);
 
 #
 # Structure for table "areas"
@@ -84,13 +84,13 @@ CREATE TABLE `club` (
   `log` text NOT NULL COMMENT '球队日志',
   `area` varchar(255) NOT NULL DEFAULT '' COMMENT '地区',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "club"
 #
 
-INSERT INTO `club` VALUES (7,'计算14级','/uploads/clubs/mark/71fe6912bb4375f9b11122f42256a348.jpg',1,1522548979,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:16:19  :陈东钦创建球队\"]','福建省厦门市集美区'),(8,'Lakers','/uploads/clubs/mark/043fcfaa2397700babdf35dd648926f2.jpg',1,1522549502,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:25:02  :陈东钦创建球队\"]','福建省龙岩市永定县');
+INSERT INTO `club` VALUES (7,'计算14级','/uploads/clubs/mark/71fe6912bb4375f9b11122f42256a348.jpg',1,1522548979,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:16:19  :陈东钦创建球队\"]','福建省厦门市集美区'),(8,'Lakers','/uploads/clubs/mark/043fcfaa2397700babdf35dd648926f2.jpg',1,1522549502,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:25:02  :陈东钦创建球队\"]','福建省龙岩市永定县'),(9,'计算14联队','/uploads/clubs/mark/d102176ab55bdc079801e28b05f5cfab.jpg',1,1523329936,'js14',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-10 11:12:16  \\u9648\\u4e1c\\u94a6\\u521b\\u5efa\\u7403\\u961f\"]','北京市县延庆县');
 
 #
 # Structure for table "club_apply"
@@ -133,13 +133,13 @@ CREATE TABLE `event` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `cancel` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否已取消',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='赛事';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='赛事';
 
 #
 # Data for table "event"
 #
 
-INSERT INTO `event` VALUES (1,'JMU计算机学院院赛','福建省厦门市集美区','/uploads/event/posterss/6d8898af5911cb2952ca726f4b2d5198.jpg',1,'2018-04-07','2018-05-10',1,'test','{\"8\":\"Lakers\",\"7\":\"\\u8ba1\\u7b9714\\u7ea7\"}',0,0,0,0,1520697093,0);
+INSERT INTO `event` VALUES (1,'JMU计算机学院院赛','福建省厦门市集美区','/uploads/event/posterss/6d8898af5911cb2952ca726f4b2d5198.jpg',1,'2018-04-07','2018-05-10',1,'test','{\"8\":\"Lakers\",\"7\":\"\\u8ba1\\u7b9714\\u7ea7\"}',0,0,0,0,1520697093,0),(2,'集美大学计算机工程学院第三届专业杯','福建省厦门市集美区','/uploads/event/posterss/4e8f0bcace1c66ff61f53e9672a58060.jpg',3,'2018-04-14','2018-05-31',1,'lTkmVB','',0,0,0,4,1523251267,0);
 
 #
 # Structure for table "event_invite"
@@ -327,10 +327,10 @@ CREATE TABLE `user` (
   `certification` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否身份认证',
   `ban` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否禁用',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 #
 # Data for table "user"
 #
 
-INSERT INTO `user` VALUES (1,'913294974@qq.com','6bb9009e4f0708cafdd5712d45201a1fb9bab064','陈东钦','350822199508014917','/uploads/user/1.jpg',178.0,71.0,'安徽省滁州市全椒县','[\"7\",\"8\"]',1,0),(2,'1575818106@qq.com','46dde728f51058987783e022abbb33c74d74f96f','','','',0.0,0.0,'安徽省宿州市墉桥区','',0,0),(3,'zgrant@foxmail.com','7ab11b4196d05f621a65441539b1dd2cac4eba52','','','',0.0,0.0,'','',0,0);
+INSERT INTO `user` VALUES (1,'913294974@qq.com','6bb9009e4f0708cafdd5712d45201a1fb9bab064','陈东钦','350822199508014917','/uploads/user/1.jpg',178.0,71.0,'安徽省滁州市全椒县','[\"7\",\"8\",\"9\"]',1,0),(2,'1575818106@qq.com','46dde728f51058987783e022abbb33c74d74f96f','','','',0.0,0.0,'安徽省宿州市墉桥区','',0,0),(3,'zgrant@foxmail.com','7ab11b4196d05f621a65441539b1dd2cac4eba52','范进雄','352229199511161030','',0.0,0.0,'','',1,0),(4,'1966650152@qq.com','aebeb43ca98b51e304820ebfdc5085be2b0dbbba','','','',0.0,0.0,'','',0,0);

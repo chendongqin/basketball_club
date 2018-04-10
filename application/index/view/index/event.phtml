@@ -1,4 +1,6 @@
 {load href="/static/css/index/event.css"}
+{load href="/static/js/jq.js"}
+{load href="/static/js/index/index/event.js"}
 
 <div class="event-seacher">
     <div class="seacher-logo"><img src="/static/image/logo.png" height="70px"></div>
@@ -54,14 +56,14 @@
                     </div>
                     <div class="list-main-silder-r">
                         <ul>
-                            <li id="event-hot"><?php echo $showStatus[$value['status']];?></li>
+                            <li id="event-hot"><?php echo $showStatus[$value['status']];?><span class="join-num">参赛队伍<?php echo count(json_decode($value['join_clubs'],true));?></span></li>
                             <li><?php echo $value['name'];?></li>
                             <li><?php echo $types[$value['type']];?></li>
                             <li><?php echo $value['address'];?></li>
                         </ul>
                     </div>
                     <div class="list-main-bottom-l">
-                        <span>时间：<?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
+                        <img src="/static/image/small/time.png" width="32px"/><span><?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
                     </div>
                     <div class="list-main-bottom-r">
                         <a href="/index/event?id=<?php echo $value['Id'];?>">详情查看</a>
@@ -82,14 +84,14 @@
                     </div>
                     <div class="list-main-silder-r">
                         <ul>
-                            <li id="event-hot"><?php echo $showStatus[$value['status']];?></li>
+                            <li id="event-hot"><?php echo $showStatus[$value['status']];?><span class="join-num">参赛队伍<?php echo count(json_decode($value['join_clubs'],true));?></span></li>
                             <li><?php echo $value['name'];?></li>
                             <li><?php echo $types[$value['type']];?></li>
                             <li><?php echo $value['address'];?></li>
                         </ul>
                     </div>
                     <div class="list-main-bottom-l">
-                        <span>时间：<?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
+                        <img src="/static/image/small/time.png" width="32px"/><span><?php echo $value['start_time'].' 至 '.$value['end_time'];?></span>
                     </div>
                     <div class="list-main-bottom-r">
                         <a href="/index/event?id=<?php echo $value['Id'];?>">详情查看</a>
@@ -101,8 +103,15 @@
             </div>
         <?php endif;?>
     <?php endforeach;?>
+    {include file="../application/index/view/public/pager.phtml"/}
 <?php else:?>
-
+<div class="nothing">
+    <div class="nothing-top"><span>没有找到赛事</span></div>
+    <div class="nothing-bottom">
+        <a href="/user/event/add">前往添加</a>
+    </div>
+</div>
 <?php endif;?>
+
 
 

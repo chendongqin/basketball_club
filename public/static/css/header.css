@@ -22,12 +22,12 @@
     border: 1px solid springgreen;
 }
 .nav-right{
-    width:450px;
+    width:550px;
     height: 50px;
     float: right;
 }
 .nav-left{
-    width: 400px;
+    width:300px;
     float: left;
     color: #00ff00;
     line-height: 50px;
@@ -38,7 +38,7 @@
 .nav-right li{
     list-style-type: none;
     float: left;
-    width: 80px;
+    width: 100px;
     margin: auto;
     text-align: center;
 }

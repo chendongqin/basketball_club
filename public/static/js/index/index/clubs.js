@@ -50,11 +50,59 @@ $(function () {
            success: function (returndata) {
                if(returndata.status==true){
                    window.location.href = '/index/index/clubs?name='+name;
+               }else{
+                   $('.tc_error').html(json.msg);
+                   $('#error').show();
                }
            },
            error: function () {
-               alert('添加失败');
+               $('.tc_error').html('添加失败');
+               $('#error').show();
            }
        });
    })
+});
+
+$(function () {
+    var idArray = $(".club-list").find(".club-list-ul");
+    $.each(idArray,function(i,temp){
+        var captain = $(temp).attr("data-captain");
+        var data = {id:captain};
+        if($("span").hasClass("captainName")){
+            $.post("/index/data/userName",data,function(json){
+                var captainName = $(temp).find(".captainName");
+                captainName.text(json.data.name);
+            });
+        }
+    });
+});
+
+$(function () {
+    var id = 0;
+   $('.joinClub').click(function () {
+       id = $(this).attr('data-id');
+       $('#modelJoinClub').modal('show');
+   }) ;
+   $('#joinClubButton').click(function () {
+       var code = $('#modal_string').val();
+       $.post('/user/index/joinClub',{id:id,code:code},function (json) {
+            if(json.status == true){
+                window.location.href = '/user/club?id='+id;
+            }else{
+                $('.tc_error').html(json.msg);
+                $('.error').show();
+            }
+       });
+   });
+    $('#applyJoinButton').click(function () {
+        var reason = $('#modal_string').val();
+        $.post('/user/index/applyJoin',{id:id,reason:reason},function (json) {
+            if(json.status == true){
+               location.reload();
+            }else{
+                $('.tc_error').html(json.msg);
+                $('#error').show();
+            }
+        });
+    });
 });

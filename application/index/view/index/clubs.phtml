@@ -1,39 +1,71 @@
-<a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">添加球队</a><br>
-<?php if(!empty($clubs['data'])):?>
-    <?php foreach ($clubs['data'] as $key=>$club):?>
-        <ul class="list">
-            <li>
-                <div >
-                    <img src="<?php echo empty($club['mark'])?'':$club['mark'];?>" width="100">
-                    <strong>队名：<?php echo $club['name'];?></strong>
-                    <strong>队长：<?php echo $club['captain'];?></strong>
-                    <strong>地区：<?php echo $club['area'];?></strong>
-                    <?php $players = json_decode($club['players'],true);?>
-                    <strong>人数：<?php echo count($players);?></strong>
-                    <?php if(!empty($user) and isset($players[$user['Id']])):?>
-                        <a href="/user/club?id=<?php echo $club['Id'];?>">进入球队</a>
-                    <?php else:?>
-                        <a href="javascript:;" data-id="<?php echo $club['Id'];?>">加入球队</a>
-                    <?php endif;?>
-                </div>
-            </li>
-        </ul>
-    <?php endforeach;?>
-<?php else:?>
-    没有找到球队
-<?php endif;?>
-
 {load href="/static/css/model.css" /}
+{load href="/static/css/index/clubs.css" /}
 {load href="/static/js/jq.js" /}
 {load href="/static/js/index/model.js" /}
-{load href="/static/js/index/index/addclub.js" /}
+{load href="/static/js/index/index/clubs.js" /}
 {load href="/static/js/index/area.js" /}
+
+<div class="main">
+    <div class="add">
+        <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">创建球队</a><br>
+    </div>
+</div>
+
+        <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$club):?>
+                <?php if($key % 2==0):?>
+                    <div class="club-list">
+                    <?php if( $key == count($pager['data'])-1):?>
+                        <div class="club-list-c">
+                    <?php endif;?>
+                            <div class="club-list-l">
+                <?php else:?>
+                    <div class="club-list-r">
+                <?php endif;?>
+                        <div class="club-list-img"><img src="<?php echo empty($club['mark'])?'':$club['mark'];?>"><span class="club-title"><?php echo $club['name'];?></span></div>
+                   <div  class="club-list-ul" role="club" data-captain="<?php echo $club['captain'];?>">
+                        <ul>
+                            <li><strong>队长：</strong><span class="captainName"></span></li>
+                            <li><strong><?php echo $club['area'];?></strong></li>
+                            <li>
+                                <?php $players = json_decode($club['players'],true);?>
+                                <span class="grey"><?php echo count($players);?></span><strong>人</strong>
+                            </li>
+                        </ul>
+                   </div>
+                    <div class="into-right">
+                        <?php if(!empty($user) and isset($players[$user['Id']])):?>
+                            <a href="/user/club?id=<?php echo $club['Id'];?>">进入球队</a>
+                        <?php else:?>
+                            <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" class="joinClub" data-id="<?php echo $club['Id'];?>">加入球队</a>
+                        <?php endif;?>
+                    </div>
+                </div>
+                <?php if( $key == count($pager['data'])-1):?>
+                      </div><!-- list-c结束-->
+                <?php endif;?>
+                <?php if($key % 2==1 or $key==count($pager['data'])-1 ):?>
+                    </div><!-- list结束-->
+                <?php endif;?>
+            <?php endforeach;?>
+            {include file="../application/index/view/public/pager.phtml"/}
+        <?php else:?>
+            <div class="nothing-clubs">
+                <span>没有找到球队</span>
+            </div>
+        <?php endif;?>
+<!--</div><!-- main结束-->
+
+
 <div class="modal fade" id="modelAddClub">
     <div class="modal-dialog custom-modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">创建球队</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal form-groups-bordered form-static" id="fauditingForm">
@@ -70,3 +102,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modelJoinClub">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">加入球队</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-groups-bordered form-static" id="joinClubForm">
+                    <textarea placeholder="输入邀请码或理由" name="modal_string" id="modal_string"></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button"  id="joinClubButton" value="加入" >
+                <input type="button"  id="applyJoinButton" value="申请加入" >
+            </div>
+        </div>
+    </div>
+</div>
+

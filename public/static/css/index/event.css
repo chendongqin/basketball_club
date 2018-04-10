@@ -123,10 +123,10 @@
 }
 .list-main-bottom-l span{
     line-height: 60px;
-    font-size: 20px;
+    font-size: 25px;
     color: #000088;
 }
-.list-main-bottom-r a:link,.list-main-bottom-r a:visited{
+.list-main-bottom-r a:link,.list-main-bottom-r a:visited,.nothing-bottom a:link,.nothing-bottom a:visited{
     text-decoration: none;
     text-align: center;
     color: white;
@@ -139,7 +139,38 @@
     background:green;
 }
 
-.list-main-bottom-r a:hover,.list-main-bottom-r a:active{
+.list-main-bottom-r a:hover,.list-main-bottom-r a:active,.nothing-bottom a:hover,.nothing-bottom a:active{
     font-size: 0;
     background:url("/static/image/bk/into.png")no-repeat center;
+}
+.join-num{
+    display: block;
+    text-align: center;
+    line-height: 16px;
+    width:48px;
+    font-size: 12px;
+    color: #3c4ee8;
+    float: right;
+}
+.nothing{
+    width:800px;
+    height: 400px;
+    margin: 20px auto;
+    background: url("/static/image/bk/tiger.png") no-repeat center;
+}
+.nothing-top{
+    height: 50px;
+    width: 800px;
+    float: right;
+    text-align: right;
+}
+.nothing-top span{
+    line-height: 50px;
+    padding: 50px;
+    color: #ff0812;
+    font-size: 30px;
+}
+.nothing-bottom{
+    height: 350px;
+    float: right;
 }

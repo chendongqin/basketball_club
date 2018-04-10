@@ -66,3 +66,25 @@ $(function () {
         $('#address').val(address);
     });
 });
+
+$(function () {
+   $('#idcardVirefy').click(function () {
+      $('#virefyUserModel').modal('show');
+   });
+   $('#virefy').click(function () {
+      var realName = $('#model_name').val();
+      var idcard = $('#model_idcard').val();
+      if(realName =='' || idcard ==''){
+          $('.tc_error').html('请输入数据');
+          $('#error').show();
+      }
+      $.post('/user/index/virefy',{idcard:idcard,realName:realName},function (json) {
+         if(json.status === true)
+             location.reload();
+         else{
+             $('.tc_error').html(json.msg);
+             $('#error').show();
+         }
+      });
+   });
+});

@@ -42,8 +42,8 @@ use think\Db;
          $this->assign('mytype',$type);
          $this->assign('mystatus',$status);
          $page = $request->param('page',1,'int');
-         $events = $eventModel->where($where)->paginate(4,false,array('page'=>$page))->toArray();
-         $this->assign('pager',$events);
+         $events = $eventModel->where($where)->paginate(4,false,array('page'=>$page));
+         $this->assign('pager',$events->toArray());
          $types = Config::get('basketball.event_types');
          $this->assign('types',$types);
          $this->assign('status',Config::get('basketball.eventStatus'));
@@ -72,7 +72,7 @@ use think\Db;
              ->order('create_time')
              ->paginate(10,false,['page'=>$page])
              ->toArray();
-         $this->assign('clubs',$clubs);
+         $this->assign('pager',$clubs);
          $provinces = Db::name('provinces')->select();
          $proData = array();
          foreach ($provinces as $item){

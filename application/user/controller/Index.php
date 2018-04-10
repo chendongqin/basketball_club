@@ -44,13 +44,9 @@ class Index extends Userbase{
 
     //身份验证
     public function virefy(){
+        $user = $this->getUser();
         $request = $this->request;
-        $id = $request->param('id','','int');
         $userModel = Db::name('user');
-        $user = $userModel->where(array('Id'=>$id))->find();
-        if(empty($user)){
-            return $this->returnJson('用户不存在');
-        }
         $realName = $request->param('realName','','string');
         $idcard = $request->param('idcard','','string');
         if(empty($realName) or empty($idcard)){
@@ -59,7 +55,7 @@ class Index extends Userbase{
         $virefy = Db::name('user')->where(['name'=>$realName,'idcard'=>$idcard])->find();
         if(!empty($virefy))
             return $this->returnJson('用户已经进行过个人身份认证');
-        $conf = Config::get('hfwapi');
+        $conf = Config::get('basketball.hfwapi');
         $data = array(
           'realName'=>$realName,
           'cardNo'=>$idcard,

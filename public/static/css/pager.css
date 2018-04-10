@@ -1,0 +1,35 @@
+.pager{
+    height: 40px;
+    width: 960px;
+    border: 1px solid #e8e8e8;
+    margin:10px auto;
+}
+.pager-list{
+    width: 718px;
+    margin-right: 100px;
+    float: right;
+    text-align: center;
+    height: 40px;
+}
+.pager-total{
+    width: 100px;
+    padding-left: 40px;
+    color: #271f18;
+    font-size: 16px;
+    float: left;
+    line-height: 40px;
+}
+.pager-total span {
+    color: grey;
+    font-size: 14px;
+}
+.pager-list span ,.pager-list a:link,.pager a:visited{
+    display: inline-block;
+    border: 1px solid rgba(219, 209, 232, 0.46);
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.pager-list a:hover,.pager-list a:active{
+   background-color: rgb(173, 195, 232);
+}

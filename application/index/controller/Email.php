@@ -30,7 +30,7 @@ class Email extends Controller{
         if(!$cacheRes){
             return json(array('status'=>false,'msg'=>'验证码存储错误'));
         }
-        $subject = '来战吧篮球注册';
+        $subject = 'BasketballClubs注册';
         $body = '验证码：'.$code;
         $res = kuEmail::sendEmail($email,$subject,$body);
         if($res){
@@ -57,7 +57,7 @@ class Email extends Controller{
         if(!$cacheRes){
             return json(array('status'=>false,'msg'=>'验证码存储错误'));
         }
-        $subject = '用户密码找回';
+        $subject = 'BasketballClubs密码找回';
         $body = '验证码：'.$code;
         $res = kuEmail::sendEmail($email,$subject,$body);
         if($res){

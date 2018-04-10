@@ -63,10 +63,10 @@ class Event extends Userbase{
         $data['start_time'] = strtotime($request->param('startTime','','string'));
         $data['end_time'] = strtotime($request->param('endTime','','string'));
         if($data['type'] === 0){
-            $data['pormotion_num'] = $request->param('pormotion','','string');
-            if(!is_int($data['pormotion_num']))
+            $data['promotion_num'] = (int)$request->param('promotion','','string');
+            if(!is_int($data['promotion_num']))
                 return $this->returnJson('晋级队伍为整数');
-            if(empty($data['pormotion_num']))
+            if(empty($data['promotion_num']))
                 return $this->returnJson('晋级队伍不能为0');
         }
         if(empty($data['name']) or empty($data['address']) or empty($data['start_time']) or empty($data['end_time']))
@@ -153,9 +153,11 @@ class Event extends Userbase{
         $joins = json_decode($event['join_clubs'],true);
         $joinClubs = [];
         $clubModel = Db::name('club');
-        foreach ($joins as $key=>$join){
-            $club = $clubModel->where('Id',$key)->find();
-            $joinClubs[] = $club;
+        if(!empty($joins)){
+            foreach ($joins as $key=>$join){
+                $club = $clubModel->where('Id',$key)->find();
+                $joinClubs[] = $club;
+            }
         }
         $this->assign('joins',$joinClubs);
         $schedules = Db::name('schedule')
@@ -166,7 +168,6 @@ class Event extends Userbase{
         $types = Config::get('basketball.event_types');
         $this->assign('types',$types);
         return $this->fetch();
-
     }
 
     //修改邀请码

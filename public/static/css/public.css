@@ -1,0 +1,66 @@
+.k-left-1{
+     height:50px;
+     width: 100px;
+     text-align: left;
+ }
+.k-left-2{
+    height:50px;
+    width: 200px;
+    text-align: left;
+}
+.k-left-3{
+    height:50px;
+    width: 300px;
+    text-align: left;
+}
+.k-right-1{
+    height:50px;
+    width: 100px;
+    text-align: right;
+}
+.k-right-2{
+    height:50px;
+    width: 200px;
+    text-align: right;
+}
+.k-right-3{
+    height:50px;
+    width: 300px;
+    text-align: right;
+}
+.input-left-1{
+    height:50px;
+    width: 100px;
+    text-align: left;
+}
+.input-left-2{
+    height:50px;
+    width: 200px;
+    text-align: left;
+}
+.input-left-3{
+    height:60px;
+    width: 300px;
+    text-align: left;
+}
+.input-right-1{
+    height:50px;
+    width: 100px;
+    text-align: right;
+}
+.input-right-2{
+    height:50px;
+    width: 200px;
+    text-align: right;
+}
+.input-right-3{
+    height:50px;
+    width: 300px;
+    text-align: right;
+}
+.k-div{
+    height: 60px;
+    width: 600px;
+    margin: auto;
+    text-align: center;
+}

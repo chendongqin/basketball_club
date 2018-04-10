@@ -1,0 +1,120 @@
+.main{
+    width: 960px;
+    min-height: 40px;
+    height:auto!important;
+    _height:40px;
+    margin: 10px auto;
+    text-align: center;
+}
+.add{
+    height: 40px;
+    text-align: right;
+    margin:10px 50px 0 0;
+}
+.main a:link,.club-list a:link,.main  a:visited,.club-list a:visited{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    margin-top:5px;
+    border: 3px green;
+    border-radius: 15px;
+    background:green;
+}
+/*.add a:link,.add a:visited{*/
+    /*text-decoration: none;*/
+    /*text-align: center;*/
+    /*color: white;*/
+    /*display:inline-block;*/
+    /*width:80px;*/
+    /*line-height:30px;*/
+    /*margin-top:5px;*/
+    /*border: 3px green;*/
+    /*border-radius: 15px;*/
+    /*background:green;*/
+/*}*/
+.add a:hover,.add a:active{
+    font-size: 0;
+    background:url("/static/image/bk/into.png")no-repeat center;
+}
+
+.club-list{
+    /*min-height: 250px;*/
+    /*height:auto!important;*/
+    /*_height: 250px;*/
+    /*max-width: 860px;*/
+    height: 250px;
+    width: 860px;
+    margin: auto;
+}
+.club-list-l{
+    float: left;
+}
+.club-list-r{
+    float: right;
+}
+.club-list-c{
+    width:430px;
+    height:250px;
+    margin: auto;
+}
+.club-list-l,.club-list-r{
+     width:420px;
+     height:240px;
+     border: 3px solid #e8e8e8;
+ }
+.club-list-img{
+    width: 420px;
+    height: 120px;
+    overflow: hidden;
+    border-bottom: 2px solid #e8e8e8;
+}
+.club-list-img img{
+    width: 100px;
+    height: 100px;
+    margin:10px 10px 10px 50px;
+    float: left;
+}
+.club-list-ul{
+    width: 200px;
+    height: 120px;
+    margin-left: 30px;
+    float: left;
+}
+.club-title{
+    font-size: 25px;
+    color: #1516ff;
+    line-height: 120px;
+}
+.club-list-l li,.club-list-r li{
+    list-style-type: none;
+    line-height: 30px;
+    text-align: left;
+}
+.into-right{
+    float: right;
+    width: 80px;
+    height: 30px;
+    line-height: 120px;
+    margin-right: 80px;
+}
+.captainName{
+    color: #421c88;
+}
+.grey{
+    color: grey;
+}
+.nothing-clubs{
+    width: 550px;
+    height: 50px;
+    margin: 150px auto;
+    text-align: center;
+    /*background: url('/static/image/bk/youhua.png') no-repeat center;*/
+}
+.nothing-clubs span{
+    font-size: 30px;
+    color: #457780;
+    padding-top:5px;
+}
