@@ -1,0 +1,114 @@
+.main-club{
+    width: 860px;
+    height:860px;
+    margin:15px auto;
+}
+
+.club-left{
+    width: 540px;
+    height:854px;
+    float: left;
+    border: 3px solid #e8e8e8;
+}
+
+.club-title{
+    width: 540px;
+    height: 254px;
+    margin: auto;
+    border-bottom: 3px solid #e8e8e8;
+}
+.title-img{
+    height: 154px;
+    padding: 50px 10px;
+    float: left;
+}
+.title-text{
+    height:156px;
+    float: left;
+    margin:48px 30px;
+}
+.club-title li{
+    line-height: 55px;
+    list-style-type: none;
+    color: grey;
+    font-size: 20px;
+}
+
+.club-log{
+    width: 536px;
+    height: 297px;
+    margin: auto;
+    border-bottom: 3px solid #e8e8e8;
+    overflow: scroll;
+}
+
+.club-right{
+    width: 300px;
+    height: 854px;
+    float: right;
+    line-height: 40px;
+    text-align: center;
+    border: 3px solid #e8e8e8;
+    background-color: greenyellow;
+    overflow: scroll;
+}
+.club-right li{
+    list-style-type: none;
+    color: #a927ff;
+    font-size: 20px;
+}
+.title-text a,.club-right a{
+    text-decoration: none;
+}
+#changeCaptain{
+    text-decoration: none;
+    text-align: center;
+    color: rgba(27, 27, 28, 0.99);
+    display:inline-block;
+    width:80px;
+    height: 30px;
+    border: 3px green;
+    margin-left:15px;
+    border-radius: 15px;
+    background: #76e8ff;
+}
+#changeCaptain:hover{
+    background: #86ff6f;
+    cursor:pointer;
+}
+.club-apply{
+    height: 294px;
+    width: 536px;
+    margin: auto;
+    text-align: center;
+    border-bottom: 3px solid #e8e8e8;
+    overflow: scroll;
+}
+.club-apply table{
+    border-collapse: collapse;
+    margin-left: 15px;
+    text-align: center;
+}
+th,td{
+    border: 1px solid rgb(230, 231, 231);
+    width: auto;
+    padding: 5px 5px;
+    height: 30px;
+    border-collapse: collapse;
+}
+.club-apply a,.delPlaers{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    line-height: 30px;
+    width:50px;
+    border: 2px green;
+    border-radius: 5px;
+}
+.pass{
+    background: green;
+}
+.refuse,.delPlaers{
+    background: red;
+}

@@ -1,19 +1,21 @@
-<?php if(!empty($pager['data'])):?>
-    <ul>
-    <?php foreach ($pager['data'] as $key=>$data):?>
-        <li>
-            <div >
-                名称：<?php echo $data['name'];?>
-                地点：<?php echo $data['address'];?>
-                赛制：<?php echo $types[$data['type']];?>
-                时间：<?php echo $data['start_time'].'——'.$data['end_time'];?>
-                <a href="/user/event/management?id=<?php echo $data['Id'];?>">进入管理</a>
+{load href="/static/css/user/event/index.css" /}
+<div class="main">
+    {include file="../application/index/view/public/user-side.phtml"/}
+    <div class="event-list">
+        <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+                <div class="list-show">
+                    <li><span><?php echo $data['name'];?></span ><span class="type"><span><?php echo $types[$data['type']];?></span></li>
+                    <li><?php echo $data['address'];?></span></li>
+                    <li><span><?php echo $data['start_time'].'至'.$data['end_time'];?></span><a href="/user/event/management?id=<?php echo $data['Id'];?>">进入管理</a></li>
+                </div>
+            <?php endforeach;?>
+        <?php else:?>
+            <div class="list-show nothing">
+                <li><span>没有比赛</span></li>
             </div>
-        </li>
-    <?php endforeach;?>
-    </ul>
-<?php else:?>
-    没有赛事
-<?php endif;?>
-
+        <?php endif;?>
+    </div>
+</div>
+{include file="../application/index/view/public/pager.phtml"/}
 

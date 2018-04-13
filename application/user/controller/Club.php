@@ -60,10 +60,20 @@ class Club extends Userbase{
         if(isset($joins[$clubId]))
             return $this->returnJson('已经加入比赛，无需重复操作');
         $joins[$clubId] = $club['name'];
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].'设置球队加入“'.$event['name'].'”的比赛';
+        array_unshift($logs,$log);
         $update = ['Id'=>$event['Id'],'join_clubs'=>json_encode($joins)];
+        Db::startTrans();
         $res = Db::name('event')->update($update);
         if(!$res)
             return $this->returnJson('加入比赛失败，请重试');
+        $res = Db::name('club')->update(['Id'=>$clubId,'log'=>json_encode($logs)]);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('写入球队日志错误，请重试');
+        }
+        Db::commit();
         return $this->returnJson('加入比赛成功',true,1);
 
     }
@@ -91,15 +101,23 @@ class Club extends Userbase{
         $user = $this->getUser();
         $id = $this->request->param('id','','int');
         $playerId = $this->request->param('playerId','','int');
+        $player = Db::name('user')->where('Id',$playerId)->find();
+        if(empty($player))
+            return $this->returnJson('用户不存在');
         $club = Db::table('club')->where('Id',$id)->find();
         if (empty($club))
             return $this->returnJson('球队不存在');
         if($user['Id'] != $club['captain'])
             return $this->returnJson('您不是队长，无法操作');
+        if($playerId==$club['captain'])
+            return $this->returnJson('不能将队长转给自己');
         $players = json_decode($club['players'],true);
         if(!isset($players[$playerId]))
             return $this->returnJson('该用户不在球队');
-        $update = ['Id'=>$id,'captain'=>$playerId];
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].'将队长转让给'.$player['name'];
+        array_unshift($logs,$log);
+        $update = ['Id'=>$id,'captain'=>$playerId,'log'=>json_encode($logs)];
         $res = Db::name('club')->update($update);
         if(!$res)
             return $this->returnJson('操作失败，请重试');
@@ -110,7 +128,7 @@ class Club extends Userbase{
         $user =$this->getUser();
         $id = $this->request->param('id','','int');
         $deal = (int)$this->request->param('deal','','int');
-        if(in_array($deal,[0,1]))
+        if($deal!= 1 and $deal !=0)
             return $this->returnJson('处理参数不正确');
         $apply = Db::name('club_apply')->where('Id',$id)->find();
         if(empty($apply))
@@ -132,7 +150,7 @@ class Club extends Userbase{
             $logs = json_decode($club['log'],true);
             $log = date('Y-m-d H:i:s').' '.$user['name'].'拒绝了'.$applyUser['name'].' 加入球队';
             array_unshift($logs,$log);
-            $update= ['Id'=>$club['Id'],'players'=>json_encode($players),'log'=>json_encode($logs)];
+            $update= ['Id'=>$club['Id'],'log'=>json_encode($logs)];
             $res = Db::name('club')->update($update);
             if(!$res)
                 return $this->returnJson('操作失败，请重试!');
@@ -159,6 +177,70 @@ class Club extends Userbase{
         }
         Db::commit();
         return $this->returnJson('处理成功',true,1);
+    }
+
+    public function delplayer(){
+        $user =$this->getUser();
+        $id = $this->request->param('id','','int');
+        $playerId = $this->request->param('playerId','','int');
+        $player = Db::name('user')->where('Id',$playerId)->find();
+        if(empty($player))
+            return $this->returnJson('用户不存在');
+        $club = Db::table('club')->where('Id',$id)->find();
+        if (empty($club))
+            return $this->returnJson('球队不存在');
+        if($user['Id'] != $club['captain'])
+            return $this->returnJson('您不是队长，无法操作');
+        if($playerId==$club['captain'])
+            return $this->returnJson('不能自己踢出队伍');
+        $players = json_decode($club['players'],true);
+        if(!isset($players[$playerId]))
+            return $this->returnJson('该用户不在球队');
+        unset($players[$playerId]);
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].'将'.$player['name'].'踢出队伍';
+        array_unshift($logs,$log);
+        $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
+        $res = Db::name('club')->update($update);
+        if(!$res)
+            return $this->returnJson('操作失败，请重试');
+        return $this->returnJson('踢出成功',true,1);
+    }
+
+    public function applyEvent(){
+        $eventId = $this->request->param('id',0,'int');
+        $event = Db::name('event')->where('Id',$eventId)->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        if(strtotime($event['start_time'])<time())
+            return $this->returnJson('赛事已开始,无法报名');
+        $clubId = $this->request->param('clubId',0,'int');
+        $club = Db::name('club')->where('Id',$clubId)->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $user = $this->getUser();
+        if($club['captain']!=$user['Id'])
+            return $this->returnJson('您不是队长，没有操作权限');
+        $reason = $this->request->param('reason','','string');
+        $exist = Db::name('event_apply')->where(['club_id'=>$clubId,'event_id'=>$eventId])->find();
+        if(!empty($exist))
+            return $this->returnJson('已申请，请勿重复操作');
+        $add = ['club_id'=>$clubId,'event_id'=>$eventId,'reason'=>$reason,'time'=>time()];
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].'申请加入'.$event['name'].'比赛';
+        array_unshift($logs,$log);
+        $update = ['Id'=>$clubId,'log'=>json_encode($logs)];
+        Db::startTrans();
+        $res = Db::name('event_apply')->insert($add);
+        if(!$res)
+            return $this->returnJson('申请失败，请重试');
+        $res = Db::name('club')->update($update);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('更新球队日志失败');
+        }
+        Db::commit();
+        return $this->returnJson('申请成功',true,1);
     }
 
 }

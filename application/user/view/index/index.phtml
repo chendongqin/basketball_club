@@ -6,42 +6,46 @@
 {load href="/static/css/user/index.css" /}
 <div class="main-user">
     {include file="../application/index/view/public/user-side.phtml"/}
-    <label>账号：<?php echo $user['email']?></label><br />
-    <label>头像：</label>
-    <img src="<?php echo empty($user['head'])?'/uploads/user/default.jpg':$user['head'];?>" id="userHeadChange">
-    <input type="file" id="userHead" name="userHead" style="display:none">
-    <br>
-    <?php if($user['certification'] === 1):?>
-        <label>姓名：<?php echo $user['name']?></label><br />
-    <?php else:?>
-        <label>姓名：    <input type="button" value="身份认证" id="idcardVirefy"></label><br />
-    <?php endif;?>
-    <form name="saveUserForm" id="saveUserForm">
-        <label>身高：<input type="text" id="height" name="height" value="<?php echo $user['height']?>"></label><br />
-        <label>体重：<input type="text" id="weight" name="weight" value="<?php echo $user['weight']?>"></label><br />
-        <label>城市：
-            <div class="city">
-                <?php echo $user['city'];?>  <button id="changeCity">更换</button>
+    <div class="user-content">
+        <div class="user-top">
+            <div class="div-img">
+                <img src="<?php echo empty($user['head'])?'/uploads/user/default.jpg':$user['head'];?>" id="userHeadChange" width="200px">
+                <input type="file" id="userHead" name="userHead" style="display:none">
             </div>
-        </label>
-        <input type="hidden" name="address" id="address" value="<?php echo $user['city'];?>">
-        <div class="changeCity" style="display:none">
-            <select  id="province" >
-                <option value="0">选择省区</option>
-                <?php foreach ($provinces as $key=>$value):?>
-                    <option value="<?php echo $key;?>" ><?php echo $value;?></option>
-                <?php endforeach;?>
-            </select>
-            <select  id="city" >
-                <option value="0">选择市区</option>
-            </select>
-            <select  id="area" >
-                <option value="0">选择县区</option>
-            </select>
+            <li>账号：<span style="color: gray"><?php echo $user['email']?></span></li>
+            <?php if($user['certification'] === 1):?>
+                <li>姓名：<?php echo $user['name']?></li>
+                <li>姓名：<?php echo substr_replace($user['idcard'],'***********',4,11);?></li>
+            <?php else:?>
+                <li>姓名：    <input type="button" value="身份认证" id="idcardVirefy"></li>
+            <?php endif;?>
         </div>
-        <br />
-        <input type="button" id="saveUser" value="保存">
-    </form>
+        <div class="user-bottom">
+            <div class="user-form">
+                <form name="saveUserForm" id="saveUserForm">
+                    <label>身高：<input type="text" id="height" name="height" value="<?php echo $user['height']?>"></label>
+                    <label>体重：<input type="text" id="weight" name="weight" value="<?php echo $user['weight']?>"></label>
+                    <label>城市：<?php echo $user['city'];?>  <a href="javascript:;" id="changeCity">更换</a></label>
+                    <input type="hidden" name="address" id="address" value="<?php echo $user['city'];?>">
+                    <div class="changeCity" style="display:none">
+                        <select  id="province" >
+                            <option value="0">选择省区</option>
+                            <?php foreach ($provinces as $key=>$value):?>
+                                <option value="<?php echo $key;?>" ><?php echo $value;?></option>
+                            <?php endforeach;?>
+                        </select>
+                        <select  id="city" >
+                            <option value="0">选择市区</option>
+                        </select>
+                        <select  id="area" >
+                            <option value="0">选择县区</option>
+                        </select>
+                    </div>
+                    <a href="javascript:;" id="saveUser" >保存</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="virefyUserModel">

@@ -1,14 +1,75 @@
-<?php var_dump($event);?>
-<?php var_dump($createUser);?>
-<?php var_dump($joinClubs);?>
-<a href="/index/event/schedule?id=<?php echo $event['Id'];?>">查看赛程</a>
-<a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?>">加入比赛</a><br>
-
-
 {load href="/static/css/model.css" /}
 {load href="/static/js/jq.js" /}
 {load href="/static/js/index/model.js" /}
 {load href="/static/js/index/event/add_game.js" /}
+{load href="/static/css/index/event/index.css" /}
+<div class="add">
+    <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?>">加入比赛</a><br>
+</div>
+<div class="event-main">
+    <div class="event">
+        <div class="event-text">
+            <li><span><?php echo $event['name'];?></span></li>
+            <li><span><?php echo $event['address'];?></span></li>
+            <li><span><?php echo $types[$event['type']];?></span></li>
+            <li><span>举办方：<?php echo $createUser['name'];?></span></li>
+            <li><span>开始：<?php echo $event['start_time'];?></span></li>
+            <li><span>结束：<?php echo $event['end_time'];?></span></li>
+        </div>
+        <div class="event-logo">
+            <img src="<?php echo $event['posters'];?>" width="390px">
+        </div>
+        <div class="event-desc">
+            <p>简介：</p>
+            <p><?php echo $event['describe'];?></p>
+        </div>
+    </div>
+    <div class="event-joins">
+        <span>参赛队伍</span>
+        <?php if(!empty($joinClubs)):?>
+        <?php foreach ($joinClubs as $key=>$joinClub):?>
+            <li ><?php echo $joinClub;?></li>
+        <?php endforeach;?>
+        <?php endif;?>
+    </div>
+</div>
+<div class="schedule">
+    <div class="schedule-title">赛程表</div>
+    <table>
+        <thead>
+        <tr>
+            <?php if($event['type']==0):?>
+                <th>小组</th>
+            <?php endif;?>
+            <th>比赛时间</th>
+            <th>主队</th>
+            <th>客队</th>
+            <th>比分</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <?php if(!empty($schedules)):?>
+        <?php $group=range('A','Z');?>
+            <?php foreach ($schedules as $key=>$schedule):?>
+                <thead>
+                <tr>
+                    <?php if($event['type']==0):?>
+                        <td><?php echo $group[$schedule['group']];?></td>
+                    <?php endif;?>
+                    <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
+                    <td><span class="homeTeam" data-id=" <?php echo $schedule['home_team'];?>"></span></td>
+                    <td><span class="visitingTeam" data-id=" <?php echo $schedule['visiting_team'];?>"></span></td>
+                    <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
+                    <td>
+                        <a href="#">查看详情</a>
+                    </td>
+                </tr>
+                </thead>
+            <?php endforeach;?>
+        <?php endif;?>
+    </table>
+</div>
+
 <div class="modal fade" id="modelAddGame">
     <div class="modal-dialog custom-modal-dialog">
         <div class="modal-content">
@@ -16,21 +77,22 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">加入比赛</h4>
             </div>
-            <div id="error" style="display: none;color: red">
+            <div class="error" style="display: none;color: red">
                 <span class="tc_error"></span>
             </div>
             <div class="modal-body">
                 <form class="" id="joinGameForm">
                     <input type="hidden" name="eventId" id="eventId" value="<?php echo $event['Id'];?>">
-                    <label class="" for="code">邀请码：</label>
-                    <input type="text"  name="code" id="code">
-                    <br>
+                    <div>
+                        <textarea  name="code" id="code" ></textarea>
+                    </div>
                     <div class="chooseClub">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <input type="button"  id="addGameButton" value="加入" >
+                <input type="button"  id="applyGameButton" value="申请" >
             </div>
         </div>
     </div>

@@ -1,1 +1,20 @@
-<?php var_dump($club);?>
+{load href="/static/css/user/event/index.css" /}
+<div class="main">
+    {include file="../application/index/view/public/user-side.phtml"/}
+    <div class="event-list">
+        <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+                <div class="list-show">
+                    <li><span><?php echo $data['name'];?></span ><span class="type">验证码：<?php echo $data['virefy_code'];?></span></li>
+                    <li><?php echo $data['area'];?></span></li>
+                    <li>球队人数：<span><?php echo count(json_decode($data['players'],true),true);?></span>人<a href="/user/club?id=<?php echo $data['Id'];?>">进入球队</a></li>
+                </div>
+            <?php endforeach;?>
+        <?php else:?>
+            <div class="list-show nothing">
+                <li><span>没有球队</span></li>
+            </div>
+        <?php endif;?>
+    </div>
+</div>
+{include file="../application/index/view/public/pager.phtml"/}

@@ -1,0 +1,130 @@
+.schedule{
+    width: 800px;
+    height: 350px;
+    margin: 10px auto;
+    padding: 20px 30px;
+    overflow: scroll;
+    border: #e8e8e8 2px solid;
+}
+.schedule-title{
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    font-size: 25px;
+    color: grey;
+    margin:10px auto;
+}
+.schedule table,.joins-table table{
+    border-collapse: collapse;
+    margin-left: 15px;
+    text-align: center;
+}
+th,td{
+    border: 1px solid rgb(230, 231, 231);
+    width: auto;
+    padding: 5px 5px;
+    height: 30px;
+    border-collapse: collapse;
+}
+.schedule th,td{
+    width: 160px;
+}
+.event-apply th,td{
+    width: 150px;
+}
+.joins-table th,td{
+    width: 200px;
+}
+.title{
+    width: 960px;
+    height: 45px;
+    margin: 5px auto;
+    padding-top: 10px;
+    text-align: center;
+}
+.title span{
+    padding-left: 20px;
+    color: blue;
+    font-size: 25px;
+}
+.title-r{
+    width: 200px;
+    height: 45px;
+    text-align: center;
+    float: right;
+    padding-top: 8px;
+}
+.joins-table{
+    width: 1200px;
+    height:500px;
+    margin: 10px auto;
+    text-align: center;
+    overflow: scroll;
+    border: #e8e8e8 3px solid;
+}
+.joins-table h3{
+    color: grey
+}
+.manage-center{
+    width: 1060px;
+    height:350px;
+    margin:5px auto;
+    border: #e8e8e8 5px solid;
+}
+.event-alter{
+    height:270px;
+    width:300px;
+    float: left;
+    border-right: #e8e8e8 2px solid;
+    padding: 40px 30px;
+}
+.event-alter input{
+    color: red;
+    font-size: 18px;
+    width: 150px;
+}
+.event-alter button,.title a,.event-apply a{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    margin-left: 15px;
+    border: 3px green;
+    border-radius: 15px;
+}
+.title a{
+    background: #7cff7a;
+}
+.pass {
+    background: green;
+}
+.refuse{
+    background: red;
+}
+.event-alter button{
+    background:blue;
+}
+.event-alter button:hover,.event-alter button:active{
+    border-radius: 30px;
+    background: #7effec;
+    cursor: pointer;
+}
+.title a:hover,.title a:active{
+    border-radius: 30px;
+    background: #ba7aff;
+    cursor: pointer;
+}
+.event-alter li{
+    list-style-type: none;
+    color: grey;
+    font-size: 18px;
+    line-height: 40px;
+}
+.event-apply{
+    height:350px;
+    width:690px;
+    float: right;
+    overflow:scroll ;
+}

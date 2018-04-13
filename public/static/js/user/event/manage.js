@@ -25,8 +25,6 @@ $(function () {
             }
         })
     });
-
-
     $('#changeTime').click(function () {
         var id = $(this).attr('data-id');
         var start = $('#startTime').val();
@@ -43,6 +41,25 @@ $(function () {
 
     $('#addSchedules').click(function () {
         $('#modelSchendule').modal('show');
+    });
+
+    $('.pass').click(function () {
+        var id= $(this).attr('data-id');
+        $.post('/user/event/pass',{id:id},function (json) {
+            if(json.status == true)
+                location.reload();
+            else
+                alert(json.msg);
+        })
+    });
+    $('.refuse').click(function () {
+        var id= $(this).attr('data-id');
+        $.post('/user/event/refuse',{id:id},function (json) {
+            if(json.status == true)
+                location.reload();
+            else
+                alert(json.msg);
+        })
     });
 
 });

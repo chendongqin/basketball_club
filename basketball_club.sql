@@ -1,5 +1,5 @@
 ﻿# Host: 127.0.0.1  (Version: 5.5.53)
-# Date: 2018-04-10 21:41:15
+# Date: 2018-04-13 09:51:13
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -84,13 +84,13 @@ CREATE TABLE `club` (
   `log` text NOT NULL COMMENT '球队日志',
   `area` varchar(255) NOT NULL DEFAULT '' COMMENT '地区',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "club"
 #
 
-INSERT INTO `club` VALUES (7,'计算14级','/uploads/clubs/mark/71fe6912bb4375f9b11122f42256a348.jpg',1,1522548979,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:16:19  :陈东钦创建球队\"]','福建省厦门市集美区'),(8,'Lakers','/uploads/clubs/mark/043fcfaa2397700babdf35dd648926f2.jpg',1,1522549502,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:25:02  :陈东钦创建球队\"]','福建省龙岩市永定县'),(9,'计算14联队','/uploads/clubs/mark/d102176ab55bdc079801e28b05f5cfab.jpg',1,1523329936,'js14',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-10 11:12:16  \\u9648\\u4e1c\\u94a6\\u521b\\u5efa\\u7403\\u961f\"]','北京市县延庆县');
+INSERT INTO `club` VALUES (7,'计算14级','/uploads/clubs/mark/71fe6912bb4375f9b11122f42256a348.jpg',1,1522548979,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\",\"3\":\"\\u8303\\u8fdb\\u96c4\"}','[\"2018-04-11 22:24:58 \\u9648\\u4e1c\\u94a6\\u540c\\u610f\\u4e86\\u8303\\u8fdb\\u96c4 \\u52a0\\u5165\\u7403\\u961f\",\"2018-04-11 22:24:44 \\u8303\\u8fdb\\u96c4 \\u7533\\u8bf7\\u52a0\\u5165\\u7403\\u961f\",\"2018-04-11 22:24:28 \\u9648\\u4e1c\\u94a6\\u5c06\\u8303\\u8fdb\\u96c4\\u8e22\\u51fa\\u961f\\u4f0d\",\"2018-04-11 22:15:30 \\u8303\\u8fdb\\u96c4\\u5c06\\u961f\\u957f\\u8f6c\\u8ba9\\u7ed9\\u9648\\u4e1c\\u94a6\",\"2018-04-11 22:12:06 \\u9648\\u4e1c\\u94a6\\u5c06\\u961f\\u957f\\u8f6c\\u8ba9\\u7ed9\\u8303\\u8fdb\\u96c4\",\"2018-04-11 22:07:26 \\u9648\\u4e1c\\u94a6\\u5c06\\u961f\\u957f\\u8f6c\\u8ba9\\u7ed9\\u9648\\u4e1c\\u94a6\",\"2018-04-11 22:07:21 \\u9648\\u4e1c\\u94a6\\u5c06\\u961f\\u957f\\u8f6c\\u8ba9\\u7ed9\\u9648\\u4e1c\\u94a6\",\"2018-04-11 21:59:52 \\u9648\\u4e1c\\u94a6\\u540c\\u610f\\u4e86\\u8303\\u8fdb\\u96c4 \\u52a0\\u5165\\u7403\\u961f\",\"2018-04-11 21:59:38 \\u8303\\u8fdb\\u96c4 \\u7533\\u8bf7\\u52a0\\u5165\\u7403\\u961f\",\"2018-04-11 21:59:04 \\u9648\\u4e1c\\u94a6\\u62d2\\u7edd\\u4e86\\u8303\\u8fdb\\u96c4 \\u52a0\\u5165\\u7403\\u961f\",\"2018-04-11 21:52:46 \\u8303\\u8fdb\\u96c4 \\u7533\\u8bf7\\u52a0\\u5165\\u7403\\u961f\",\"2018-04-01 10:16:19  :\\u9648\\u4e1c\\u94a6\\u521b\\u5efa\\u7403\\u961f\",\"2018-04-12 14:43:56 \\u9648\\u4e1c\\u94a6\\u7533\\u8bf7\\u52a0\\u5165JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u6bd4\\u8d5b\",\"2018-04-12 22:07:05 JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u901a\\u8fc7\\u4e86\\u7403\\u961f\\u52a0\\u5165\\u6bd4\\u8d5b\",\"2018-04-12 22:11:12 \\u9648\\u4e1c\\u94a6\\u7533\\u8bf7\\u52a0\\u5165JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u6bd4\\u8d5b\",\"2018-04-12 22:11:38 JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u901a\\u8fc7\\u4e86\\u7403\\u961f\\u52a0\\u5165\\u6bd4\\u8d5b\"]','福建省厦门市集美区'),(8,'Lakers','/uploads/clubs/mark/043fcfaa2397700babdf35dd648926f2.jpg',1,1522549502,'4917',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-01 10:25:02  :\\u9648\\u4e1c\\u94a6\\u521b\\u5efa\\u7403\\u961f\",\"2018-04-12 22:11:20 \\u9648\\u4e1c\\u94a6\\u7533\\u8bf7\\u52a0\\u5165JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u6bd4\\u8d5b\",\"2018-04-12 22:11:43 JMU\\u8ba1\\u7b97\\u673a\\u5b66\\u9662\\u9662\\u8d5b\\u901a\\u8fc7\\u4e86\\u7403\\u961f\\u52a0\\u5165\\u6bd4\\u8d5b\"]','福建省龙岩市永定县'),(9,'计算14联队','/uploads/clubs/mark/d102176ab55bdc079801e28b05f5cfab.jpg',1,1523329936,'js14',1,'{\"1\":\"\\u9648\\u4e1c\\u94a6\"}','[\"2018-04-10 11:12:16  \\u9648\\u4e1c\\u94a6\\u521b\\u5efa\\u7403\\u961f\"]','北京市县延庆县'),(10,'选择题全队','/uploads/clubs/mark/2783467807c4d95c763e8939a83e4490.jpg',3,1523508961,'08ZZ',3,'{\"3\":\"\\u8303\\u8fdb\\u96c4\"}','[\"2018-04-12 12:56:01  \\u8303\\u8fdb\\u96c4\\u521b\\u5efa\\u7403\\u961f\"]','北京市市辖区宣武区'),(11,'对不队','/uploads/clubs/mark/e41d87dc4d194d768025403a1c5a8079.jpg',3,1523509483,'EN1G',3,'{\"3\":\"\\u8303\\u8fdb\\u96c4\"}','[\"2018-04-12 13:04:43  \\u8303\\u8fdb\\u96c4\\u521b\\u5efa\\u7403\\u961f\"]','天津市市辖区河东区');
 
 #
 # Structure for table "club_apply"
@@ -101,7 +101,9 @@ CREATE TABLE `club_apply` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `club_id` int(11) NOT NULL DEFAULT '0' COMMENT '球队ID',
   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `user_name` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
   `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '理由',
+  `time` int(11) NOT NULL DEFAULT '0' COMMENT '申请时间',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='球队申请表';
 
@@ -132,30 +134,33 @@ CREATE TABLE `event` (
   `promotion_num` tinyint(3) NOT NULL DEFAULT '0' COMMENT '小组晋级队伍数，type=0时有效',
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `cancel` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否已取消',
+  `describe` text COMMENT '赛事描述',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='赛事';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='赛事';
 
 #
 # Data for table "event"
 #
 
-INSERT INTO `event` VALUES (1,'JMU计算机学院院赛','福建省厦门市集美区','/uploads/event/posterss/6d8898af5911cb2952ca726f4b2d5198.jpg',1,'2018-04-07','2018-05-10',1,'test','{\"8\":\"Lakers\",\"7\":\"\\u8ba1\\u7b9714\\u7ea7\"}',0,0,0,0,1520697093,0),(2,'集美大学计算机工程学院第三届专业杯','福建省厦门市集美区','/uploads/event/posterss/4e8f0bcace1c66ff61f53e9672a58060.jpg',3,'2018-04-14','2018-05-31',1,'lTkmVB','',0,0,0,4,1523251267,0);
+INSERT INTO `event` VALUES (1,'JMU计算机学院院赛','福建省厦门市集美区','/uploads/event/posterss/6d8898af5911cb2952ca726f4b2d5198.jpg',1,'2018-04-13','2018-05-10',1,'test','{\"7\":\"\\u8ba1\\u7b9714\\u7ea7\",\"8\":\"Lakers\"}',0,0,0,0,1520697093,0,'集美大学计算机工程学院篮球赛，为了促进学院篮球的人才选拔，以及相应多运动更健康的号召。'),(2,'集美大学计算机工程学院第三届专业杯','福建省厦门市集美区','/uploads/event/posterss/4e8f0bcace1c66ff61f53e9672a58060.jpg',3,'2018-04-14','2018-05-31',1,'lTkmVB','',0,0,0,4,1523251267,0,NULL),(3,'海峡两岸篮球友谊赛','福建省厦门市思明区','/uploads/event/posterss/beb40662e6e821012b00a48ab857790d.jpg',3,'2018-05-12','2018-05-18',0,'fvZDwC','',2,0,0,0,1523498077,0,'促进海峡两岸友谊发展，有意第一，比赛第二');
 
 #
-# Structure for table "event_invite"
+# Structure for table "event_apply"
 #
 
-DROP TABLE IF EXISTS `event_invite`;
-CREATE TABLE `event_invite` (
+DROP TABLE IF EXISTS `event_apply`;
+CREATE TABLE `event_apply` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `club_id` int(11) NOT NULL DEFAULT '0' COMMENT '邀请球队',
-  `event_id` varchar(255) NOT NULL DEFAULT '',
-  `status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '邀请状态0未处理1接受2拒绝',
-  PRIMARY KEY (`Id`)
+  `event_id` tinyint(3) NOT NULL DEFAULT '0',
+  `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '理由',
+  `time` int(11) NOT NULL DEFAULT '0' COMMENT '申请时间',
+  PRIMARY KEY (`Id`),
+  KEY `club_id` (`club_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='赛事邀请表';
 
 #
-# Data for table "event_invite"
+# Data for table "event_apply"
 #
 
 
@@ -285,6 +290,7 @@ CREATE TABLE `schedule` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `event_id` int(11) NOT NULL DEFAULT '0' COMMENT '赛事id',
   `game_time` int(11) NOT NULL DEFAULT '0' COMMENT '比赛时间',
+  `acting` tinyint(3) NOT NULL DEFAULT '0' COMMENT '进行中？',
   `home_team` int(11) NOT NULL DEFAULT '0' COMMENT 'club_id',
   `visiting_team` int(11) NOT NULL DEFAULT '0' COMMENT '客队',
   `home_sorce` tinyint(3) NOT NULL DEFAULT '0' COMMENT '主队得分',
@@ -300,6 +306,7 @@ CREATE TABLE `schedule` (
   `home_section_score` varchar(255) NOT NULL DEFAULT '' COMMENT 'json形式单节得分',
   `visiting_section_score` varchar(255) NOT NULL DEFAULT '' COMMENT 'json形式单节得分',
   `over` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否已结束',
+  `group` tinyint(3) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='赛程表';
 
@@ -333,4 +340,4 @@ CREATE TABLE `user` (
 # Data for table "user"
 #
 
-INSERT INTO `user` VALUES (1,'913294974@qq.com','6bb9009e4f0708cafdd5712d45201a1fb9bab064','陈东钦','350822199508014917','/uploads/user/1.jpg',178.0,71.0,'安徽省滁州市全椒县','[\"7\",\"8\",\"9\"]',1,0),(2,'1575818106@qq.com','46dde728f51058987783e022abbb33c74d74f96f','','','',0.0,0.0,'安徽省宿州市墉桥区','',0,0),(3,'zgrant@foxmail.com','7ab11b4196d05f621a65441539b1dd2cac4eba52','范进雄','352229199511161030','',0.0,0.0,'','',1,0),(4,'1966650152@qq.com','aebeb43ca98b51e304820ebfdc5085be2b0dbbba','','','',0.0,0.0,'','',0,0);
+INSERT INTO `user` VALUES (1,'913294974@qq.com','6bb9009e4f0708cafdd5712d45201a1fb9bab064','陈东钦','350822199508014917','/uploads/user/1.jpg',178.0,71.0,'山东省德州市乐陵市','[\"7\",\"8\",\"9\"]',1,0),(2,'1575818106@qq.com','46dde728f51058987783e022abbb33c74d74f96f','','','',0.0,0.0,'安徽省宿州市墉桥区','',0,0),(3,'zgrant@foxmail.com','7ab11b4196d05f621a65441539b1dd2cac4eba52','范进雄','352229199511161030','',0.0,0.0,'','[\"11\"]',1,0),(4,'1966650152@qq.com','aebeb43ca98b51e304820ebfdc5085be2b0dbbba','','','/uploads/user/4.jpg',0.0,0.0,'','',0,0);

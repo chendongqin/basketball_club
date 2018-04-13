@@ -16,8 +16,7 @@ class Userbase extends Base {
     );
     private  $_user = '';
     protected function _initialize() {
-        $session = new Session();
-        $user = $session->get('user');
+        $user = Session::pull('user');
         if($this->isFilter()===false){
             if(empty($user)){
                 return $this->redirect('/user/login');
@@ -26,6 +25,7 @@ class Userbase extends Base {
         $user = isset($user[0])?$user[0]:$user;
         $this->assign('user',$user);
         $this->setUser($user);
+        Session::push('user',$user);
     }
 
     protected function isFilter(){

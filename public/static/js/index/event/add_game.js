@@ -1,5 +1,6 @@
 $(function () {
    $('#joinGame').click(function () {
+       $('.error').hide();
        var id = $('#eventId').val();
        var str = '<label class="" for="clubId">参加球队：</label>';
        $('.chooseClub').empty();
@@ -30,8 +31,23 @@ $(function () {
                window.location.href = '/index/event?id='+id;
            }else{
                 $('.tc_error').html(json.msg);
-                $('#error').show();
+                $('.error').show();
            }
        })
    });
+    $('#applyGameButton').click(function () {
+        var id = $('#eventId').val();
+        var reason = $('#code').val();
+        var clubId = $('#clubId').val();
+        var data = {id:id,reason:reason,clubId:clubId};
+        // console.log(data);
+        $.post('/user/club/applyEvent',data,function (json) {
+            if(json.status == true){
+                window.location.href = '/index/event?id='+id;
+            }else{
+                $('.tc_error').html(json.msg);
+                $('.error').show();
+            }
+        })
+    });
 });

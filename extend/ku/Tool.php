@@ -358,14 +358,20 @@ class Tool {
      * @return bool
      */
     public static function sizeImage($fileName,$save_path,$size=100){
+        $originSize = $size;
         $imageInfo = getimagesize($fileName);
         $width = $imageInfo[0];
         $height = $imageInfo[1];
         $type = $imageInfo[2];
-        $heightSize = $height/$width*$size;
-        $thumb = imagecreatetruecolor($size,$heightSize);
-        $white = imagecolorallocate($thumb, 255, 255, 255);
-        imagefilledrectangle($thumb,0,0,$size,$heightSize,$white);
+        if($width<$height){
+            $heightSize = $originSize;
+            $size = (int)$width/$height*$originSize;
+        }else{
+            $heightSize = (int)$height/$width*$originSize;
+        }
+        $thumb = imagecreatetruecolor($originSize,$originSize);
+        $black = imagecolorallocate($thumb, 0, 0, 0);
+        imagefilledrectangle($thumb,0,0,$originSize,$originSize,$black);
         $source = null;
         //1 = GIF，2 = JPG，3 = PNG
         switch ($type){
@@ -381,7 +387,9 @@ class Tool {
             default:
                 break;
         }
-        imagecopyresized($thumb,$source,0,0,0,0,$size,$heightSize,$width,$height);
+        $beginy = (int)$originSize>$heightSize?($originSize-$heightSize)/2:0;
+        $beginx = (int)$originSize>$size?($originSize-$size)/2:0;
+        imagecopyresized($thumb,$source,$beginx,$beginy,0,0,$size-$beginx,$heightSize-$beginy,$width,$height);
         $result = imagejpeg($thumb,$save_path,100);
         return $result;
     }

@@ -28,7 +28,7 @@ class Event extends Userbase{
         $this->assign('types',$types);
         $events = $eventModel->where($where)
             ->order('create_time desc')
-            ->paginate(10,false,array('page'=>$page))
+            ->paginate(5,false,array('page'=>$page))
             ->toArray();
         $this->assign('pager',$events);
         return $this->fetch();
@@ -59,6 +59,7 @@ class Event extends Userbase{
         $data['name'] = $request->param('name','','string');
         $data['type'] = (int)$request->param('type','','int');
         $data['address'] = $request->param('address','','string');
+        $data['describe'] = $request->param('describe','','string');
         $data['posters'] = $request->param('posters','','string');
         $data['start_time'] = strtotime($request->param('startTime','','string'));
         $data['end_time'] = strtotime($request->param('endTime','','string'));
@@ -167,6 +168,12 @@ class Event extends Userbase{
         $this->assign('schedules',$schedules);
         $types = Config::get('basketball.event_types');
         $this->assign('types',$types);
+        $applys = Db::name('event_apply')->where('event_id',$id)->select();
+        foreach ($applys as $key=>$apply){
+            $club = Db::name('club')->where('Id',$apply['club_id'])->find();
+            $applys[$key]['clubName'] = $club['name'];
+        }
+        $this->assign('applys',$applys);
         return $this->fetch();
     }
 
@@ -226,5 +233,88 @@ class Event extends Userbase{
             return $this->returnJson('踢出失败，请重试');
         return $this->returnJson('踢出成功',true,1);
     }
-
+    //通过申请
+    public function pass(){
+        $id = $this->request->param('id',0,'int');
+        $apply = Db::name('event_apply')->where('Id',$id)->find();
+        if(empty($apply))
+            return $this->returnJson('没有申请记录');
+        $event = Db::name('event')->where('Id',$apply['event_id'])->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user']!=$user['Id'])
+            return $this->returnJson('您不是赛事创建者不可以进行此操作');
+        $club = Db::name('club')->where('Id',$apply['club_id'])->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $res = $this->dealApply($id,$club,$event);
+        if(!$res)
+            return $this->returnJson('操作失败，请重试');
+        return $this->returnJson('操作成功',true,1);
+    }
+    //拒绝申请
+    public function refuse(){
+        $id = $this->request->param('id',0,'int');
+        $apply = Db::name('event_apply')->where('Id',$id)->find();
+        if(empty($apply))
+            return $this->returnJson('没有申请记录');
+        $event = Db::name('event')->where('Id',$apply['event_id'])->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user']!=$user['Id'])
+            return $this->returnJson('您不是赛事创建者不可以进行此操作');
+        $club = Db::name('club')->where('Id',$apply['club_id'])->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $res = $this->dealApply($id,$club,$event,false);
+        if(!$res)
+            return $this->returnJson('操作失败，请重试');
+        return $this->returnJson('操作成功',true,1);
+    }
+    /**
+     * @param $id
+     * @param $club
+     * @param $event
+     * @param bool $pass
+     * @return bool
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    protected function dealApply($id,$club,$event,$pass=true){
+        $logs = json_decode($club['log'],true);
+        if($pass){
+            $log = date('Y-m-d H:i:s').' '.$event['name'].'通过了球队加入比赛';
+        }else{
+            $log = date('Y-m-d H:i:s').' '.$event['name'].'拒绝了球队加入比赛';
+        }
+        array_unshift($logs,$log);
+        $update = ['Id'=>$club['Id'],'log'=>json_encode($logs)];
+        Db::startTrans();
+        $res = Db::name('club')->update($update);
+        if(!$res)
+            return false;
+        $delRes = Db::name('event_apply')->where('Id',$id)->delete();
+        if(!$delRes){
+            Db::rollback();
+            return false;
+        }
+        if(!$pass){
+            Db::commit();
+            return true;
+        }
+        $joins = json_decode($event['join_clubs'],true);
+        if(!isset($joins[$club['Id']])){
+            $joins[$club['Id']] = $club['name'];
+            $eventUpdate = ['Id'=>$event['Id'],'join_clubs'=>json_encode($joins)];
+            $updateRes = Db::name('event')->update($eventUpdate);
+            if(!$updateRes){
+                Db::rollback();
+                return false;
+            }
+        }
+        Db::commit();
+        return true;
+    }
 }

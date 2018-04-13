@@ -7,6 +7,36 @@
     background: rgba(118, 115, 128, 0.5);
 }
 #user-side img{
-    margin: 25px;
+    margin: 10px 25px 60px 25px ;
     width: 150px;
+}
+
+#user-side li{
+    line-height: 50px;
+    height: 50px;
+    font-size: 24px;
+    list-style-type: none;
+}
+#user-side a{
+    padding-left: 30px;
+    display: block;
+    padding-left: 60px;
+}
+#user-side a:link,#user-side a:visited{
+    text-decoration: none;
+    color: grey;
+    background: url("/static/image/small/right_jt.png") no-repeat  left;
+}
+
+#user-side a:hover,#user-side a:active{
+    color: #000088;
+    background: url("/static/image/small/true.png") no-repeat  left;
+    background-color: #4f5259;
+}
+
+.logo-title{
+    margin-top: 100px;
+    padding-left: 25px;
+    color: green;
+    font-size: 24px;
 }

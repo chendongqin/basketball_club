@@ -1,53 +1,130 @@
 {load href="/static/js/jq.js" /}
 {load href="/static/js/user/event/manage.js" /}
-<ul>
-    <li><?php echo $event['name'];?></li>
-    <li><input type="text" value="<?php echo $event['virefy_code'];?>" id="code"><button data-id="<?php echo $event['Id'];?>" id="changeCode">修改</button></li>
-    <li><?php echo $event['address'];?></li>
-    <li><input type="text" id="startTime" value="<?php echo $event['start_time'];?>">——<input type="text" id="endTime" value="<?php echo $event['end_time'];?>"><button data-id="<?php echo $event['Id'];?>" id="changeTime">修改</button></li>
-    <li><?php echo $types[$event['type']];?></li>
-</ul>
-
-<table border="1">
-    <tr>
-        <th>队徽</th>
-        <th>队名</th>
-        <th>队长</th>
-        <th>人数</th>
-        <th>地区</th>
-        <th>创建时间</th>
-        <th>操作</th>
-    </tr>
-    <?php if (!empty($joins)):?>
-    <?php foreach ($joins as $key =>$join):?>
-        <tr>
-            <td><img src="<?php echo $join['mark'];?>" width="100"></td>
-            <td><?php echo $join['name'];?></td>
-            <td><?php echo $join['captain'];?></td>
-            <td><?php echo count(json_decode($join['players'],true));?></td>
-            <td><?php echo $join['area'];?></td>
-            <td><?php echo date('Y-m-d H:i:s',$join['create_time']);?></td>
-            <td><button data-eventId="<?php echo $event['Id'];?>" data-id="<?php echo $join['Id'];?>" class="delJoins">删除</button></td>
-        </tr>
-    <?php endforeach;?>
-    <?php else:?>
-        <td colspan="16"><center>没有球队加入</center></td>
-    <?php endif;?>
-</table>
-
-<?php if(!empty($schedules)):?>
-    <?php foreach ($schedules as $key=>$schedule):?>
-    <?php var_dump($schedule);?>
-    <?php endforeach;?>
-<?php else:?>
-    <button id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</button>
-    <button id="importSchedules" data-id="<?php $event['Id']?>">导入赛程</button>
-<?php endif;?>
-
-
-
+{load href="/static/css/user/event/manage.css" /}
 {load href="/static/css/model.css" /}
 {load href="/static/js/index/model.js" /}
+<div class="title">
+    <span><?php echo $event['name'];?></span>
+    <?php if(empty($schedules)):?>
+        <div class="title-r">
+            <a href="javascript:;" id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</a>
+            <a href="javascript:;" id="importSchedules" data-id="<?php $event['Id']?>">导入赛程</a>
+        </div>
+    <?php endif;?>
+</div>
+<div class="manage-center">
+    <div class="event-alter">
+<!--        <li>--><?php //echo $event['name'];?><!--</li>-->
+        <li><?php echo $types[$event['type']];?></li>
+        <li><input type="text" value="<?php echo $event['virefy_code'];?>" id="code"><button data-id="<?php echo $event['Id'];?>" id="changeCode">修改</button></li>
+        <li><?php echo $event['address'];?></li>
+        <li>开始：<input type="text" id="startTime" value="<?php echo $event['start_time'];?>"></li>
+        <li>结束：<input type="text" id="endTime" value="<?php echo $event['end_time'];?>"><button data-id="<?php echo $event['Id'];?>" id="changeTime">修改</button></li>
+    </div>
+    <div class="event-apply">
+        <h3>申请列表</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>球队</th>
+                <th>申请理由</th>
+                <th>申请时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <?php if(!empty($applys)):?>
+                <?php foreach ($applys as $key=>$apply):?>
+                    <thead>
+                    <tr>
+                        <td><?php echo $key+1;?></td>
+                        <td><?php echo $apply['clubName'];?></td>
+                        <td><?php echo $apply['reason'];?></td>
+                        <td><?php echo date('Y-m-d H:i:s',$apply['time']);?></td>
+                        <td>
+                            <a href="javascript:;" class="pass" data-id="<?php echo $apply['Id'];?>">通过</a>
+                            <a href="javascript:;" class="refuse" data-id="<?php echo $apply['Id'];?>">拒绝</a>
+                        </td>
+                    </tr>
+                    </thead>
+                <?php endforeach;?>
+            <?php endif;?>
+        </table>
+    </div>
+</div>
+<div class="joins-table">
+    <h3>参赛队伍</h3>
+    <table>
+        <tbody>
+        <tr>
+            <th>队徽</th>
+            <th>队名</th>
+            <th>队长</th>
+            <th>人数</th>
+            <th>地区</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </tbody>
+        <?php if (!empty($joins)):?>
+            <?php foreach ($joins as $key =>$join):?>
+                <tbody>
+                <tr>
+                    <td><img src="<?php echo $join['mark'];?>" width="100"></td>
+                    <td><?php echo $join['name'];?></td>
+                    <td><?php echo $join['captain'];?></td>
+                    <td><?php echo count(json_decode($join['players'],true));?></td>
+                    <td><?php echo $join['area'];?></td>
+                    <td><?php echo date('Y-m-d H:i:s',$join['create_time']);?></td>
+                    <td><button data-eventId="<?php echo $event['Id'];?>" data-id="<?php echo $join['Id'];?>" class="delJoins">删除</button></td>
+                </tr>
+                </tbody>
+            <?php endforeach;?>
+        <?php else:?>
+            <td colspan="16"><center>没有球队加入</center></td>
+        <?php endif;?>
+    </table>
+</div>
+
+
+
+<div class="schedule">
+    <div class="schedule-title">赛程表</div>
+    <table>
+        <thead>
+        <tr>
+            <?php if($event['type']==0):?>
+                <th>小组</th>
+            <?php endif;?>
+            <th>比赛时间</th>
+            <th>主队</th>
+            <th>客队</th>
+            <th>比分</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <?php if(!empty($schedules)):?>
+            <?php $group=range('A','Z');?>
+            <?php foreach ($schedules as $key=>$schedule):?>
+                <thead>
+                <tr>
+                    <?php if($event['type']==0):?>
+                        <td><?php echo $group[$schedule['group']];?></td>
+                    <?php endif;?>
+                    <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
+                    <td><span class="homeTeam" data-id=" <?php echo $schedule['home_team'];?>"></span></td>
+                    <td><span class="visitingTeam" data-id=" <?php echo $schedule['visiting_team'];?>"></span></td>
+                    <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
+                    <td>
+                        <a href="#">查看详情</a>
+                    </td>
+                </tr>
+                </thead>
+            <?php endforeach;?>
+        <?php endif;?>
+    </table>
+</div>
+
 <div class="modal fade" id="modelSchendule">
     <div class="modal-dialog custom-modal-dialog">
         <div class="modal-content">

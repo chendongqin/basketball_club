@@ -84,18 +84,18 @@ class Index extends Userbase{
     }
 
     public function club(){
+        $page = $this->request->param('page',1,'int');
         $user = $this->getUser();
         $clubIds = json_decode($user['club'],true);
-        $in = implode(',',$clubIds);
-        $clubs = Db::name('club')->where('Id','in',$in)->select();
-//        foreach ($clubs  as $key=>$club){
-//            $players = json_decode($club['players'],true);
-//            $userId = array_keys($players);
-//            $in = implode(',',$userId);
-//            $players = Db::name('user')->where('Id','in',$in)->select();
-//            $clubs[$key]['players'] = $players;
-//        }
-        $this->assign('clubs',$clubs);
+        if(!empty($clubIds))
+            $in = implode(',',$clubIds);
+        else
+            $in = [];
+        $clubs = Db::name('club')
+            ->where('Id','in',$in)
+            ->paginate(5,false,array('page'=>$page))
+            ->toArray();
+        $this->assign('pager',$clubs);
         return $this->fetch();
     }
 
@@ -115,7 +115,7 @@ class Index extends Userbase{
             return $this->returnJson('上传的队标文件不存在');
         $code = $request->param('code','','string');
         if(empty($code)){
-            $string = array_merge(range(0,9),range('A','Z'));
+            $string = join('',array_merge(range(0,9),range('A','Z')));
             for ($i=0;$i<4;$i++)
                 $code .= str_shuffle($string){0};
         }
@@ -188,10 +188,21 @@ class Index extends Userbase{
         $virefy = Db::name('club_apply')->where(['user_id'=>$user['Id'],'club_id'=>$id])->find();
         if(!empty($virefy))
             return $this->returnJson('您已经申请过加入该球队，请不要重复操作');
-        $add = ['user_id'=>$user['Id'],'reason'=>$reason,'club_id'=>$id];
+        $add = ['user_id'=>$user['Id'],'user_name'=>$user['name'],'reason'=>$reason,'club_id'=>$id,'time'=>time()];
+        Db::startTrans();
         $res = Db::name('club_apply')->insert($add);
         if(!$res)
             return $this->returnJson('申请失败，请重试!');
+        $logs = json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].' 申请加入球队';
+        array_unshift($logs,$log);
+        $update = ['Id'=>$club['Id'],'log'=>json_encode($logs)];
+        $res = Db::name('club')->update($update);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('申请失败，请重试!');
+        }
+        Db::commit();
         return $this->returnJson('申请成功',true,1);
     }
 

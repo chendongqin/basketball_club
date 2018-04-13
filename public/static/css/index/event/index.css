@@ -1,0 +1,110 @@
+.add{
+    height: 40px;
+    width: 960px;
+    text-align: right;
+    margin: auto;
+}
+.add a:link,.add  a:visited{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    margin:5px 20px;
+    border: 3px green;
+    border-radius: 15px;
+    background:green;
+}
+.add a:hover,.add  a:hover{
+    background-color: blue;
+    width: 30px;
+    font-size: 0;
+    border-radius: 30px;
+}
+.event-main{
+    width: 954px;
+    height:494px;
+    margin: 5px auto;
+    border: #e8e8e8 3px solid;
+}
+.event-joins{
+    width: 200px;
+    height: 394px;
+    overflow: scroll;
+    border-left: #e8e8e8 2px solid;
+    float: right;
+    padding: 50px 50px;
+}
+.event{
+    width: 645px;
+    height: 494px;
+    float: left;
+}
+.event-text{
+    float: left;
+    width: 250px;
+    height: 240px;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+    padding: 55px 0;
+    border-bottom: 2px #e8e8e8 solid;
+}
+.event-text li{
+    list-style-type: none;
+}
+.event-text span{
+    color: grey;
+    font-size: 18px;
+}
+.event-logo{
+    float: right;
+    width: 390px;
+    height: 200px;
+    margin: 75px 0;
+    overflow: hidden;
+    border-bottom: 2px #e8e8e8 solid;
+}
+.event-desc{
+    width: 405px;
+    height: 105px;
+    color: grey;
+    padding: 15px 100px 15px 80px;
+    overflow: scroll;
+}
+.event-joins li{
+    list-style-type: none;
+    font-size: 20px;
+    color: #0a628f;
+    line-height: 35px;
+    padding-left:40px;
+}
+.schedule{
+    width: 800px;
+    height: 350px;
+    margin: 10px auto;
+    padding: 20px 30px;
+    overflow: scroll;
+    border: #e8e8e8 2px solid;
+}
+.schedule-title{
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    font-size: 25px;
+    color: grey;
+    margin:10px auto;
+}
+.schedule table{
+    border-collapse: collapse;
+    margin-left: 15px;
+    text-align: center;
+}
+th,td{
+    border: 1px solid rgb(230, 231, 231);
+    width: 160px;
+    padding: 5px 5px;
+    height: 30px;
+    border-collapse: collapse;
+}

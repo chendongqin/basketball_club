@@ -1,5 +1,70 @@
 .main-user{
     width: 860px;
-    height: 500px;
+    _height: auto;
+    min-height: 500px;
     margin: 15px auto;
+}
+.user-content{
+    width: 648px;
+    _height: auto;
+    min-height: 494px;
+    border: #e8e8e8 solid 3px;
+    float: right;
+}
+.user-top,.user-bottom{
+    width: 648px;
+    height: 247px;
+}
+.user-top li{
+    padding-top: 30px;
+    padding-left: 20px;
+    height: 40px;
+    list-style-type: none;
+    color: #5449ff;
+}
+.div-img{
+    margin: 10px 50px;
+    width: 200px;
+    height: 200px;
+    float: left;
+    background-color: #e8e8e8;
+    overflow: hidden;
+}
+.user-form{
+    width: 500px;
+    height: 247px;
+    margin: auto;
+    text-align: left;
+    color: #000088;
+    font-size: 20px;
+}
+.user-form label{
+    display: block;
+    line-height: 40px;
+}
+.changeCity select{
+    color: #271f18;
+    font-family: "Century Gothic", Consolas, "Liberation Mono", Courier, Verdana;
+    background: transparent;
+    width: 140px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    height: 34px;
+    -webkit-appearance: none;
+}
+.user-form a{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    border: 3px green;
+    margin:15px 0 0 70px;
+    border-radius: 15px;
+    background:blue;
+}
+.user-form a:hover{
+    background:greenyellow;
 }

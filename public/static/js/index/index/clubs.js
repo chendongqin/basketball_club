@@ -1,5 +1,6 @@
 $(function () {
     $("#addClub").click(function () {
+        $('.error').hide();
         $("#modelAddClub").modal('show');
     })
 });
@@ -51,13 +52,13 @@ $(function () {
                if(returndata.status==true){
                    window.location.href = '/index/index/clubs?name='+name;
                }else{
-                   $('.tc_error').html(json.msg);
-                   $('#error').show();
+                   $('.tc_error').html(returndata.msg);
+                   $('.error').show();
                }
            },
            error: function () {
                $('.tc_error').html('添加失败');
-               $('#error').show();
+               $('.error').show();
            }
        });
    })
@@ -80,6 +81,7 @@ $(function () {
 $(function () {
     var id = 0;
    $('.joinClub').click(function () {
+       $('.error').hide();
        id = $(this).attr('data-id');
        $('#modelJoinClub').modal('show');
    }) ;
@@ -101,7 +103,7 @@ $(function () {
                location.reload();
             }else{
                 $('.tc_error').html(json.msg);
-                $('#error').show();
+                $('.error').show();
             }
         });
     });
