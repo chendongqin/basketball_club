@@ -6,9 +6,20 @@
 <div class="title">
     <span><?php echo $event['name'];?></span>
     <?php if(empty($schedules)):?>
+        <?php if($event['type']===0):?>
+            <div class="title-r">
+                <a href="javascript:;" id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</a>
+                <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
+            </div>
+        <?php elseif($event['type']===2):?>
+            <div class="title-r">
+                <a href="/user/schedule/outSchedule" >安排赛程</a>
+                <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
+            </div>
+        <?php endif;?>
+    <?php elseif($event['type']!==0):?>
         <div class="title-r">
-            <a href="javascript:;" id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</a>
-            <a href="javascript:;" id="importSchedules" data-id="<?php $event['Id']?>">导入赛程</a>
+            <a href="javascript:;" id="overGroup" data-id="<?php $event['Id']?>">下一轮</a>
         </div>
     <?php endif;?>
 </div>
@@ -72,11 +83,15 @@
                 <tr>
                     <td><img src="<?php echo $join['mark'];?>" width="100"></td>
                     <td><?php echo $join['name'];?></td>
-                    <td><?php echo $join['captain'];?></td>
+                    <td><?php echo idOfFiler('user',['Id'=>$join['captain']]);?></td>
                     <td><?php echo count(json_decode($join['players'],true));?></td>
                     <td><?php echo $join['area'];?></td>
                     <td><?php echo date('Y-m-d H:i:s',$join['create_time']);?></td>
-                    <td><button data-eventId="<?php echo $event['Id'];?>" data-id="<?php echo $join['Id'];?>" class="delJoins">删除</button></td>
+                    <td>
+                        <?php if($event['status']===0):?>
+                            <button data-eventId="<?php echo $event['Id'];?>" data-id="<?php echo $join['Id'];?>" class="delJoins">删除</button>
+                        <?php endif;?>
+                    </td>
                 </tr>
                 </tbody>
             <?php endforeach;?>
@@ -109,14 +124,20 @@
                 <thead>
                 <tr>
                     <?php if($event['type']==0):?>
-                        <td><?php echo $group[$schedule['group']];?></td>
+                        <td><?php echo is_int($schedule['group'])?$group[$schedule['group']]:$schedule['group'];?></td>
                     <?php endif;?>
                     <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
-                    <td><span class="homeTeam" data-id=" <?php echo $schedule['home_team'];?>"></span></td>
-                    <td><span class="visitingTeam" data-id=" <?php echo $schedule['visiting_team'];?>"></span></td>
+                    <td><?php echo idOfFiler('club',['Id'=>$schedule['home_team']])?></td>
+                    <td><?php echo idOfFiler('club',['Id'=>$schedule['visiting_team']])?></td>
+<!--                    <td><span class="homeTeam" data-id=" --><?php //echo $schedule['home_team'];?><!--"></span></td>-->
+<!--                    <td><span class="visitingTeam" data-id=" --><?php //echo $schedule['visiting_team'];?><!--"></span></td>-->
                     <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
                     <td>
-                        <a href="#">查看详情</a>
+                        <?php if($schedule['over']==1):?>
+                            <a href="/user/schedule/detail?id=<?php echo $schedule['Id'];?>">查看详情</a>
+                        <?php else:?>
+                            <a href="/user/game?id=<?php echo $schedule['Id'];?>">进入比赛</a>
+                        <?php endif;?>
                     </td>
                 </tr>
                 </thead>
@@ -136,36 +157,64 @@
                 <span class="tc_error"></span>
             </div>
             <div class="modal-body">
-                <form  method="post" action="/user/schedule/group" class="" name="scheduleForm" id="scheduleForm">
-                    <input type="hidden" name="id" value="<?php echo $event['Id'];?>">
-                    <label >每组晋级：</label>
-                    <select id="promotion" name="promotion">
-                        <?php $count= count($joins);$end = $count<4?$count:4?>
-                        <?php ;for ($i=1;$i<=$end;$i++):?>
-                            <option value="<?php echo $i?>"><?php echo $i.'队';?></option>
-                        <?php endfor;?>
-                        <?php if($count>=6):?>
-                            <option value="6">6队</option>
-                        <?php endif;?>
-                        <?php if($count>=8):?>
-                            <option value="8">8队</option>
-                        <?php endif;?>
-                    </select>
-                    <label >赛程安排：</label>
-                    <select id="divideTime" name="divideTime">
-                        <?php ;for ($i=1;$i<=6;$i++):?>
-                            <option value="<?php echo $i?>"><?php echo $i.'天一赛程';?></option>
-                        <?php endfor;?>
-                        <option value="7">1周一赛程</option>
-                        <option value="14">2周一赛程</option>
-                        <option value="30">1月一赛程</option>
-                    </select>
-                    <br>
-                    <label >每组一日最多<input type="text" id="dayTimes" name="dayTimes">赛</label>
-                    <br>
-                    <label >分<input type="text" id="num" name="num">组</label>
+                    <form  method="post" action="/user/schedule/group?id=<?php echo $event['Id'];?>" class="" name="scheduleForm" id="scheduleForm">
+    <!--                    <input type="hidden" name="id" value="--><?php //echo $event['Id'];?><!--">-->
+                        <div>
+                            <label >比赛开始时间：</label>
+                            <input type="text" id="bTime" name="bTime">
+                        </div>
+                        <div>
+                            <label >比赛间隔时间：</label>
+                            <input type="text" id="freeTime" name="freeTime">
+                        </div>
+                        <div>
+                        <label >赛程安排：</label>
+                            <select id="divideTime" name="divideTime">
+                                <?php ;for ($i=1;$i<=6;$i++):?>
+                                    <option value="<?php echo $i?>"><?php echo $i.'天一赛程';?></option>
+                                <?php endfor;?>
+                                <option value="7">1周一赛程</option>
+                                <option value="14">2周一赛程</option>
+                                <option value="30">1月一赛程</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label >每组一日最多<input type="text" id="dayTimes" name="dayTimes">赛</label>
+                        </div>
+                        <div>
+                            <label >分<input type="text" id="num" name="num">组</label>
+                        </div>
+                        <div>
+                            <label >小组比赛是否同时进行：</label>
+                            <select name="groupWith">
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit"  value="安排赛程" >
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelImportSchendule">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程导入</h4>
+            </div>
+            <div id="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" action="/user/schedule/import?id=<?php echo $event['Id'];?>" class="" name="importScheduleForm" id="importScheduleForm" enctype="multipart/form-data">
+                    <input type="file" name="importSchedules">
                     <div class="modal-footer">
-                        <input type="submit"  value="安排赛程" >
+                        <a href="/user/schedule/downTemp" class="downTemp">模板下载</a>
+                        <input type="submit"  value="导入赛程" >
                     </div>
                 </form>
             </div>

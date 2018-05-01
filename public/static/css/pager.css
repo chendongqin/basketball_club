@@ -7,6 +7,7 @@
 .pager-list{
     width: 718px;
     margin-right: 100px;
+    padding-top: 3px;
     float: right;
     text-align: center;
     height: 40px;

@@ -657,6 +657,18 @@ if (!function_exists('uri')) {
         }
         return $uri;
     }
+}
 
-
+if (!function_exists('idOfFiler')) {
+    /**
+     * 生成URI
+     *
+     * @param array $reset
+     *        	需要重置的URI参数对, key === (null|false) 此参数将被注销
+     * @return string
+     */
+    function idOfFiler($table,array $where,$filer='name') {
+        $value = Db::name($table)->where($where)->column($filer);
+        return isset($value[0])?$value[0]:$value;
+    }
 }

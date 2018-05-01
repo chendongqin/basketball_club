@@ -1,0 +1,99 @@
+{load href="/static/js/jq.js" /}
+{load href="/static/css/model.css" /}
+{load href="/static/js/index/model.js" /}
+{load href="/static/js/user/schedule/import.js" /}
+<table  border="3px solid">
+    <tbody>
+    <th>序号</th>
+    <?php if($event['type']==0):?>
+        <th>小组</th>
+    <?php endif;?>
+    <th>主队</th>
+    <th>客队</th>
+    <th>比赛时间</th>
+    <th>比赛场地</th>
+    <th>操作</th>
+    </tbody>
+    <?php if(!empty($schedules)):?>
+        <?php foreach ($schedules as $key=>$schedule):?>
+            <tbody>
+                <td><?php echo $key;?></td>
+                <?php if($event['type']==0):?>
+                    <td><?php echo $schedule['group'];?></td>
+                <?php endif;?>
+                <td><?php echo $schedule['home_team'];?></td>
+                <td><?php echo $schedule['visiting_team'];?></td>
+                <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
+                <td><?php echo $schedule['game_address'];?></td>
+                <td><a href="javascript:;" class="alterSchedule" data-id="<?php echo $key;?>">修改</a></td>
+            </tbody>
+        <?php endforeach;?>
+    <?php endif;?>
+</table>
+<button id="sureSchedules">确认赛程</button>
+<div class="modal fade" id="modelSureSchedules">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程导入</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="sureScheduleForm" id="sureScheduleForm">
+                    <input type="hidden" name="id" id="eventId" value="<?php echo $event['Id'];?>">
+                    <div>
+                        <label >上半场暂停次数：</label>
+                        <input type="text" id="firstStop" name="firstStop">
+                    </div>
+                    <div>
+                        <label >下半场暂停次数：</label>
+                        <input type="text" id="lastStop" name="lastStop">
+                    </div>
+                    <div>
+                        <label >单节时间：</label>
+                        <select id="sectionTime" name="sectionTime">
+                            <option value="10">10分钟</option>
+                            <option value="12">12分钟</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <input type="button" id="actSureSchedules" value="确认赛程" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelAlterSchedules">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程修改</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="sureScheduleForm" id="sureScheduleForm">
+                    <div>
+                        <label >比赛时间：</label>
+                        <input type="text" id="alter_game_time" name="alter_game_time">
+                    </div>
+                    <div>
+                        <label >比赛场地：</label>
+                        <input type="text" id="alter_game_place" name="alter_game_place">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <input type="button" id="actAlterSchedules" value="确认修改" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<input id="code" value="--><?php //echo $dataStr;?><!--" type="hidden">-->
+

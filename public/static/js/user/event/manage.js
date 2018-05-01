@@ -61,5 +61,8 @@ $(function () {
                 alert(json.msg);
         })
     });
+    $('#importSchedulesButton').click(function () {
+        $('#modelImportSchendule').modal('show');
+    });
 
 });

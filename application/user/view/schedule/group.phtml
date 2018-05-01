@@ -1,14 +1,101 @@
+
+{load href="/static/js/jq.js" /}
+{load href="/static/css/model.css" /}
+{load href="/static/js/index/model.js" /}
+{load href="/static/js/user/schedule/group.js" /}
 <?php if(!empty($schedules)):?>
-<ul>
     <?php foreach ($schedules as $key=>$schedule):?>
-    <?php echo $key;?>组赛程：
-    <li>
-        <label>比赛时间:<?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></label>
-        <label>主队:<?php echo $joins[$schedule['home_team']];?></label>
-        <label>客队:<?php echo $joins[$schedule['visiting_team']];?></label>
-    </li>
+        <h3><?php echo $key;?>组赛程</h3>
+        <table border="2px slider" >
+            <tbody>
+                <tr>
+                    <th>比赛时间</th>
+                    <th>主队</th>
+                    <th>客队</th>
+                    <th>操作</th>
+                </tr>
+            </tbody>
+        <?php foreach ($schedule as $k=>$value):?>
+            <?php foreach ($value as $my=>$v):?>
+            <tbody>
+                <tr>
+                    <td><?php echo date('Y-m-d H:i:s',$v['game_time']);?></td>
+                    <td><?php echo $joins[$v['home_team']];?></td>
+                    <td><?php echo $joins[$v['visiting_team']];?></td>
+                    <td><a href="javascript:;" class="alterSchedule" data-key="<?php echo $key;?>" data-k="<?php echo $k;?>" data-my="<?php echo $my;?>" >修改</a></td>
+                </tr>
+            </tbody>
+            <?php endforeach;?>
+        <?php endforeach;?>
+        </table>
     <?php endforeach;?>
-</ul>
 <?php else:?>
-没有赛程
+    <td >没有赛程</td>
 <?php endif;?>
+<button id="sureSchedules">确认赛程</button>
+<div class="modal fade" id="modelSureSchedules">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程导入</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="sureScheduleForm" id="sureScheduleForm">
+                    <input type="hidden" name="id" id="eventId" value="<?php echo $event['Id'];?>">
+                    <div>
+                        <label >上半场暂停次数：</label>
+                        <input type="text" id="firstStop" name="firstStop">
+                    </div>
+                    <div>
+                        <label >下半场暂停次数：</label>
+                        <input type="text" id="lastStop" name="lastStop">
+                    </div>
+                    <div>
+                        <label >比赛地点：</label>
+                        <input type="text" id="game_address" name="game_address">
+                    </div>
+                    <div>
+                        <label >单节时间：</label>
+                        <select id="sectionTime" name="sectionTime">
+                            <option value="10">10分钟</option>
+                            <option value="12">12分钟</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <input type="button" id="actSureSchedules" value="确认赛程" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改-->
+<div class="modal fade" id="modelAlterSchedules">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">赛程修改</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="sureScheduleForm" id="sureScheduleForm">
+                    <div>
+                        <label >比赛时间：</label>
+                        <input type="text" id="alter_game_time" name="alter_game_time">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <input type="button" id="actAlterSchedules" value="确认修改" data-url="<?php echo uri(['cache'=>1])?>">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

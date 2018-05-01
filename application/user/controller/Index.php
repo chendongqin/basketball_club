@@ -86,6 +86,9 @@ class Index extends Userbase{
     public function club(){
         $page = $this->request->param('page',1,'int');
         $user = $this->getUser();
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::delete('user');
+        Session::set('user',$user);
         $clubIds = json_decode($user['club'],true);
         if(!empty($clubIds))
             $in = implode(',',$clubIds);
@@ -140,7 +143,7 @@ class Index extends Userbase{
         $clubId = Db::name('club')->getLastInsID();
         $club = json_decode($user['club'],true);
         $club = empty($club)?array():$club;
-        $club[] = $clubId;
+        array_push($club,$clubId);
         $updateUser = ['Id'=>$user['Id'],'club'=>json_encode($club)];
         $upRes = Db::name('user')->update($updateUser);
         if(!$upRes){
@@ -148,6 +151,9 @@ class Index extends Userbase{
             return $this->returnJson('创建球队,加入球队失败');
         }
         Db::commit();
+        Session::delete('user');
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::push('user',$user);
         return $this->returnJson('创建球队成功',true,1);
     }
 
@@ -170,9 +176,24 @@ class Index extends Userbase{
         $log = date('Y-m-d H:i:s').' '.$user['name'].' 加入球队';
         array_unshift($logs,$log);
         $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
+        Db::startTrans();
         $res = Db::name('club')->update($update);
         if(!$res)
             return $this->returnJson('加入失败，请重试');
+        $join_clubs = json_decode($user['club'],true);
+        if(empty($join_clubs))
+            $join_clubs=array();
+        array_push($join_clubs,$club['Id']);
+        $userUpdate = ['Id'=>$user['Id'],'club'=>json_encode($join_clubs)];
+        $res = Db::name('user')->update($userUpdate);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('加入失败，请重试');
+        }
+        Db::commit();
+        Session::delete('user');
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::push('user',$user);
         return $this->returnJson('加入成功',true,1);
     }
 
@@ -204,6 +225,44 @@ class Index extends Userbase{
         }
         Db::commit();
         return $this->returnJson('申请成功',true,1);
+    }
+
+    public function outClub(){
+        $clubId = $this->request->param('id',0,'int');
+        $club = Db::name('club')->where('Id',$clubId)->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $user = $this->getUser();
+        if($user['Id']===$club['captain'])
+            return $this->returnJson('队长无法退出');
+        $players = (array)json_decode($club['players'],true);
+        if(!isset($players[$user['Id']]))
+            return $this->returnJson('系统错误');
+        unset($players[$user['Id']]);
+        $logs = (array)json_decode($club['log'],true);
+        $log = date('Y-m-d H:i:s').' '.$user['name'].' 退出球队';
+        array_unshift($logs,$log);
+        $cUpdate = ['Id'=>$club['Id'],'log'=>json_encode($logs),'players'=>json_encode($players)];
+        $userClubs = (array)json_decode($user['club'],true);
+        $key = array_search($clubId,$userClubs);
+        if($key===false)
+            return $this->returnJson('系统错误');
+        unset($userClubs[$key]);
+        $uUpdate = ['Id'=>$user['Id'],'club'=>json_encode($userClubs)];
+        Db::startTrans();
+        $cRes = Db::name('club')->update($cUpdate);
+        if(!$cRes)
+            return $this->returnJson('退出失败');
+        $uRes = Db::name('user')->update($uUpdate);
+        if(!$uRes){
+            Db::rollback();
+            return $this->returnJson('退出失败');
+        }
+        Db::commit();
+        Session::delete('user');
+        $user = Db::name('user')->where('Id',$user['Id'])->find();
+        Session::push('user',$user);
+        return $this->returnJson('退出成功',true,1);
     }
 
 }

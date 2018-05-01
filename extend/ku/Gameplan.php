@@ -11,9 +11,8 @@ class Gameplan {
 
     private $config = [
         'group'=>[
-            'num'=>0,
-            'dayTimes'=>0,
-            'promotion'=>1,
+            'num'=>0, 'dayTimes'=>0, 'promotion'=>1,
+//            'place_num'=>1,'freeTime'=>2,'bTime'=>0
         ],
     ];
     private $_group = array();
@@ -142,6 +141,7 @@ class Gameplan {
                     array_push($exist,$value[1]);
                     $schedules[] = $key%2==0?['home_team'=>$value[1],'visiting_team'=>$value[0]]:['home_team'=>$value[0],'visiting_team'=>$value[1]];
                     unset($virefy[$key]);
+                    break;
                 }
                 continue;
             }

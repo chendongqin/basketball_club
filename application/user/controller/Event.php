@@ -163,7 +163,7 @@ class Event extends Userbase{
         $this->assign('joins',$joinClubs);
         $schedules = Db::name('schedule')
             ->where('event_id',$id)
-            ->order(['over','game_time'=>'desc'])
+            ->order(['over','game_time'=>'asc'])
             ->select();
         $this->assign('schedules',$schedules);
         $types = Config::get('basketball.event_types');
@@ -317,4 +317,41 @@ class Event extends Userbase{
         Db::commit();
         return true;
     }
+
+    public function setWorker(){
+        $id = $this->request->param('id',0,'int');
+        $userEmail = $this->request->param('userEmail','','string');
+        $event = Db::name('event')->where('Id',$id)->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user'] != $user['Id'])
+            return $this->returnJson('您没有权限');
+        $user = Db::name('user')->where('email',$userEmail)->find();
+        if(empty($user))
+            return $this->returnJson('没有该用户');
+        $add = ['event_id'=>$id,'user_id'=>$user['Id']];
+        $res = Db::name('event_workers')->insert($add);
+        if(!$res)
+            return $this->returnJson('操作失败，请重试');
+        return $this->returnJson('设置成功',true,1);
+    }
+
+    public function delWorker(){
+        $id = $this->request->param('id',0,'int');
+        $worker = Db::name('event_workers')->where('Id',$id)->find();
+        if(empty($worker))
+            return $this->returnJson('赛事工作人员不存在');
+        $event = Db::name('event')->where('Id',$worker['event_id'])->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user'] != $user['Id'])
+            return $this->returnJson('您没有权限');
+        $res = Db::name('event_workers')->where('Id',$id)->delete();
+        if(!$res)
+            return $this->returnJson('操作失败，请重试');
+        return $this->returnJson('操作成功',true,1);
+    }
+
 }

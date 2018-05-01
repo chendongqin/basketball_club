@@ -69,8 +69,8 @@ use think\Db;
              $where['area'] = ['like','%'.$area.'%'];
          $clubs  = Db::name('club')
              ->where($where)
-             ->order('create_time')
-             ->paginate(10,false,['page'=>$page])
+             ->order(['create_time'=>'desc'])
+             ->paginate(6,false,['page'=>$page])
              ->toArray();
          $this->assign('pager',$clubs);
          $provinces = Db::name('provinces')->select();

@@ -138,7 +138,7 @@ class Club extends Userbase{
             return $this->returnJson('球队不存在');
         if($user['Id']!= $club['captain'])
             return $this->returnJson('您不是队长，无法处理申请');
-        $subject = '来战吧篮球通知';
+        $subject = 'BasketballClubs通知';
         $applyUser = Db::name('user')->where('Id',$apply['user_id'])->find();
         if(empty($applyUser)){
             Db::name('club_apply')->where('Id',$id)->delete();
@@ -166,6 +166,14 @@ class Club extends Userbase{
                 $update= ['Id'=>$club['Id'],'players'=>json_encode($players),'log'=>json_encode($logs)];
                 $res = Db::name('club')->update($update);
                 if(!$res)
+                    return $this->returnJson('操作失败，请重试!');
+                $join_clubs = json_decode($applyUser['club'],true);
+                if(empty($join_clubs))
+                    $join_clubs=array();
+                array_push($join_clubs,$club['Id']);
+                $userUpdate = ['Id'=>$applyUser['Id'],'club'=>json_encode($join_clubs)];
+                $userRes = Db::name('user')->update($userUpdate);
+                if(!$userRes)
                     return $this->returnJson('操作失败，请重试!');
             }
         }
@@ -200,10 +208,23 @@ class Club extends Userbase{
         $logs = json_decode($club['log'],true);
         $log = date('Y-m-d H:i:s').' '.$user['name'].'将'.$player['name'].'踢出队伍';
         array_unshift($logs,$log);
+        Db::startTrans();
         $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
         $res = Db::name('club')->update($update);
         if(!$res)
             return $this->returnJson('操作失败，请重试');
+        $join_clubs = json_decode($player['club'],true);
+        $key = array_search($club['Id'],$join_clubs);
+        if($key===false)
+            return $this->returnJson('踢出成功',true,1);
+        unset($join_clubs[$key]);
+        $userUpdate = ['Id'=>$player['Id'],'club'=>json_encode($join_clubs)];
+        $res = Db::name('user')->update($userUpdate);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('操作失败，请重试');
+        }
+        Db::commit();
         return $this->returnJson('踢出成功',true,1);
     }
 
