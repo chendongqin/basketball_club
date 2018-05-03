@@ -82,4 +82,29 @@ use think\Db;
          return $this->fetch();
      }
 
+     //临时功能，补充球员球衣号码
+//     public function clubno(){
+//         $clubs = Db::name('club')->select();
+//         Db::startTrans();
+//         foreach ($clubs as $club){
+//             $no = 4;
+//             $players = json_decode($club['players'],true);
+//             $playerno = [];
+//             foreach ($players as $key=>$player){
+//                 $playerno[$key] = $no;
+//                 $no++;
+//             }
+//             $update = ['Id'=>$club['Id'],'players_no'=>json_encode($playerno)];
+//             $res = Db::name('club')->update($update);
+//             if(!$res){
+//                 Db::rollback();
+//                 return $this->returnJson('更新失败');
+//             }
+//         }
+//         Db::commit();
+//         return $this->returnJson('更新成功',true,1);
+//     }
+
+
+
  }

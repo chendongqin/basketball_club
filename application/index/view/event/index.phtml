@@ -54,14 +54,18 @@
                 <thead>
                 <tr>
                     <?php if($event['type']==0):?>
-                        <td><?php echo $group[$schedule['group']];?></td>
+                        <td><?php echo is_int($schedule['group'])?$group[$schedule['group']]:$schedule['group'];?></td>
                     <?php endif;?>
                     <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
-                    <td><span class="homeTeam" data-id=" <?php echo $schedule['home_team'];?>"></span></td>
-                    <td><span class="visitingTeam" data-id=" <?php echo $schedule['visiting_team'];?>"></span></td>
+                    <td><?php echo idOfFiler('club',['Id'=>$schedule['home_team']],'name')?></td>
+                    <td><?php echo idOfFiler('club',['Id'=>$schedule['visiting_team']],'name')?></td>
                     <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
                     <td>
-                        <a href="#">查看详情</a>
+                        <?php if($schedule['over']==1):?>
+                            <a href="/user/schedule/detail?id=<?php echo $schedule['Id'];?>">查看详情</a>
+<!--                        --><?php //else:?>
+<!--                            <a href="/user/game?id=--><?php //echo $schedule['Id'];?><!--">进入比赛</a>-->
+                        <?php endif;?>
                     </td>
                 </tr>
                 </thead>

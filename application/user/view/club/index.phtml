@@ -65,10 +65,11 @@
     </div>
     <div class="club-right">
         <h3 style="color: honeydew;">队员列表</h3>
+        <?php $nos = json_decode($club['players_no'],true);?>
         <?php foreach ($players as $userId=>$name):?>
             <li>
                 <span style="color: grey"><?php echo $userId==$club['captain']?'队长：':'队员：';?></span>
-                <a href="/user/club/player?id=<?php echo $userId;?>"><span><?php echo $name;?></span></a>
+                <a href="/user/club/player?id=<?php echo $userId;?>"><span><?php echo $name.' '.$nos[$userId].'号';?></span></a>
                 <?php if($user['Id']==$club['captain'] and $userId!=$club['captain']):?>
                     <a href="javascript:;" class="delPlaers" data-id="<?php echo $userId;?>">踢出</a>
                 <?php endif;?>

@@ -158,12 +158,14 @@ class Club extends Userbase{
         else{
             $body = '您申请加入"'.$club['name'].'"通过了你的申请';
             $players = json_decode($club['players'],true);
+            $playersNo = json_decode($club['players_no'],true);
             if(!isset($players[$applyUser['Id']])){
                 $players[$applyUser['Id']] = $applyUser['name'];
+                $playersNo[$applyUser['Id']] = $this->getNo($playersNo);
                 $logs = json_decode($club['log'],true);
                 $log = date('Y-m-d H:i:s').' '.$user['name'].'同意了'.$applyUser['name'].' 加入球队';
                 array_unshift($logs,$log);
-                $update= ['Id'=>$club['Id'],'players'=>json_encode($players),'log'=>json_encode($logs)];
+                $update= ['Id'=>$club['Id'],'players_no'=>json_encode($playersNo),'players'=>json_encode($players),'log'=>json_encode($logs)];
                 $res = Db::name('club')->update($update);
                 if(!$res)
                     return $this->returnJson('操作失败，请重试!');
@@ -187,6 +189,13 @@ class Club extends Userbase{
         return $this->returnJson('处理成功',true,1);
     }
 
+    public function getNo(array $nos){
+        $no = rand(0,99);
+        if(in_array($no,$nos))
+            $no = $this->getNo($nos);
+        return $no;
+    }
+
     public function delplayer(){
         $user =$this->getUser();
         $id = $this->request->param('id','','int');
@@ -205,11 +214,13 @@ class Club extends Userbase{
         if(!isset($players[$playerId]))
             return $this->returnJson('该用户不在球队');
         unset($players[$playerId]);
+        $playersNo = json_decode($club['players_no'],true);
+        unset($playersNo[$playerId]);
         $logs = json_decode($club['log'],true);
         $log = date('Y-m-d H:i:s').' '.$user['name'].'将'.$player['name'].'踢出队伍';
         array_unshift($logs,$log);
         Db::startTrans();
-        $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
+        $update = ['Id'=>$id,'players_no'=>json_encode($playersNo),'players'=>json_encode($players),'log'=>json_encode($logs)];
         $res = Db::name('club')->update($update);
         if(!$res)
             return $this->returnJson('操作失败，请重试');

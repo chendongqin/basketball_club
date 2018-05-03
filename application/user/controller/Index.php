@@ -127,6 +127,7 @@ class Index extends Userbase{
         if(!empty($virefyName))
             return $this->returnJson('队名已被使用');
         $players = json_encode([$user['Id']=>$user['name']]);
+        $playersNo = json_encode([$user['Id']=>$this->getNo()]);
         $log = array();
         $log[] = date('Y-m-d H:i:s').'  '.$user['name'].'创建球队';
         Db::startTrans();
@@ -134,8 +135,8 @@ class Index extends Userbase{
             'create_user'=>$user['Id'],'name'=>$name,
             'mark'=>$mark,'virefy_code'=>$code,
             'create_time'=>time(),'captain'=>$user['Id'],
-            'area'=>$area,'log'=>'','players'=>$players,
-            'log'=>json_encode($log),
+            'area'=>$area,'players'=>$players,
+            'log'=>json_encode($log),'players_no'=>$playersNo,
             ];
         $res = Db::name('club')->insert($add);
         if(!$res)
@@ -169,13 +170,15 @@ class Index extends Userbase{
         if(strcmp($code,$club['virefy_code'])!==0)
             return $this->returnJson('邀请码不正确');
         $players = json_decode($club['players'],true);
+        $playersNo = json_decode($club['players_no'],true);
         if(isset($players[$user['Id']]))
             return $this->returnJson('已经加入球队，无需重复操作');
         $players[$user['Id']] = $user['name'];
+        $playersNo[$user['Id']] = $this->getNo($playersNo);
         $logs = json_decode($club['log'],true);
         $log = date('Y-m-d H:i:s').' '.$user['name'].' 加入球队';
         array_unshift($logs,$log);
-        $update = ['Id'=>$id,'players'=>json_encode($players),'log'=>json_encode($logs)];
+        $update = ['Id'=>$id,'players'=>json_encode($players),'players_no'=>json_encode($playersNo),'log'=>json_encode($logs)];
         Db::startTrans();
         $res = Db::name('club')->update($update);
         if(!$res)
@@ -195,6 +198,15 @@ class Index extends Userbase{
         $user = Db::name('user')->where('Id',$user['Id'])->find();
         Session::push('user',$user);
         return $this->returnJson('加入成功',true,1);
+    }
+
+    public function getNo(array $nos=[]){
+        $no = rand(0,99);
+        if(empty($nos))
+            return $no;
+        if(in_array($no,$nos))
+            $no = $this->getNo($nos);
+        return $no;
     }
 
     public function applyJoin(){
@@ -236,13 +248,15 @@ class Index extends Userbase{
         if($user['Id']===$club['captain'])
             return $this->returnJson('队长无法退出');
         $players = (array)json_decode($club['players'],true);
+        $playersNo = (array)json_decode($club['players_no'],true);
         if(!isset($players[$user['Id']]))
             return $this->returnJson('系统错误');
         unset($players[$user['Id']]);
+        unset($playersNo[$user['Id']]);
         $logs = (array)json_decode($club['log'],true);
         $log = date('Y-m-d H:i:s').' '.$user['name'].' 退出球队';
         array_unshift($logs,$log);
-        $cUpdate = ['Id'=>$club['Id'],'log'=>json_encode($logs),'players'=>json_encode($players)];
+        $cUpdate = ['Id'=>$club['Id'],'players_no'=>json_encode($playersNo),'log'=>json_encode($logs),'players'=>json_encode($players)];
         $userClubs = (array)json_decode($user['club'],true);
         $key = array_search($clubId,$userClubs);
         if($key===false)
