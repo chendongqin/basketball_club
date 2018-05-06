@@ -15,7 +15,7 @@
             <li>账号：<span style="color: gray"><?php echo $user['email']?></span></li>
             <?php if($user['certification'] === 1):?>
                 <li>姓名：<?php echo $user['name']?></li>
-                <li>姓名：<?php echo substr_replace($user['idcard'],'***********',4,11);?></li>
+                <li>身份证：<?php echo substr_replace($user['idcard'],'***********',4,11);?></li>
             <?php else:?>
                 <li>姓名：    <input type="button" value="身份认证" id="idcardVirefy"></li>
             <?php endif;?>

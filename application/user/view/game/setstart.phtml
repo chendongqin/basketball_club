@@ -1,0 +1,33 @@
+{load href="/static/css/user/game/setstart.css" /}
+{load href="/static/js/jq.js" /}
+{load href="/static/js/user/game/setstart.js" /}
+<h3 class="header__title">首发设置</h3>
+<div class="lineup__list">
+    <div class="lineup__item">
+        <div class="lineup__name">[主队]<?php echo $home['name'];?></div>
+        <form action=""  method="get" class="lineup__form">
+            <?php $i=0;?>
+            <?php foreach ($homePlayers as $key=>$player):?>
+                <div class="lineup__form-item">
+                    <input type="checkbox" name="homePlayer" value="<?php echo $key;?>" <?php echo $i>4?'':'checked';?> /> <?php echo $player.' #'.$homeNo[$key];?>
+                </div>
+                <?php $i++;?>
+            <?php endforeach;?>
+        </form>
+    </div>
+    <div class="lineup__item" >
+        <div class="lineup__name">[客队]<?php echo $visiting['name'];?></div>
+        <form action="" method="get" class="lineup__form">
+            <?php $i=0;?>
+            <?php foreach ($visitingPlayers as $key=>$player):?>
+                <div class="lineup__form-item">
+                    <input type="checkbox" name="visitingPlayer" value="<?php echo $key;?>" <?php echo $i>4?'':'checked';?> /> <?php echo $player.' #'.$visitingNo[$key];?>
+                </div>
+                <?php $i++;?>
+            <?php endforeach;?>
+        </form>
+    </div>
+</div>
+<div class="lineup__btn-group">
+    <span class="lineup__btn" id="setStartButton" data-id="<?php echo $schedule['Id'];?>">提交</span>
+</div>

@@ -1,0 +1,89 @@
+{load href="/static/css/user/game/index.css" /}
+{load href="/static/js/jq.js" /}
+<div class="header__info">
+    <div class="header__team-name home-name"><?php echo $home['name'];?></div>
+    <div class="header__team-score home-score"><?php echo $schedule['home_score'];?></div>
+    <div class="header__time-box fl">
+        <div class="header__picth"><?php echo $schedule['section']>4?'第'.($schedule['section']-4).'加时':'第'.$schedule['section'].'节'?></div>
+        <div class="header__time"><?php echo str_pad($schedule['second']/60,2,0);?>:<?php echo str_pad($schedule['second']%60,2,0);?></div>
+    </div>
+    <div class="header__team-name away-name"><?php echo $visiting['name'];?></div>
+    <div class="header__team-score away-score"><?php echo $schedule['visiting_score'];?></div>
+</div>
+<div class="detail__box">
+    <div class="detail__team fl">
+        <div class="detail__team-name"><?php echo $home['name'];?></div>
+        <form action="" method="get" class="lineup__form">
+            <?php foreach ($homePlayers as $key=>$player):?>
+                <div class="detail__team-item">
+                    <?php if($playerStatus[$key]['is_playing']==1):?>
+                        <input type="radio" name="homePlayer" value="<?php echo $key;?>" />
+                    <?php endif;?>
+                    <?php echo $player.' #'.$homeNo[$key];?>
+                </div>
+            <?php endforeach;?>
+            <div class="detail__team-item">
+                <input type="reset" class="detail__btn" value="重置">
+            </div>
+        </form>
+    </div>
+    <div class="detail__character">
+
+    </div>
+    <div class="detail__team fr">
+        <div class="detail__team-name"><?php echo $visiting['name'];?></div>
+        <form action="" method="get"  style="text-align: right;">
+            <?php foreach ($visitingPlayers as $key=>$player):?>
+                <div class="detail__team-item">
+                    <?php echo $player.' #'.$visitingNo[$key];?>
+                    <?php if($playerStatus[$key]['is_playing']==1):?>
+                        <input type="radio" name="homePlayer" value="<?php echo $key;?>" />
+                    <?php endif;?>
+                </div>
+            <?php endforeach;?>
+            <div class="detail__team-item">
+                <input type="reset" class="detail__btn" value="重置">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="detail__btn-group">
+    <span class="detail__btn">换人</span>
+    <span class="detail__btn">撤销</span>
+    <span class="detail__btn"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
+    <span class="detail__btn">死球停止</span>
+    <?php if($schedule['second']==0):?>
+        <span class="detail__btn"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
+    <?php endif;?>
+    <?php if($schedule['second']==0 and $schedule['section']>=4):?>
+        <span class="detail__btn">结束比赛</span>
+    <?php endif;?>
+    <br>
+    <span class="detail__btn">中投命中</span>
+    <span class="detail__btn">突破命中</span>
+    <span class="detail__btn">篮下命中</span>
+    <span class="detail__btn">补篮命中</span>
+    <span class="detail__btn">三分命中</span>
+    <span class="detail__btn">罚球命中</span>
+    <br>
+    <span class="detail__btn">中投未中</span>
+    <span class="detail__btn">上篮未中</span>
+    <span class="detail__btn">篮下未中</span>
+    <span class="detail__btn">补篮未中</span>
+    <span class="detail__btn">三分未中</span>
+    <span class="detail__btn">罚球未中</span>
+    <br>
+    <span class="detail__btn">助攻</span>
+    <span class="detail__btn">失误</span>
+    <span class="detail__btn">抢断</span>
+    <span class="detail__btn">盖帽</span>
+    <span class="detail__btn">三分盖帽</span>
+    <br>
+    <span class="detail__btn">普通犯规</span>
+    <span class="detail__btn">犯规罚球</span>
+    <span class="detail__btn">两分犯规</span>
+    <span class="detail__btn">三分犯规</span>
+    <span class="detail__btn">2+1</span>
+    <span class="detail__btn">3+1</span>
+</div>
+</body>

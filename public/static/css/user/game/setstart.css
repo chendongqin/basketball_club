@@ -1,0 +1,204 @@
+@charset "UTF-8";
+/* CSS reset@ */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td, a {
+  padding: 0;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+del, ins {
+  text-decoration: none;
+}
+
+fieldset, img {
+  border: 0;
+}
+
+body, button, input, select, textarea {
+  font: 14px "microsoft YaHei","simsun",Tahoma,Helvetica,Arial;
+}
+
+input, select, img {
+  vertical-align: middle;
+}
+
+input, select {
+  outline: none;
+}
+
+input, button, select, textarea {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+address, cite, dfn, em, var {
+  font-style: normal;
+}
+
+legend {
+  display: none;
+}
+
+td {
+  font-size: 12px;
+  line-height: 160%;
+}
+
+input::-moz-focus-inner, button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+input, button {
+  background: none;
+  border: none;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after {
+  content: "";
+  height: 0;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+
+.fl {
+  float: left;
+  _display: inline;
+}
+
+.fr {
+  float: right;
+  _display: inline;
+}
+
+.lineup__list {
+  zoom: 1;
+}
+
+.lineup__list:after {
+  content: "";
+  height: 0;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+
+.lineup__item {
+  float: left;
+  _display: inline;
+}
+
+body {
+  min-width: 980px;
+}
+
+.header__title {
+  color: #666;
+  text-align: center;
+  font-size: 24px;
+  line-height: 48px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e8e8e8;
+  text-shadow: 2px 2px 5px #e3e3e3;
+}
+
+.lineup__list {
+  margin: 50px 0;
+}
+
+.lineup__item {
+  height: 375;
+  width: 30%;
+  margin: 0 10%;
+  padding: 20px;
+  border: 1px solid #e8e8e8;
+  box-sizing: border-box;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-sizing: border-box;
+  /* Firefox */
+  -webkit-box-sizing: border-box;
+  /* Safari */
+  -moz-box-shadow: 1px 1px 5px #e3e3e3;
+  /* 老的 Firefox */
+  box-shadow: 1px 1px 5px #e3e3e3;
+}
+
+.lineup__name {
+  text-align: center;
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.lineup__form-item {
+  font-size: 14px;
+  color: #666;
+  line-height: 28px;
+}
+
+.lineup__form-item input {
+  margin-bottom: 2px;
+}
+
+.lineup__btn {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0 0 50px 0;
+  transition: .1s;
+  font-weight: 500;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  padding: 12px 50px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.lineup__btn-group {
+  text-align: center;
+}
+
+.lineup__btn:hover {
+  background: #66b1ff;
+  border-color: #66b1ff;
+  color: #fff;
+}

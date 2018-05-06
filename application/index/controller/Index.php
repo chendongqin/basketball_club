@@ -104,7 +104,12 @@ use think\Db;
 //         Db::commit();
 //         return $this->returnJson('更新成功',true,1);
 //     }
-
+//    public function test(){
+//         $test = [1,2,3,4,5,6];
+//            $t = array_shift($test);
+//            var_dump($t);
+//            var_dump($test);
+//    }
 
 
  }

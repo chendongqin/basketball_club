@@ -202,7 +202,7 @@ class Schedule extends Userbase{
         $import = json_decode($dataStr,true);
         if(!$import)
             return $this->returnJson('数据错误');
-        $add = ['event_id'=>$eventId,'second'=>$sectionTime,'home_fhalf_stop'=>$firstStop,
+        $add = ['event_id'=>$eventId,'second'=>$sectionTime,'section_time'=>$sectionTime,'home_fhalf_stop'=>$firstStop,
             'visiting_fhalf_stop'=>$firstStop,'home_shalf_stop'=>$lastStop,'visiting_shalf_stop'=>$lastStop,
             ];
         Db::startTrans();
@@ -286,7 +286,7 @@ class Schedule extends Userbase{
         $import = json_decode($dataStr,true);
         if(!$import)
             return $this->returnJson('数据错误');
-        $add = ['event_id'=>$eventId,'second'=>$sectionTime,'home_fhalf_stop'=>$firstStop,
+        $add = ['event_id'=>$eventId,'second'=>$sectionTime,'section_time'=>$sectionTime,'home_fhalf_stop'=>$firstStop,
             'visiting_fhalf_stop'=>$firstStop,'home_shalf_stop'=>$lastStop,'visiting_shalf_stop'=>$lastStop,
         ];
         Db::startTrans();
