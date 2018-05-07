@@ -763,7 +763,7 @@ class Game extends Userbase{
             return $this->returnJson('比赛不存在');
         $actLogs = json_decode($schedule['logs_act'],true);
         $unsetLogs = array_shift($actLogs);
-        
+
 
     }
 
