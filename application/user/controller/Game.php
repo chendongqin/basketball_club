@@ -763,8 +763,43 @@ class Game extends Userbase{
             return $this->returnJson('比赛不存在');
         $actLogs = json_decode($schedule['logs_act'],true);
         $unsetLogs = array_shift($actLogs);
+        Db::startTrans();
+        foreach ($unsetLogs as $userId=>$log){
+            $res = $this->doBack($log,$userId,$scheduleId);
+            if(!$res){
+                Db::rollback();
+                return $this->returnJson('失败，请重试!');
+            }
+        }
+        $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs)];
+        $logRes = Db::name('player_data')->update($update);
+        if(!$logRes){
+            Db::rollback();
+            return $this->returnJson('失败，请重试！');
+        }
+        Db::commit();
+        return $this->returnJson('成功',true,1);
+    }
 
-
+    //撤销执行
+    public function doBack($log,$userId,$scheduleId){
+        $num = 1;
+        switch ($log){
+            case 'three_hit':
+               $num = 3;
+                break ;
+            case 'hit':
+                $num = 2;
+                break ;
+            default:
+                $num = 1;
+                break;
+        }
+        $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$userId])->find();
+        if(empty($playerData))
+            return false;
+        $update = ['Id'=>$playerData['Id'],$log=>$playerData[$log]-$num];
+        return Db::name('player_data')->update($update);
     }
 
     //赛事管理员退出

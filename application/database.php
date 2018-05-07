@@ -13,14 +13,14 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '127.0.0.1',
+    'hostname'        => '119.23.215.192',
     // 数据库名
     'database'        => 'basketball_club',
 //    'database'        => 'virefy',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'cdq',
     // 密码
-    'password'        => 'root',
+    'password'        => 'r7i!2khIi:dg1995',
     // 端口
     'hostport'        => '',
     // 连接dsn
