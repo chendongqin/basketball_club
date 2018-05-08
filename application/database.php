@@ -23,6 +23,7 @@ return [
 //    'username'        => 'root',
     // 密码
     'password'        => 'r7i!2khIi:dg1995',
+    //测试
 //    'password'        => 'root',
     // 端口
     'hostport'        => '',
