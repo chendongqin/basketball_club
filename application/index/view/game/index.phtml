@@ -15,5 +15,7 @@
         <a href="/index/game/playerData?id=<?php echo $schedule['Id'];?>">球员数据</a>
     </div>
     <div class="broadcast">
-
+        <?php foreach ($gameLogs as $gameLog):?>
+            <p><?php echo $gameLog;?></p>
+        <?php endforeach;?>
     </div>
