@@ -21,9 +21,12 @@ class Game extends Base{
         $homeData = Db::name('player_data')
             ->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['home_team']])
             ->select();
+        $this->assign('homeData',$homeData);
         $visitingData = Db::name('player_data')
             ->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['visiting_team']])
             ->select();
+        $this->assign('visitingData',$visitingData);
+
 
     }
 
