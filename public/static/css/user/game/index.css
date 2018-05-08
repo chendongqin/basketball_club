@@ -1,8 +1,8 @@
 /* CSS reset@ */
-body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td, a {
-  padding: 0;
-  margin: 0;
-}
+/*body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td, a {*/
+  /*padding: 0;*/
+  /*margin: 0;*/
+/*}*/
 
 table {
   border-collapse: collapse;
@@ -209,6 +209,7 @@ body {
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
   border-radius: 5px;
+  overflow-y: auto;
 }
 
 .detail__team-name {
@@ -245,7 +246,7 @@ body {
   left: 50%;
   margin-left: -17%;
   line-height: 24px;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .detail__btn {
