@@ -109,6 +109,7 @@ class Game extends Userbase{
             $playsStatus[$key]['starter'] = $playStatus['starter'];
         }
         $this->assign('playerStatus',$playsStatus);
+        $this->assign('logs',json_decode($schedule['logs'],true));
         return $this->fetch();
     }
     //首发设置

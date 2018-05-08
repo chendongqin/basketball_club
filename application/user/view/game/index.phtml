@@ -29,7 +29,9 @@
         </form>
     </div>
     <div class="detail__character">
-
+        <?php foreach ($logs as $log):?>
+            <p><?php echo $log;?></p>
+        <?php endforeach;?>
     </div>
     <div class="detail__team fr">
         <div class="detail__team-name"><?php echo $visiting['name'];?></div>
