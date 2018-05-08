@@ -239,7 +239,11 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $noTrue = $hometeam==0?'home_score':'visiting_score';
+        $data[$noTrue] = $schedule[$noTrue];
+        $data[$scoreKey] = $score;
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     /**
@@ -298,7 +302,11 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $noTrue = $hometeam==0?'home_score':'visiting_score';
+        $data[$noTrue] = $schedule[$noTrue];
+        $data[$scoreKey] = $score;
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     /**
@@ -356,7 +364,11 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $noTrue = $hometeam==0?'home_score':'visiting_score';
+        $data[$noTrue] = $schedule[$noTrue];
+        $data[$scoreKey] = $score;
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //篮板
@@ -392,7 +404,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     /**
@@ -475,7 +488,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //助攻
@@ -533,7 +547,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //抢断
@@ -587,7 +602,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //blocks 盖帽 type=1三分被盖
@@ -651,7 +667,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //失误
@@ -687,7 +704,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //更换球员
@@ -805,7 +823,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
 
@@ -849,7 +868,8 @@ class Game extends Userbase{
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试!');
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
     //结束比赛
     public function over(){
@@ -877,7 +897,8 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //撤销
