@@ -855,9 +855,16 @@ class Game extends Userbase{
         $update['logs'] = json_encode($logs);
         if($clear==1)
             $update['logs_act'] = '';
+        Db::startTrans();
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试!');
+        $dataRes = Db::name('player_data')->where('schedule_id',$scheduleId)->update(['is_playing'=>2]);
+        if(!$dataRes){
+            Db::rollback();
+            return $this->returnJson('失败，请重试！');
+        }
+        Db::commit();
         return $this->returnJson('成功',true,1);
     }
 

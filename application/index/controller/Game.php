@@ -97,4 +97,31 @@ class Game extends Base{
         return $this->returnJson('未更新',false,1);
     }
 
+
+    public function detail(){
+        $userId = $this->request->param('userId',0,'int');
+        $user = Db::name('user')->where('Id',$userId)->find();
+        if(empty($user))
+            return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'用户不存在']);
+        $datas = Db::name('player_data')->where(['user_id'=>$userId,'is_playing'=>2])->select();
+        $total['score'] = $total['rebounds']= $total['assists']= $total['steals']= $total['blocks']= $total['lost']
+            = $total['shoot']= $total['hit']= $total['three_shoot']= $total['three_hit']
+            = $total['penalty_shoot']= $total['penalty_hit']= $total['foul']= $total['playing_time']=0;
+        foreach ($datas as $data){
+            foreach ($total as $key=>$value){
+                $total[$key] = $total[$key]+$data[$key];
+            }
+        }
+        $avg = [];
+        $count = count($datas);
+        foreach ($total as $key=>$value){
+            $avg[$key] = number_format($value/$count,2,'.','');
+        }
+        $this->assign('datas',$datas);
+        $this->assign('total',$total);
+        $this->assign('avg',$avg);
+        return $this->fetch();
+    }
+
+
 }
