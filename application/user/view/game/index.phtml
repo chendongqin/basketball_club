@@ -29,9 +29,6 @@
         </form>
     </div>
     <div class="detail__character">
-        <?php foreach ($logs as $log):?>
-            <p><?php echo $log;?></p>
-        <?php endforeach;?>
     </div>
     <div class="detail__team fr">
         <div class="detail__team-name"><?php echo $visiting['name'];?></div>
@@ -62,12 +59,12 @@
         <span class="detail__btn">结束比赛</span>
     <?php endif;?>
     <br>
-    <span class="detail__btn" id="test">中投命中</span>
+    <span class="detail__btn" id="getTwo">中投命中</span>
     <span class="detail__btn">突破命中</span>
     <span class="detail__btn">篮下命中</span>
     <span class="detail__btn">补篮命中</span>
-    <span class="detail__btn">三分命中</span>
-    <span class="detail__btn">罚球命中</span>
+    <span class="detail__btn" id="getThree">三分命中</span>
+    <span class="detail__btn" id="getOne">罚球命中</span>
     <br>
     <span class="detail__btn">中投未中</span>
     <span class="detail__btn">上篮未中</span>
