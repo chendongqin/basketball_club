@@ -87,7 +87,7 @@ class Event extends Userbase{
         $strings = $string = join('',array_merge(range(0,9),range('a','z'),range('A','Z')));
         $virefy = '';
         for($i=0;$i<6;$i++)
-            $virefy .= str_shuffle($strings){0};
+            $virefy .= str_shuffle($strings)[0];
         $data['virefy_code'] = $virefy;
         $data['join_clubs'] = '';
         $data['create_time'] = time();

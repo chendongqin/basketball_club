@@ -120,7 +120,7 @@ class Index extends Userbase{
         if(empty($code)){
             $string = join('',array_merge(range(0,9),range('A','Z')));
             for ($i=0;$i<4;$i++)
-                $code .= str_shuffle($string){0};
+                $code .= str_shuffle($string)[0];
         }
         $area =  $request->param('areas','','string');
         $virefyName = Db::name('club')->where('name',$name)->find();
