@@ -680,6 +680,8 @@ class Game extends Userbase{
     //更换球员
     public function replace(){
         $scheduleId  = $this->request->param('id','','int');
+        $hometeam = $this->request->param('hometeam',1,'int');
+        $team = $hometeam==1?'[主队]':'[客队]';
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('该比赛不存在');
@@ -695,6 +697,22 @@ class Game extends Userbase{
             return $this->returnJson('未定义需要更换的球员或更换球员');
         Db::startTrans();
         $timeTotal = ($schedule['section'])*$schedule['section_time']-$schedule['second'];
+        $oldsName = $team;
+        foreach ($news as $new){
+            $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$new])->find();
+            if(empty($playerData))
+                return $this->returnJson($new.'数据不存在');
+            $update = ['Id'=>$playerData['Id'],'is_playing'=>1,'enter_time'=>$timeTotal];
+            $newRes = Db::name('player_data')->update($update);
+            if(!$newRes){
+                Db::rollback();
+                return $this->returnJson('失败，请重试！');
+            }
+            $name = Db::name('user')->where('Id',$new)->column('name');
+            $name = isset($name[0])?$name[0]:'';
+            $oldsName .= $name.' ';
+        }
+        $oldsName .= '换下 ';
         foreach ($olds as $old){
             $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$old])->find();
             if(empty($playerData))
@@ -706,17 +724,20 @@ class Game extends Userbase{
                 Db::rollback();
                 return $this->returnJson('失败，请重试！');
             }
+            $oldname = Db::name('user')->where('Id',$old)->column('name');
+            $oldname = isset($oldname[0])?$oldname[0]:'';
+            $oldsName .= $oldname.' ';
         }
-        foreach ($news as $new){
-            $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$new])->find();
-            if(empty($playerData))
-                return $this->returnJson($new.'数据不存在');
-            $update = ['Id'=>$playerData['Id'],'is_playing'=>1,'enter_time'=>$timeTotal];
-            $newRes = Db::name('player_data')->update($update);
-            if(!$newRes){
-                Db::rollback();
-                return $this->returnJson('失败，请重试！');
-            }
+        $logs = json_decode($schedule['logs'],true);
+        $logs = empty($logs)?array():$logs;
+        $logs_act = json_decode($schedule['logs_act'],true);
+        $logs_act = empty($logs_act)?array():$logs_act;
+        array_unshift($logs,$oldsName);
+        array_unshift($logs_act,'');
+        $res = Db::name('schedule')->update(['Id'=>$scheduleId,'logs'=>json_encode($logs),'update_time'=>time()]);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('失败，请重试！');
         }
         Db::commit();
         return $this->returnJson('成功',true,1);
@@ -725,13 +746,27 @@ class Game extends Userbase{
     //开始或暂停
     public function stop(){
         $scheduleId = $this->request->param('id',0,'int');
+        $type = (int)$this->request->param('type',0,'int');
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         if(!in_array($schedule['acting'],[1,2]))
             return $this->returnJson('参数错误');
         $stopStatus = $schedule['acting'] == 1?2:1;
-        $update = ['acting'=>$stopStatus,'Id'=>$scheduleId,'update'=>time()];
+        if( $schedule['acting']==0){
+            $stopStr = '比赛开始';
+        }elseif( $schedule['acting']== 1){
+            $stopStr = $type==0?'比赛暂停':'死球暂停';
+        }else{
+            $stopStr = '比赛继续';
+        }
+        $logs = json_decode($schedule['logs'],true);
+        $logs = empty($logs)?array():$logs;
+        array_unshift($logs,$stopStr);
+        $logs_act = json_decode($schedule['logs_act'],true);
+        $logs_act = empty($logs_act)?array():$logs_act;
+        array_unshift($logs_act,'');
+        $update = ['acting'=>$stopStatus,'Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试!');
@@ -747,6 +782,10 @@ class Game extends Userbase{
         if($schedule['section']<4 or $schedule['second']!=0)
             return $this->returnJson('比赛时间或节数未结束');
         $update = ['acting'=>3,'Id'=>$scheduleId,'update'=>time()];
+        $logs = json_decode($schedule['logs'],true);
+        $logs = empty($logs)?array():$logs;
+        array_unshift($logs,'比赛结束');
+        $update['logs'] = json_encode($logs);
         if($clear==1)
             $update['logs_act'] = '';
         $res = Db::name('schedule')->update($update);
@@ -761,7 +800,10 @@ class Game extends Userbase{
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
+        if($schedule['acting']==3)
+            return $this->returnJson('比赛已结束，无法撤回');
         $actLogs = json_decode($schedule['logs_act'],true);
+        $logs = json_decode($schedule['logs'],true);
         $unsetLogs = array_shift($actLogs);
         Db::startTrans();
         foreach ($unsetLogs as $userId=>$log){
@@ -771,7 +813,8 @@ class Game extends Userbase{
                 return $this->returnJson('失败，请重试!');
             }
         }
-        $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs)];
+        array_shift($logs);
+        $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
         $logRes = Db::name('player_data')->update($update);
         if(!$logRes){
             Db::rollback();
