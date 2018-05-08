@@ -11,7 +11,7 @@ use think\Config;
 use think\Db;
 class Game extends Userbase{
 
-    private $_allow =['index','broadcastOut'];
+    private $_allow =['index','broadcastOut','playing'];
 
     //比赛ID传输字段统一用id作为验证
     public function _initialize()
@@ -191,9 +191,22 @@ class Game extends Userbase{
      * type查看配置
     */
     public function getTwo(){
+        //比赛id
         $scheduleId = $this->request->param('id',0,'int');
+        //球员id
         $playerId = $this->request->param('playerId',0,'int');
+        //主队1客队0
         $hometeam = $this->request->param('hometeam',1,'int');
+        /*'two_score'=>[
+        0=>'中投命中',
+        1=>'上篮得分',
+        2=>'篮下打板',
+        3=>'补篮命中',
+        4=>'中投打铁',
+        5=>'上篮不中',
+        6=>'篮下打铁',
+        7=>'补篮不中',
+        ],*/
         $type = $this->request->param('type',0,'int');
         $team = $hometeam==1?'[主队]':'[客队]';
         $scoreKey = $hometeam==1?'home_score':'visiting_score';
@@ -388,7 +401,7 @@ class Game extends Userbase{
         $res = Db::name('player_data')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试！');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -436,7 +449,7 @@ class Game extends Userbase{
             return $this->returnJson('该球员没有参加该比赛数据');
         if(empty($foulPlayerData))
             return $this->returnJson('该规范球员没有参加该比赛数据');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -445,18 +458,18 @@ class Game extends Userbase{
         $logs_act = empty($logs_act)?array():$logs_act;
         Db::startTrans();
         if($type===2){
-            $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+2,'shoot'=>$player['shoot']+1,'hit'=>$playerData['hit']+1];
+            $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+2,'shoot'=>$playerData['shoot']+1,'hit'=>$playerData['hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
                 return $this->returnJson('失败，请重试！');
-            array_unshift($logs_act,[$playerId=>'two_andone',$foulId=>'foul']);
+            array_unshift($logs_act,[$playerId=>'hid',$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规,球进！加罚一次!');
         }elseif($type===3){
-            $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+3,'three_shoot'=>$player['three_shoot']+1,'three_hit'=>$playerData['three_hit']+1];
+            $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+3,'three_shoot'=>$playerData['three_shoot']+1,'three_hit'=>$playerData['three_hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
                 return $this->returnJson('失败，请重试！');
-            array_unshift($logs_act,[$playerId=>'three_andone',$foulId=>'foul']);
+            array_unshift($logs_act,[$playerId=>'three_hid',$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 三分出手造成'.$foulTeam.$foulPlayer['name'].'犯规,球进！加罚一次!');
         }elseif($type===1){
             array_unshift($logs_act,[$foulId=>'foul']);
@@ -513,7 +526,7 @@ class Game extends Userbase{
             return $this->returnJson('该球员没有参加该比赛数据');
         if(empty($scorePlayerData))
             return $this->returnJson('该得分球员没有参加该比赛数据');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -521,20 +534,23 @@ class Game extends Userbase{
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
         if($type ==1){
+            $score = $scorePlayerData['score']+2;
             $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+3,'three_shoot'=>$scorePlayerData['three_shoot']+1,'three_hit'=>$scorePlayerData['three_hit']];
             array_unshift($logs_act,[$scoreId=>'three_hit',$playerId=>'assists']);
             array_unshift($logs,$team.''.$player['name'].' 把球传给'.$team.$scorePlayer['name'].',三分线外出手!'."\n稳稳命中!");
         }else{
+            $score = $scorePlayerData['score']+3;
             $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+2,'shoot'=>$scorePlayerData['shoot']+1,'hit'=>$scorePlayerData['hit']];
             array_unshift($logs_act,[$scoreId=>'hit',$playerId=>'assists']);
             array_unshift($logs,$team.''.$player['name'].' 把球传给'.$team.$scorePlayer['name'].'!'."\n".$team.$scorePlayer['name'].'稳稳命中!');
         }
         Db::startTrans();
+        $scoreKey = $hometeam==1?'home_score':'visiting_score';
         $scoreRes = Db::name('player_data')->update($scoreUpdate);
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
         }
-        $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'rebounds'=>$playerData['rebounds']+1];
+        $update = ['Id'=>$playerData['Id'],$scoreKey=>$score,'update_time'=>time(),'rebounds'=>$playerData['rebounds']+1];
         $res = Db::name('player_data')->update($update);
         if(!$res){
             Db::rollback();
@@ -547,6 +563,9 @@ class Game extends Userbase{
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
+        $noTrue = $hometeam==0?'home_score':'visiting_score';
+        $data[$noTrue] = $schedule[$noTrue];
+        $data[$scoreKey] = $score;
         $data['logs'] = $logs;
         return $this->returnJson('成功',true,1,$data);
     }
@@ -572,7 +591,7 @@ class Game extends Userbase{
             return $this->returnJson('该球员没有参加该比赛数据');
         if(empty($stealsPlayerData))
             return $this->returnJson('被抢断球员没有参加该比赛数据');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -610,7 +629,7 @@ class Game extends Userbase{
     public function blocks(){
         $scheduleId = $this->request->param('id',0,'int');
         $playerId = $this->request->param('playerId',0,'int');
-        //被抢断者
+        //被盖者
         $blocksId = $this->request->param('blocksId',0,'int');
         $hometeam = $this->request->param('hometeam',1,'int');
         $type = $this->request->param('type',0,'int');
@@ -628,7 +647,7 @@ class Game extends Userbase{
             return $this->returnJson('该球员没有参加该比赛数据');
         if(empty($blocksPlayerData))
             return $this->returnJson('被盖帽球员没有参加该比赛数据');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -688,7 +707,7 @@ class Game extends Userbase{
         $res = Db::name('player_data')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试！');
-        $schedule = Db::name('shcedule')->where('Id',$scheduleId)->find();
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
         $logs = json_decode($schedule['logs'],true);
@@ -824,6 +843,31 @@ class Game extends Userbase{
         }
         Db::commit();
         $data['logs'] = $logs;
+        return $this->returnJson('成功',true,1,$data);
+    }
+
+    //进入下一节
+    public function next(){
+        $scheduleId = $this->request->param('id',0,'int');
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
+        if(empty($schedule))
+            return $this->returnJson('比赛不存在');
+        if($schedule['second']!=0)
+            return $this->returnJson('本节时间未结束');
+        $str = $schedule['section']>4?'进入第'.($schedule['section']-4).'加时':'进入第'.$schedule['section'].'节';
+        $logs = json_decode($schedule['logs'],true);
+        $logs = empty($logs)?array():$logs;
+        array_unshift($logs,$str);
+        $logs_act = json_decode($schedule['logs_act'],true);
+        $logs_act = empty($logs_act)?array():$logs_act;
+        array_unshift($logs_act,'');
+        $update = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act),'second'=>$schedule['section_time'],'section'=>$schedule['section']+1];
+        $res = Db::name('schedule')->update($update);
+        if(!$res)
+            return $this->returnJson('失败,请重试');
+        $data['logs'] = $logs;
+        $data['section'] = $schedule['section']+1;
+        $data['second']=$schedule['section_time'];
         return $this->returnJson('成功',true,1,$data);
     }
 
@@ -971,4 +1015,30 @@ class Game extends Userbase{
             return $this->returnJson('退出失败，请重试!');
         return $this->returnJson('退出成功',true,1);
     }
+
+    //获取球员 type=1在场比赛球员 type=0未上场球员
+    public function playing(){
+        $scheduleId = $this->request->param('id',0,'int');
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
+        if(empty($schedule))
+            return $this->returnJson('比赛不存在');
+        $type = (int)$this->request->param('type',0,'int');
+        $hometeam = (int)$this->request->param('hometeam',1,'int');
+        $team = $hometeam ==1?'home_team':'visiting_team';
+        $players = Db::name('player_data')
+            ->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule[$team],'is_playing'=>$type])
+            ->select();
+        if(empty($players))
+            return $this->returnJson('没有找到球员');
+        $data = [];
+        foreach ($players as $key=>$player){
+            $user = Db::name('user')->where('Id',$player['user_id'])->find();
+            $data[] = ['user_id'=>$user['Id'],'user_name'=>$user['name']];
+        }
+        return $this->returnJson('获取成功',true,1,$data);
+    }
+
+
+
+
 }
