@@ -1,5 +1,6 @@
 {load href="/static/css/user/game/index.css" /}
 {load href="/static/js/jq.js" /}
+{load href="/static/js/user/game/index.js" /}
 <div class="header__info">
     <div class="header__team-name home-name"><?php echo $home['name'];?></div>
     <div class="header__team-score home-score"><?php echo $schedule['home_score'];?></div>
@@ -37,7 +38,7 @@
                 <div class="detail__team-item">
                     <?php echo $player.' #'.$visitingNo[$key];?>
                     <?php if($playerStatus[$key]['is_playing']==1):?>
-                        <input type="radio" name="homePlayer" value="<?php echo $key;?>" />
+                        <input type="radio" name="awayPlayer" value="<?php echo $key;?>" />
                     <?php endif;?>
                 </div>
             <?php endforeach;?>
@@ -50,8 +51,8 @@
 <div class="detail__btn-group">
     <span class="detail__btn">换人</span>
     <span class="detail__btn">撤销</span>
-    <span class="detail__btn"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
-    <span class="detail__btn">死球停止</span>
+    <span class="detail__btn" id="j-start"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
+    <span class="detail__btn" id="j-stop">死球停止</span>
     <?php if($schedule['second']==0):?>
         <span class="detail__btn"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
     <?php endif;?>
@@ -59,7 +60,7 @@
         <span class="detail__btn">结束比赛</span>
     <?php endif;?>
     <br>
-    <span class="detail__btn">中投命中</span>
+    <span class="detail__btn" id="test">中投命中</span>
     <span class="detail__btn">突破命中</span>
     <span class="detail__btn">篮下命中</span>
     <span class="detail__btn">补篮命中</span>

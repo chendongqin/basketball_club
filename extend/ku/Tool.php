@@ -408,7 +408,7 @@ class Tool {
             $size = mt_rand(12,18);
             $angle = mt_rand(-20,20);
             $x = 5+20*$i;
-            $text = str_shuffle($string){0};
+            $text = str_shuffle($string)[0];
             $code .= $text;
             imagettftext($image,$size,$angle,$x,$y,$randColor,$fontFile,$text);
         }
