@@ -899,7 +899,7 @@ class Game extends Userbase{
         $logs_act = empty($logs_act)?array():$logs_act;
         $update = ['acting'=>$stopStatus,'Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'second'=>$second];
         if($type == 1){
-            $stopKey = $hometeam==1?'home':'visting';
+            $stopKey = $hometeam==1?'home':'visiting';
             $stopKey .= $schedule['section']>2?'_fhalf_stop':'_shalf_stop';
             array_unshift($logs_act,[$stopKey=>'stop']);
             if($schedule[$stopKey]==0)
