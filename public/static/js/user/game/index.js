@@ -1,5 +1,6 @@
 $(function(){
-    var maxtime = 10*60; //10分钟，按秒计算，自己调整!  
+    // var maxtime = 10*60; //10分钟，按秒计算，自己调整!  
+    var maxtime = Number($('.header__time').text().split(':')[0])*60+Number($('.header__time').text().split(':')[1]);
     var timer;    //定时器
     // 倒计时方法 
     function CountDown() {
@@ -20,27 +21,12 @@ $(function(){
             alert("时间到，结束!");
         }
     }
-    // 开始计时
-    $('#j-start').on('click',function(){
-        if($(this).text() == "开始"){
-            timer = setInterval(function(){
-                CountDown();
-            }, 1000);
-            $(this).text("暂停"); 
-        }else{
-            clearInterval(timer);
-             $(this).text("开始"); 
-        }
-    })
-    // 死球停止
-    $('#j-stop').on('click',function(){
-        clearInterval(timer);  
-    })
     // 选择球员校验
     function choose_check(){
         var home_check = $('input[name="homePlayer"]:checked').val();   //主队选中球员
         var away_check = $('input[name="awayPlayer"]:checked').val();   //客队选中球员
-        var check_val;   //最终球员信息
+        var check_val;   //选中球员信息
+        var is_home;  //是否是主队球员
         if(home_check == undefined && away_check == undefined){  //没有选中任何球员情况
             alert("没有选中球员！");
             return {flag:false};
@@ -50,13 +36,14 @@ $(function(){
         }else{
             if(home_check){  //选中球员为主队球员情况
                 check_val = home_check;
+                is_home = 1;
                 // alert("选中的球员号码为：主队"+check_val+"号");
             }else{   //选中球员为客队球员情况
                 check_val = away_check;
+                is_home = 0;
                 //  alert("选中的球员号码为：客队"+check_val+"号");
             }
-            // 使用AJAX将信息传递到服务端的操作放在这里
-            return {flag:true};
+            return {flag:true,playerId:check_val,hometeam:is_home};
         }
     }
     //AJAX封装函数开始
@@ -98,13 +85,68 @@ $(function(){
     //AJAX封装函数结束
     
     //AJAX使用示例
-    // 球员进两分球
-    $('#getTwo').on("click",function(){
-        if(choose_check().flag){
-            http.post("/user/game/getTwo",{id:1,playerId:1,hometeam:1,type:0})
+    //比赛ID还未填写,请求暂停主客队未填写
+    // 暂停/开始
+    $('.start_to_stop').on('click',function(){
+        if($(this).attr('data-type')==1){
+            if($('#j-start').text() == "开始"){
+                timer = setInterval(function(){
+                    CountDown();
+                }, 1000);
+                $('#j-start').text("暂停"); 
+            }else{
+                clearInterval(timer);
+                $('#j-start').text("开始"); 
+            }
+        }else{
+            clearInterval(timer);
+            $('#j-start').text("开始"); 
+        }
+
+
+        http.post("/user/game/stop",
+            {
+                id:1,
+                hometeam:0,
+                second:maxtime,
+                type:$(this).attr('data-type')
+            })
             .then(function(res){
+                var logs = "";
                 // 成功函数
-                console.log(res);
+                $('.home-score').text(res.data.home_score);
+                $('.away-score').text(res.data.visiting_score);
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+
+            })
+            .catch(function(e){
+                // 失败函数
+                console.log(e);
+            });
+    })
+    // 两分球
+    $('.double_score').on("click",function(){
+        if(choose_check().flag){
+            http.post("/user/game/getTwo",
+            {
+                id:1,
+                playerId:choose_check().playerId,
+                hometeam:choose_check().hometeam,
+                type:$(this).attr('data-type')
+            })
+            .then(function(res){
+                var logs = "";
+                // 成功函数
+                $('.home-score').text(res.data.home_score);
+                $('.away-score').text(res.data.visiting_score);
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+
             })
             .catch(function(e){
                 // 失败函数
@@ -112,13 +154,25 @@ $(function(){
             });
         }
     })
-    // 球员进三分球
-    $('#getThree').on("click",function(){
+    // 三分球
+    $('.three_score').on("click",function(){
         if(choose_check().flag){
-            http.post("/user/game/getThree",{id:1,playerId:1,hometeam:1,type:0})
+            http.post("/user/game/getThree",
+            {
+                id:1,
+                playerId:choose_check().playerId,
+                hometeam:choose_check().hometeam,
+                type:$(this).attr('data-type')
+            })
             .then(function(res){
+                var logs = "";
                 // 成功函数
-                console.log(res);
+                $('.home-score').text(res.data.home_score);
+                $('.away-score').text(res.data.visiting_score);
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
             })
             .catch(function(e){
                 // 失败函数
@@ -127,12 +181,24 @@ $(function(){
         }
     })
     // 球员罚球
-    $('#getOne').on("click",function(){
+    $('.one_score').on("click",function(){
         if(choose_check().flag){
-            http.post("/user/game/getOne",{id:1,playerId:1,hometeam:1,type:0})
+            http.post("/user/game/getOne",
+            {
+                id:1,
+                playerId:choose_check().playerId,
+                hometeam:choose_check().hometeam,
+                type:$(this).attr('data-type')
+            })
             .then(function(res){
+                var logs = "";
                 // 成功函数
-                console.log(res);
+                $('.home-score').text(res.data.home_score);
+                $('.away-score').text(res.data.visiting_score);
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
             })
             .catch(function(e){
                 // 失败函数

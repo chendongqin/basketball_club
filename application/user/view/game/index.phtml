@@ -53,8 +53,8 @@
 <div class="detail__btn-group">
     <span class="detail__btn">换人</span>
     <span class="detail__btn">撤销</span>
-    <span class="detail__btn" id="j-start"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
-    <span class="detail__btn" id="j-stop">死球停止</span>
+    <span class="detail__btn start_to_stop" data-type="1" id="j-start"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
+    <span class="detail__btn start_to_stop" data-type="0">死球停止</span>
     <?php if($schedule['second']==0):?>
         <span class="detail__btn"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
     <?php endif;?>
@@ -62,19 +62,19 @@
         <span class="detail__btn">结束比赛</span>
     <?php endif;?>
     <br>
-    <span class="detail__btn" id="getTwo">中投命中</span>
-    <span class="detail__btn">突破命中</span>
-    <span class="detail__btn">篮下命中</span>
-    <span class="detail__btn">补篮命中</span>
-    <span class="detail__btn" id="getThree">三分命中</span>
-    <span class="detail__btn" id="getOne">罚球命中</span>
+    <span class="detail__btn double_score" data-type="0">中投命中</span>
+    <span class="detail__btn double_score" data-type="1">突破命中</span>
+    <span class="detail__btn double_score" data-type="2">篮下命中</span>
+    <span class="detail__btn double_score" data-type="3">补篮命中</span>
+    <span class="detail__btn three_score" data-type="1">三分命中</span>
+    <span class="detail__btn one_score" data-type="1">罚球命中</span>
     <br>
-    <span class="detail__btn">中投未中</span>
-    <span class="detail__btn">上篮未中</span>
-    <span class="detail__btn">篮下未中</span>
-    <span class="detail__btn">补篮未中</span>
-    <span class="detail__btn">三分未中</span>
-    <span class="detail__btn">罚球未中</span>
+    <span class="detail__btn double_score" data-type="4">中投未中</span>
+    <span class="detail__btn double_score" data-type="5">上篮未中</span>
+    <span class="detail__btn double_score" data-type="6">篮下未中</span>
+    <span class="detail__btn double_score" data-type="7">补篮未中</span>
+    <span class="detail__btn three_score" data-type="0">三分未中</span>
+    <span class="detail__btn one_score" data-type="0">罚球未中</span>
     <br>
     <span class="detail__btn">助攻</span>
     <span class="detail__btn">失误</span>
