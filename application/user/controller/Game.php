@@ -461,21 +461,21 @@ class Game extends Userbase{
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
         Db::startTrans();
-        if($type===2){
+        if($type==2){
             $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+2,'shoot'=>$playerData['shoot']+1,'hit'=>$playerData['hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
                 return $this->returnJson('失败，请重试！');
             array_unshift($logs_act,[$playerId=>'hid',$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规,球进！加罚一次!');
-        }elseif($type===3){
+        }elseif($type==3){
             $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+3,'three_shoot'=>$playerData['three_shoot']+1,'three_hit'=>$playerData['three_hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
                 return $this->returnJson('失败，请重试！');
             array_unshift($logs_act,[$playerId=>'three_hid',$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 三分出手造成'.$foulTeam.$foulPlayer['name'].'犯规,球进！加罚一次!');
-        }elseif($type===1){
+        }elseif($type==1){
             array_unshift($logs_act,[$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规！罚球两次!');
         }else{
@@ -554,6 +554,7 @@ class Game extends Userbase{
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
         }
+        //错误，插入这里player_data表中没有相应的home_score字段
         $update = ['Id'=>$playerData['Id'],$scoreKey=>$score,'update_time'=>time(),'rebounds'=>$playerData['rebounds']+1];
         $res = Db::name('player_data')->update($update);
         if(!$res){
@@ -605,7 +606,7 @@ class Game extends Userbase{
         Db::startTrans();
         //失误处理
         $stealsUpdate = ['Id'=>$stealsPlayerData['Id'],'update_time'=>time(),'lost'=>$stealsPlayerData['lost']+1];
-        $stealRes = Db::name('players_data')->update($stealsUpdate);
+        $stealRes = Db::name('player_data')->update($stealsUpdate);
         if(!$stealRes)
             return $this->returnJson('失败，请重试');
         //抢断处理
@@ -670,7 +671,7 @@ class Game extends Userbase{
             $logs_str = '出手';
             $act = [$blocksId=>'shoot',$playerId=>'blocks'];
         }
-        $blocksRes = Db::name('players_data')->update($blocksUpdate);
+        $blocksRes = Db::name('player_data')->update($blocksUpdate);
         if(!$blocksRes)
             return $this->returnJson('失败，请重试');
         //抢断处理
