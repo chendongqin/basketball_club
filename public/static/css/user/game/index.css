@@ -211,6 +211,10 @@ body {
   border-radius: 5px;
   overflow-y: auto;
 }
+.detail__team1{
+  padding: 20px;
+  text-align: left;
+}
 
 .detail__team-name {
   text-align: center;

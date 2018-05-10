@@ -110,28 +110,24 @@ $(function(){
     //AJAX封装函数结束
     
     //AJAX使用示例
-    //比赛ID还未填写,请求暂停主客队未填写
     // 暂停/开始
     $('.start_to_stop').on('click',function(){
         clearInterval(timer);
         if($(this).attr('data-type')==1){
+            clearInterval(timer);
+        }else{
             if($('#j-start').text() == "开始"){
                 timer = setInterval(function(){
                     CountDown();
                 }, 1000);
-                $('#j-start').text("暂停"); 
             }else{
                 clearInterval(timer);
-                $('#j-start').text("开始"); 
             }
-        }else{
-            clearInterval(timer);
-            $('#j-start').text("开始"); 
         }
         http.post("/user/game/stop",
             {
-                id:1,
-                hometeam:0,
+                id:$('.schedule_id').text(),
+                hometeam:select_value,
                 second:maxtime,
                 type:$(this).attr('data-type')
             })
@@ -144,6 +140,13 @@ $(function(){
                         logs +="<p>"+res.data.logs[i]+"</p>"
                     }
                     $('.detail__character').html(logs);
+                    if(res.data.logs[0] == "比赛继续"){
+                        $('#j-start').text("死球暂停"); 
+                    }else if(res.data.logs[0] == "死球暂停"){
+                        $('#j-start').text("开始"); 
+                    }else{
+                        $('#j-start').text("开始"); 
+                    }
                 }else{
                     alert(res.msg);
                 }
@@ -159,7 +162,7 @@ $(function(){
         if(choose_check().flag){
             http.post("/user/game/getTwo",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
                 hometeam:choose_check().hometeam,
                 type:$(this).attr('data-type')
@@ -190,7 +193,7 @@ $(function(){
         if(choose_check().flag){
             http.post("/user/game/getThree",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
                 hometeam:choose_check().hometeam,
                 type:$(this).attr('data-type')
@@ -220,7 +223,7 @@ $(function(){
         if(choose_check().flag){
             http.post("/user/game/getOne",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
                 hometeam:choose_check().hometeam,
                 type:$(this).attr('data-type')
@@ -251,7 +254,7 @@ $(function(){
         if(choose_check().flag){
             http.post("/user/game/lost",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
                 hometeam:choose_check().hometeam,
             })
@@ -278,7 +281,7 @@ $(function(){
         if(choose_check().flag){
             http.post("/user/game/rebounds",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
                 hometeam:choose_check().hometeam,
             })
@@ -305,7 +308,7 @@ $(function(){
         if(choose_double_check().flag){
             http.post("/user/game/steals",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_double_check().Id1,
                 stealsId:choose_double_check().Id2,
                 hometeam:choose_double_check().hometeam,
@@ -333,7 +336,7 @@ $(function(){
         if(choose_double_check().flag){
             http.post("/user/game/blocks",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_double_check().Id1,
                 blocksId:choose_double_check().Id2,
                 hometeam:choose_double_check().hometeam,
@@ -362,7 +365,7 @@ $(function(){
         if(choose_double_check().flag){
             http.post("/user/game/faul",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_double_check().Id1,
                 foulId:choose_double_check().Id2,
                 hometeam:choose_double_check().hometeam,
@@ -386,17 +389,20 @@ $(function(){
             });
         }
     })
-    // 助攻(得分者，区分2/3分未填写)
-    $('#j-assists').on("click",function(){
+    // 助攻(助攻接口错误)
+    $('.assists').on("click",function(){
         if(choose_check().flag){
-            http.post("/user/game/assists",
+            $('#modelAssist').modal('show');
+        }
+    })
+    $('#j-assists').on('click',function(){
+        http.post("/user/game/assists",
             {
-                id:1,
+                id:$('.schedule_id').text(),
                 playerId:choose_check().playerId,
-                scoreId:7,
+                scoreId:$('input[name="doublePlayer"]:checked').val(),
                 hometeam:choose_check().hometeam,
-                // type:$(this).attr('data-type')
-                type:0
+                type:$(this).attr('data-type')
             })
             .then(function(res){
                 if(res.data!=""){
@@ -416,6 +422,40 @@ $(function(){
                 // 失败函数
                 console.log(e);
             });
-        }
     })
+    // 撤销(撤销接口出错)
+    $('#j-returnBack').on("click",function(){
+        http.post("/user/game/returnBack",
+        {
+            id:$('.schedule_id').text(),
+        })
+        .then(function(res){
+            // if(res.data!=""){
+            //     var logs = "";
+            //     // 成功函数
+            //     for(var i = 0;i<res.data.logs.length; i++){
+            //         logs +="<p>"+res.data.logs[i]+"</p>"
+            //     }
+            //     $('.detail__character').html(logs);
+            // }else{
+            //     alert(res.msg);
+            // }
+        })
+        .catch(function(e){
+            // 失败函数
+            console.log(e);
+        });
+    })
+    http.post("/user/game/playing",
+        {
+            id:$('.schedule_id').text(),
+            type:1
+        })
+        .then(function(res){
+            console.log(res.data);
+        })
+        .catch(function(e){
+            // 失败函数
+            console.log(e);
+        });
 })

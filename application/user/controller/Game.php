@@ -1019,7 +1019,7 @@ class Game extends Userbase{
         return $this->returnJson('退出成功',true,1);
     }
 
-    //获取球员 type=1在场比赛球员 type=0未上场球员
+    //获取球员 type=1在场比赛球员 type=0未上场球员(获取球员出错，没有player_no索引)
     public function playing(){
         $scheduleId = $this->request->param('id',0,'int');
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
