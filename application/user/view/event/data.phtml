@@ -1,0 +1,20 @@
+{load href="/static/css/user/event/index.css" /}
+<div class="main">
+    {include file="../application/index/view/public/user-side.phtml"/}
+    <div class="event-list">
+        <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+                <div class="list-show">
+                    <li><span><?php echo $data['name'];?></span ><span class="type"><span><?php echo $types[$data['type']];?></span></li>
+                    <li><?php echo $data['address'];?></span></li>
+                    <li><span><?php echo $data['start_time'].'至'.$data['end_time'];?></span><a href="/user/event/datadetail?id=<?php echo $data['Id'];?>">进入比赛</a></li>
+                </div>
+            <?php endforeach;?>
+        <?php else:?>
+            <div class="list-show nothing">
+                <li><span>没有比赛</span></li>
+            </div>
+        <?php endif;?>
+    </div>
+</div>
+{include file="../application/index/view/public/pager.phtml"/}

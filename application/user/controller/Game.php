@@ -137,10 +137,13 @@ class Game extends Userbase{
         Db::startTrans();
         $homePlayers = json_decode($home['players'],true);
         $visitingPlayers = json_decode($visiting['players'],true);
+        $homePlayersNo = json_decode($home['players_no'],true);
+        $visitingPlayersNo = json_decode($visiting['players_no'],true);
         $add = ['schedule_id'=>$id,'event_id'=>$schedule['event_id']];
         $add['club_id'] = $schedule['home_team'];
         foreach ($homePlayers as $userId=> $homePlayer){
             $add['user_id'] = $userId;
+            $add['player_no'] = $homePlayersNo[$userId];
             if(in_array($userId,$homeStarts)){
                 $add['starter'] = 1;
                 $add['is_playing'] = 1;
@@ -162,6 +165,7 @@ class Game extends Userbase{
         }
         foreach ($visitingPlayers as $userId=> $visitingPlayer){
             $add['user_id'] = $userId;
+            $add['player_no'] = $visitingPlayersNo[$userId];
             if(in_array($userId,$visitingStarts))
             {
                 $add['starter'] = 1;
@@ -984,7 +988,6 @@ class Game extends Userbase{
 
     //撤销执行
     public function doBack($log,$userId,$scheduleId){
-        $num = 1;
         switch ($log){
             case 'three_hit':
                $num = 3;
@@ -1033,7 +1036,7 @@ class Game extends Userbase{
         $data = [];
         foreach ($players as $key=>$player){
             $user = Db::name('user')->where('Id',$player['user_id'])->find();
-            $data[] = ['user_id'=>$user['Id'],'user_name'=>$user['name']];
+            $data[] = ['user_id'=>$user['Id'],'user_name'=>$user['name'],'player_no'=>$player['player_no']];
         }
         return $this->returnJson('获取成功',true,1,$data);
     }

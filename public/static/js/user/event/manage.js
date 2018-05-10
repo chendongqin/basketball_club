@@ -11,7 +11,7 @@ $(function () {
                 alert(json.msg);
             }
         })
-    })
+    });
 
     $('.delJoins').click(function () {
         var clubId = $(this).attr('data-id');
@@ -65,4 +65,17 @@ $(function () {
         $('#modelImportSchendule').modal('show');
     });
 
+    $('#eventWork').click(function () {
+        $('#modelJishutai').modal('show');
+    });
+    $('#jstWorkerAdd').click(function () {
+        var id= $(this).attr('data-id');
+        var user = $('#jstWorker').val();
+        $.post('/user/event/addworker',{id:id,user:user},function (json) {
+            if(json.status == true)
+                location.reload();
+            else
+                alert(json.msg);
+        })
+    });
 });

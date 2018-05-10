@@ -11,6 +11,7 @@ use think\Db;
 use think\Session;
 use ku\Upload;
 use ku\Tool;
+use ku\Verify;
 use think\Cache;
 use think\Config;
 class Event extends Userbase{
@@ -34,6 +35,39 @@ class Event extends Userbase{
         return $this->fetch();
     }
 
+    public function data(){
+        $this->assign('title','我的技术台');
+        $page = $this->request->param('page',1,'int');
+        $user  = $this->getUser();
+        $eventIds = Db::name('event_workers')->where('user_id',$user['Id'])->column('event_id');
+        $eventModel = Db::name('event');
+        $where['audit'] = 1;
+        $where['Id'] = ['in',$eventIds];
+        $types = Config::get('basketball.event_types');
+        $this->assign('types',$types);
+        $events = $eventModel->where($where)
+            ->order('create_time desc')
+            ->paginate(5,false,array('page'=>$page))
+            ->toArray();
+        $this->assign('pager',$events);
+        return $this->fetch();
+    }
+    public function datadetail(){
+        $id = $this->request->param('id',0,'int');
+        $event = Db::name('event')->where('Id',$id)->find();
+        if(empty($event))
+            return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'赛事不存在']);
+        $user = $this->getUser();
+        $worker  = Db::name('event_workers')->where(['user_id'=>$user['Id'],'event_id'=>$id])->find();
+        if(empty($worker))
+            return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'您不是该比赛的技术台工作人员，没有权限操作']);
+        $schedule = Db::name('schedule')->where('event_id',$id)->select();
+        if(empty($schedule))
+            return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'赛事还未安排比赛']);
+        $this->assign('event',$event);
+        $this->assign('schedule',$schedule);
+        return $this->fetch();
+    }
 
     //添加赛事
     public function add(){
@@ -174,7 +208,35 @@ class Event extends Userbase{
             $applys[$key]['clubName'] = $club['name'];
         }
         $this->assign('applys',$applys);
+        $workers = Db::name('event_workers')->where('event_id',$id)->select();
+        $eventWorkers = [];
+        foreach ($workers as $worker){
+            $workData = Db::name('user')->where('Id',$worker['user_id'])->find();
+            $eventWorkers[] = ['Id'=>$workData['Id'],'name'=>$workData['name']];
+        }
+        $this->assign('workers',$eventWorkers);
         return $this->fetch();
+    }
+
+    public function addworker(){
+        $id = $this->request->param('id',0,'int');
+        $email = $this->request->param('user','','string');
+        if(!Verify::isEmail($email))
+            return $this->returnJson('邮箱格式不正确');
+        $event = Db::name('event')->where('Id',$id)->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user']!=$user['Id'])
+            return $this->returnJson('您没有设置权限');
+        $worker = Db::name('user')->where('email',$email)->find();
+        if(empty($worker))
+            return $this->returnJson('用户不存在');
+        $add = ['event_id'=>$id,'user_id'=>$worker['Id']];
+        $res = Db::name('event_workers')->insert($add);
+        if(!$res)
+            return $this->returnJson('添加失败，请重试!');
+        return $this->returnJson('成功',true,1);
     }
 
     //修改邀请码

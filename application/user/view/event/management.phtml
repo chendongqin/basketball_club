@@ -5,23 +5,20 @@
 {load href="/static/js/index/model.js" /}
 <div class="title">
     <span><?php echo $event['name'];?></span>
+    <div class="title-r">
     <?php if(empty($schedules)):?>
         <?php if($event['type']===0):?>
-            <div class="title-r">
                 <a href="javascript:;" id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</a>
                 <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
-            </div>
         <?php elseif($event['type']===2):?>
-            <div class="title-r">
                 <a href="/user/schedule/outSchedule" >安排赛程</a>
                 <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
-            </div>
         <?php endif;?>
     <?php elseif($event['type']!==0):?>
-        <div class="title-r">
             <a href="javascript:;" id="overGroup" data-id="<?php $event['Id']?>">下一轮</a>
-        </div>
     <?php endif;?>
+        <a href="javascript:;" id="eventWork" data-id="<?php $event['Id']?>">添加管理</a>
+    </div>
 </div>
 <div class="manage-center">
     <div class="event-alter">
@@ -100,8 +97,6 @@
         <?php endif;?>
     </table>
 </div>
-
-
 
 <div class="schedule">
     <div class="schedule-title">赛程表</div>
@@ -221,4 +216,31 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modelJishutai">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">技术台管理</h4>
+            </div>
+            <div id="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="modelJishutaiForm" id="modelJishutaiForm">
+                    <input type="text" name="jstWorker" id="jstWorker" >
+                    <input type="button"  value="添加" id="jstWorkerAdd" data-id="<?php echo $event['Id'];?>">
+                </form>
+                <?php foreach ($workers as $worker):?>
+                    <p>
+                        <?php echo $worker['name'];?>
+                        <a href="javascript:;" class="worker-list" data-id="<?php echo $worker['Id'];?>">删除</a>
+                    </p>
+                <?php endforeach;?>
+            </div>
+        </div>
+    </div>
+</div>
+
 

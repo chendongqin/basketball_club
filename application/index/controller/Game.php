@@ -113,7 +113,7 @@ class Game extends Base{
             }
         }
         $avg = [];
-        $count = count($datas);
+        $count = count($datas)==0?1:count($datas);
         foreach ($total as $key=>$value){
             $avg[$key] = number_format($value/$count,2,'.','');
         }
