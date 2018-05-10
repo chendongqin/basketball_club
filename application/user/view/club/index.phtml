@@ -22,6 +22,7 @@
                     <?php if($user['Id'] == $club['captain']):?>
                         <button id="changeCaptain">更换队长</button>
                     <?php endif;?>
+
                 </li>
             </div>
         </div>
@@ -33,7 +34,12 @@
             <?php endforeach;?>
         </div>
         <div class="club-apply">
-            <h3>申请列表</h3>
+            <h3>
+                申请列表
+                <?php if($user['Id'] == $club['captain']):?>
+                    <span id="changeCode">(邀请码：<?php echo $club['virefy_code'];?>)</span>
+                <?php endif;?>
+            </h3>
             <table>
                 <thead>
                 <tr>
