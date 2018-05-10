@@ -59,7 +59,7 @@
         <option value ="1">主队</option>
         <option value ="0">客队</option>
     </select>
-    <span class="detail__btn">换人</span>
+    <span class="detail__btn replace">换人</span>
     <span class="detail__btn" id="j-returnBack">撤销</span>
     <span class="detail__btn start_to_stop" data-type="1">暂停</span>
     <span class="detail__btn start_to_stop" data-type="0" id="j-start"><?php echo $schedule['acting']==1?'死球停止':'开始';?></span>
@@ -94,8 +94,7 @@
     <br>
     <span class="detail__btn faul" data-type="0">普通犯规</span>
     <span class="detail__btn faul" data-type="1">犯规罚球</span>
-    <span class="detail__btn faul" data-type="2">两分犯规</span>
-    <span class="detail__btn faul" data-type="3">三分犯规</span>
+    <span class="detail__btn faul" data-type="4">三分犯规</span>
     <span class="detail__btn faul" data-type="2">2+1</span>
     <span class="detail__btn faul" data-type="3">3+1</span>
 </div>
@@ -113,6 +112,28 @@
             <div class="modal-body">
                 <div class="detail__team1">
                     <ul style="text-align: left;margin:0;padding:0" id="j-get-player">
+                    </ul>
+                    <div class="detail__team-item">
+                        <input type="button" class="detail__btn" id="j-assists" value="确定" data-dismiss="modal" aria-hidden="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelReplace">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">换人</h4>
+            </div>
+            <div id="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <div class="detail__team1">
+                    <ul style="text-align: left;margin:0;padding:0" id="j-replace-player">
                         <?php foreach ($homePlayers as $key=>$player):?>
                             <li class="detail__team-item">
                                 <?php if($playerStatus[$key]['is_playing']==1):?>
@@ -123,7 +144,7 @@
                         <?php endforeach;?>
                     </ul>
                     <div class="detail__team-item">
-                        <input type="button" class="detail__btn" id="j-assists" value="确定" data-dismiss="modal" aria-hidden="true">
+                        <input type="button" class="detail__btn" id="j-replace" value="确定" data-dismiss="modal" aria-hidden="true">
                     </div>
                 </div>
             </div>

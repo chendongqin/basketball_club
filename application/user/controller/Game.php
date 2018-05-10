@@ -43,7 +43,7 @@ class Game extends Userbase{
                 echo json_encode(['msg'=>'比赛已结束，不可操作！','status'=>false,'code'=>0]);
                 die();
             }
-            if(($act!='stop' and $act !='returnback') and $schedule['acting']!=1){
+            if(($act!='stop' and $act !='returnback' and $act !='replace') and $schedule['acting']!=1){
                 header('Content-type: application/json; charset=utf-8');
                 echo json_encode(['msg'=>'比赛暂停，不可操作！','status'=>false,'code'=>0]);
                 die();
@@ -816,7 +816,7 @@ class Game extends Userbase{
             return $this->returnJson('不是死球状态，无法换人');
         $playerId = $this->request->param('oldId',0,'int');
         $newPlayerId = $this->request->param('newId',0,'int');
-        if(empty($olds) or empty($news))
+        if(empty($playerId) or empty($newPlayerId))
             return $this->returnJson('未定义需要更换的球员或更换球员');
         Db::startTrans();
         $timeTotal = ($schedule['section'])*$schedule['section_time']-$schedule['second'];
