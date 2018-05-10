@@ -550,6 +550,7 @@ class Game extends Userbase{
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
         }
+        //错误，插入这里player_data表中没有相应的home_score字段
         $update = ['Id'=>$playerData['Id'],$scoreKey=>$score,'update_time'=>time(),'rebounds'=>$playerData['rebounds']+1];
         $res = Db::name('player_data')->update($update);
         if(!$res){

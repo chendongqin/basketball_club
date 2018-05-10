@@ -46,11 +46,20 @@ $(function(){
             return {flag:true,playerId:check_val,hometeam:is_home};
         }
     }
-    // 选择两个个球员校验（缺少主客队区分）
+    // 选择主客队
+    var select_value = "";
+    function get_select_value(){
+        select_value = $(".detail__select option:selected").val();
+        $(".detail__select").change(function(){
+            select_value = $(".detail__select option:selected").val();
+        })
+    }
+    get_select_value();
+    // 选择两个个球员校验
     function choose_double_check(){
         var home_check = $('input[name="homePlayer"]:checked').val();   //主队选中球员
         var away_check = $('input[name="awayPlayer"]:checked').val();   //客队选中球员
-        var is_home = 1;  //是否是主队球员在前
+        var is_home = select_value;  //是否是主队球员在前
         if(home_check == undefined || away_check == undefined){  //没有选中任何球员情况
             alert("请选中两名球员！");
             return {flag:false};
@@ -361,6 +370,38 @@ $(function(){
             })
             .then(function(res){
                 if(res.data!=""){
+                    var logs = "";
+                    // 成功函数
+                    for(var i = 0;i<res.data.logs.length; i++){
+                        logs +="<p>"+res.data.logs[i]+"</p>"
+                    }
+                    $('.detail__character').html(logs);
+                }else{
+                    alert(res.msg);
+                }
+            })
+            .catch(function(e){
+                // 失败函数
+                console.log(e);
+            });
+        }
+    })
+    // 助攻(得分者，区分2/3分未填写)
+    $('#j-assists').on("click",function(){
+        if(choose_check().flag){
+            http.post("/user/game/assists",
+            {
+                id:1,
+                playerId:choose_check().playerId,
+                scoreId:7,
+                hometeam:choose_check().hometeam,
+                // type:$(this).attr('data-type')
+                type:0
+            })
+            .then(function(res){
+                if(res.data!=""){
+                    $('.home-score').text(res.data.home_score);
+                    $('.away-score').text(res.data.visiting_score);
                     var logs = "";
                     // 成功函数
                     for(var i = 0;i<res.data.logs.length; i++){

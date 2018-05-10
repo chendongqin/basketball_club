@@ -51,6 +51,10 @@
     </div>
 </div>
 <div class="detail__btn-group">
+    <select class="detail__select">
+        <option value ="1">主队</option>
+        <option value ="0">客队</option>
+    </select>
     <span class="detail__btn">换人</span>
     <span class="detail__btn">撤销</span>
     <span class="detail__btn start_to_stop" data-type="1" id="j-start"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
@@ -76,7 +80,7 @@
     <span class="detail__btn three_score" data-type="0">三分未中</span>
     <span class="detail__btn one_score" data-type="0">罚球未中</span>
     <br>
-    <span class="detail__btn">助攻</span>
+    <span class="detail__btn" id="j-assists">助攻</span>
     <span class="detail__btn" id="j-lost">失误</span>
     <span class="detail__btn" id="j-rebounds">篮板</span>
     <span class="detail__btn" id="j-steals">抢断</span>

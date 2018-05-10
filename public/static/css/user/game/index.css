@@ -287,6 +287,12 @@ body {
   -ms-border-radius: 5px;
   border-radius: 5px;
   padding: 20px 20px 0;
+  position: relative;
+}
+.detail__select{
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .detail__btn:hover {
