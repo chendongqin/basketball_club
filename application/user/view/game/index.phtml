@@ -53,6 +53,7 @@
     </div>
 </div>
 <div class="schedule_id" style="display:none;"><?php echo $schedule['Id'];?></div>
+<div class="acting" style="display:none;"><?php echo $schedule['acting'];?></div>
 <div class="detail__btn-group">
     <select class="detail__select">
         <option value ="1">主队</option>
@@ -111,19 +112,19 @@
             </div>
             <div class="modal-body">
                 <div class="detail__team1">
-                    <form action="" method="get"  style="text-align: left;">
+                    <ul style="text-align: left;margin:0;padding:0" id="j-get-player">
                         <?php foreach ($homePlayers as $key=>$player):?>
-                            <div class="detail__team-item">
+                            <li class="detail__team-item">
                                 <?php if($playerStatus[$key]['is_playing']==1):?>
                                     <input type="radio" name="doublePlayer" value="<?php echo $key;?>" />
                                      <?php echo $player.' #'.$homeNo[$key];?>
                                 <?php endif;?>
-                            </div>
+                            </li>
                         <?php endforeach;?>
-                        <div class="detail__team-item">
-                            <input type="button" class="detail__btn" id="j-assists" value="确定" data-dismiss="modal" aria-hidden="true">
-                        </div>
-                    </form>
+                    </ul>
+                    <div class="detail__team-item">
+                        <input type="button" class="detail__btn" id="j-assists" value="确定" data-dismiss="modal" aria-hidden="true">
+                    </div>
                 </div>
             </div>
         </div>

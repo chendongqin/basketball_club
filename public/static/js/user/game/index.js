@@ -111,19 +111,12 @@ $(function(){
     
     //AJAX使用示例
     // 暂停/开始
+    if($('.acting').text() == 1){
+        timer = setInterval(function(){
+            CountDown();
+        }, 1000);
+    }
     $('.start_to_stop').on('click',function(){
-        clearInterval(timer);
-        if($(this).attr('data-type')==1){
-            clearInterval(timer);
-        }else{
-            if($('#j-start').text() == "开始"){
-                timer = setInterval(function(){
-                    CountDown();
-                }, 1000);
-            }else{
-                clearInterval(timer);
-            }
-        }
         http.post("/user/game/stop",
             {
                 id:$('.schedule_id').text(),
@@ -140,12 +133,18 @@ $(function(){
                         logs +="<p>"+res.data.logs[i]+"</p>"
                     }
                     $('.detail__character').html(logs);
+                    clearInterval(timer);
                     if(res.data.logs[0] == "比赛继续"){
-                        $('#j-start').text("死球暂停"); 
+                        $('#j-start').text("死球暂停");
+                        timer = setInterval(function(){
+                            CountDown();
+                        }, 1000); 
                     }else if(res.data.logs[0] == "死球暂停"){
                         $('#j-start').text("开始"); 
+                        clearInterval(timer);
                     }else{
                         $('#j-start').text("开始"); 
+                        clearInterval(timer);
                     }
                 }else{
                     alert(res.msg);
@@ -389,10 +388,36 @@ $(function(){
             });
         }
     })
-    // 助攻(助攻接口错误)
+    // 助攻
     $('.assists').on("click",function(){
+        var data_type = 0;
         if(choose_check().flag){
-            $('#modelAssist').modal('show');
+            data_type = $(this).attr('data-type');
+            http.post("/user/game/playing",
+            {
+                id:$('.schedule_id').text(),
+                hometeam:choose_check().hometeam,
+                type:1
+            })
+            .then(function(res){
+                if(res.data!=""){
+                    $('#j-get-player').text("");
+                    var data = "";
+                    for(var i= 0;i<res.data.length;i++){
+                        if(res.data[i].user_id != choose_check().playerId){
+                            data += "<li class='detail__team-item'><input type='radio' name='doublePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #1</li>"
+                        }
+                    }
+                    $('#j-get-player').html(data);
+                    $('#modelAssist').modal('show');
+                }
+                console.log($(this).attr('data-type'));
+                $('#j-assists').attr('data-type',data_type);
+            })
+            .catch(function(e){
+                // 失败函数
+                console.log(e);
+            });
         }
     })
     $('#j-assists').on('click',function(){
@@ -423,7 +448,7 @@ $(function(){
                 console.log(e);
             });
     })
-    // 撤销(撤销接口出错)
+    // 撤销(撤销接口分数没变化，未返回数据)
     $('#j-returnBack').on("click",function(){
         http.post("/user/game/returnBack",
         {
@@ -446,16 +471,4 @@ $(function(){
             console.log(e);
         });
     })
-    http.post("/user/game/playing",
-        {
-            id:$('.schedule_id').text(),
-            type:1
-        })
-        .then(function(res){
-            console.log(res.data);
-        })
-        .catch(function(e){
-            // 失败函数
-            console.log(e);
-        });
 })
