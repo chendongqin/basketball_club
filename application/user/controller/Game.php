@@ -968,21 +968,42 @@ class Game extends Userbase{
         $unsetLogs = array_shift($actLogs);
         Db::startTrans();
         $stop = '';
-        foreach ($unsetLogs as $userId=>$log){
-            if($log=='stop'){
-                $stop = $userId;
-                continue;
-            }
-            $res = $this->doBack($log,$userId,$scheduleId);
-            if(!$res){
-                Db::rollback();
-                return $this->returnJson('失败，请重试!');
+        $score = 0;
+        $scoreKey = 'home_score';
+        if(!empty($unsetLogs)){
+            foreach ($unsetLogs as $userId=>$log){
+                if($log=='stop'){
+                    $stop = $userId;
+                    continue;
+                }
+                $res = $this->doBack($log,$userId,$scheduleId);
+                if(!$res){
+                    Db::rollback();
+                    return $this->returnJson('失败，请重试!');
+                }
+                if(in_array($log,['hit','three_hit','penalty_hit'])){
+                    $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$userId])->find();
+                    $scoreKey = $playerData['club_id']==$schedule['home_team']?'home_score':'visiting_score';
+                    switch ($log){
+                        case 'three_hit':
+                            $score += 3;
+                            break ;
+                        case 'hit':
+                            $score += 2;
+                            break ;
+                        default:
+                            $score += 1;
+                            break;
+                    }
+                }
             }
         }
         array_shift($logs);
         $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
         if($stop)
             $update[$stop] = $schedule[$stop]+1;
+        if($score!=0)
+            $update[$scoreKey] = $schedule[$scoreKey]-$score;
         $logRes = Db::name('schedule')->update($update);
         if(!$logRes){
             Db::rollback();
