@@ -279,4 +279,25 @@ class Index extends Userbase{
         return $this->returnJson('退出成功',true,1);
     }
 
+    public function changeNo(){
+        $id = $this->request->param('id',0,'int');
+        $no = $this->request->param('no',0,'int');
+        $club = Db::name('club')->where('Id',$id)->find();
+        if(empty($club))
+            return $this->returnJson('球队不存在');
+        $user = $this->getUser();
+        $players = json_decode($club['players'],true);
+        if(!isset($players[$user['Id']]))
+            return $this->returnJson('您没有加入球队');
+        $playerNo = json_decode($club['players_no'],true);
+        if(in_array($no,$playerNo))
+            return $this->returnJson('号码已存在');
+        $playerNo[$user['Id']] = $no;
+        $update = ['Id'=>$id,'players_no'=>json_encode($playerNo)];
+        $res = Db::name('club')->update($update);
+        if(!$res)
+            return $this->returnJson('失败，请重试!');
+        return $this->returnJson('成功',true,1);
+    }
+
 }

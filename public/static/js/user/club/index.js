@@ -2,7 +2,13 @@ $(function () {
    $('#changeCaptain') .click(function () {
        $('.error').hide();
        $('#modelChangeCaptain').modal('show');
-   })
+   });
+});
+$(function () {
+    $('#changeNo') .click(function () {
+        $('.error').hide();
+        $('#modelChangeNo').modal('show');
+    });
 });
 $(function () {
     $('#changeCaptainButton') .click(function () {
@@ -17,7 +23,20 @@ $(function () {
                 $('.error').show();
             }
         });
-    })
+    });
+    $('#changeNoButton') .click(function () {
+        var id = $('#clubId').val();
+        var no = $('#changeNoValue').val();
+        var data = {id:id,no:no};
+        $.post('/user/index/changeNo',data,function (returnData) {
+            if(returnData.status == true){
+                location.reload();
+            }else{
+                $('.tc_error').html(returnData.msg);
+                $('.error').show();
+            }
+        });
+    });
 });
 $(function () {
    var id = $('#captainName').attr('data-id');

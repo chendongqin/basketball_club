@@ -65,7 +65,7 @@ class Event extends Userbase{
         if(empty($schedule))
             return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'赛事还未安排比赛']);
         $this->assign('event',$event);
-        $this->assign('schedule',$schedule);
+        $this->assign('schedules',$schedule);
         return $this->fetch();
     }
 
@@ -217,7 +217,7 @@ class Event extends Userbase{
         $this->assign('workers',$eventWorkers);
         return $this->fetch();
     }
-
+    //添加技术台管理人员
     public function addworker(){
         $id = $this->request->param('id',0,'int');
         $email = $this->request->param('user','','string');
@@ -238,7 +238,24 @@ class Event extends Userbase{
             return $this->returnJson('添加失败，请重试!');
         return $this->returnJson('成功',true,1);
     }
-
+    //删除技术台管理人员
+    public function delworker(){
+        $id = $this->request->param('id',0,'int');
+        $workId = $this->request->param('user','','string');
+        $event = Db::name('event')->where('Id',$id)->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在');
+        $user = $this->getUser();
+        if($event['create_user']!=$user['Id'])
+            return $this->returnJson('您没有设置权限');
+        $worker = Db::name('event_workers')->where(['event_id'=>$id,'user_id'=>$workId])->find();
+        if(empty($worker))
+            return $this->returnJson('管理员不存在');
+        $res = Db::name('event_workers')->delete($worker['Id']);
+        if(!$res)
+            return $this->returnJson('失败，请重试!');
+        return $this->returnJson('成功',true,1);
+    }
     //修改邀请码
     public function alterCode(){
         $id = $this->request->param('id','','int');
@@ -399,21 +416,21 @@ class Event extends Userbase{
         return $this->returnJson('设置成功',true,1);
     }
 
-    public function delWorker(){
-        $id = $this->request->param('id',0,'int');
-        $worker = Db::name('event_workers')->where('Id',$id)->find();
-        if(empty($worker))
-            return $this->returnJson('赛事工作人员不存在');
-        $event = Db::name('event')->where('Id',$worker['event_id'])->find();
-        if(empty($event))
-            return $this->returnJson('赛事不存在');
-        $user = $this->getUser();
-        if($event['create_user'] != $user['Id'])
-            return $this->returnJson('您没有权限');
-        $res = Db::name('event_workers')->where('Id',$id)->delete();
-        if(!$res)
-            return $this->returnJson('操作失败，请重试');
-        return $this->returnJson('操作成功',true,1);
-    }
+//    public function delWorker(){
+//        $id = $this->request->param('id',0,'int');
+//        $worker = Db::name('event_workers')->where('Id',$id)->find();
+//        if(empty($worker))
+//            return $this->returnJson('赛事工作人员不存在');
+//        $event = Db::name('event')->where('Id',$worker['event_id'])->find();
+//        if(empty($event))
+//            return $this->returnJson('赛事不存在');
+//        $user = $this->getUser();
+//        if($event['create_user'] != $user['Id'])
+//            return $this->returnJson('您没有权限');
+//        $res = Db::name('event_workers')->where('Id',$id)->delete();
+//        if(!$res)
+//            return $this->returnJson('操作失败，请重试');
+//        return $this->returnJson('操作成功',true,1);
+//    }
 
 }

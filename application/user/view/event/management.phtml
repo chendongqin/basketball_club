@@ -17,7 +17,7 @@
     <?php elseif($event['type']!==0):?>
             <a href="javascript:;" id="overGroup" data-id="<?php $event['Id']?>">下一轮</a>
     <?php endif;?>
-        <a href="javascript:;" id="eventWork" data-id="<?php $event['Id']?>">添加管理</a>
+        <a href="javascript:;" id="eventWork" data-id="<?php $event['Id']?>">直播管理</a>
     </div>
 </div>
 <div class="manage-center">
@@ -148,7 +148,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">赛程安排</h4>
             </div>
-            <div id="error" style="display: none;color: red">
+            <div class="error" style="display: none;color: red">
                 <span class="tc_error"></span>
             </div>
             <div class="modal-body">
@@ -201,7 +201,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">赛程导入</h4>
             </div>
-            <div id="error" style="display: none;color: red">
+            <div class="error" style="display: none;color: red">
                 <span class="tc_error"></span>
             </div>
             <div class="modal-body">
@@ -224,7 +224,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">技术台管理</h4>
             </div>
-            <div id="error" style="display: none;color: red">
+            <div class="error" style="display: none;color: red">
                 <span class="tc_error"></span>
             </div>
             <div class="modal-body">
@@ -235,12 +235,13 @@
                 <?php foreach ($workers as $worker):?>
                     <p>
                         <?php echo $worker['name'];?>
-                        <a href="javascript:;" class="worker-list" data-id="<?php echo $worker['Id'];?>">删除</a>
+                        <a href="javascript:;" class="worker-list" data-id="<?php echo $worker['Id'];?>" >删除</a>
                     </p>
                 <?php endforeach;?>
             </div>
         </div>
     </div>
 </div>
+<input type="hidden" id="eventId" value="<?php echo $event['Id'];?>">
 
 

@@ -69,12 +69,13 @@
         <?php foreach ($players as $userId=>$name):?>
             <li>
                 <span style="color: grey"><?php echo $userId==$club['captain']?'队长：':'队员：';?></span>
-                <a href="/user/club/player?id=<?php echo $userId;?>"><span><?php echo $name.' '.$nos[$userId].'号';?></span></a>
+                <a href="/index/game/detail?userId=<?php echo $userId;?>"><span><?php echo $name.' '.$nos[$userId].'号';?></span></a>
                 <?php if($user['Id']==$club['captain'] and $userId!=$club['captain']):?>
                     <a href="javascript:;" class="delPlaers" data-id="<?php echo $userId;?>">踢出</a>
                 <?php endif;?>
             </li>
         <?php endforeach;?>
+        <a href="javascript:;" id="changeNo" >更换号码</a>
     </div>
 
 </div>
@@ -102,6 +103,30 @@
             </div>
             <div class="modal-footer">
                 <input type="button"  id="changeCaptainButton" value="更换" >
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modelChangeNo">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">更换号码</h4>
+            </div>
+            <div class="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="modelJishutaiForm" id="modelJishutaiForm">
+                    <div>
+                        <input type="text" name="changeNoValue" id="changeNoValue" value="<?php echo $nos[$user['Id']];?>">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <input type="button"  value="更换" id="changeNoButton">
+                </div>
             </div>
         </div>
     </div>

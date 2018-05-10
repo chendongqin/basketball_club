@@ -76,6 +76,16 @@ $(function () {
                 location.reload();
             else
                 alert(json.msg);
-        })
+        });
+    });
+    $('.worker-list').click(function () {
+        var id= $(this).attr('data-id');
+        var eventId = $('#eventId').val();
+        $.post('/user/event/delworker',{id:eventId,user:id},function (json) {
+            if(json.status == true)
+                location.reload();
+            else
+                alert(json.msg);
+        });
     });
 });
