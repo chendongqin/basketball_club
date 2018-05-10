@@ -64,10 +64,10 @@
     <span class="detail__btn start_to_stop" data-type="1">暂停</span>
     <span class="detail__btn start_to_stop" data-type="0" id="j-start"><?php echo $schedule['acting']==1?'死球停止':'开始';?></span>
     <?php if($schedule['second']==0):?>
-        <span class="detail__btn"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
+        <span class="detail__btn" id="j-next"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
     <?php endif;?>
     <?php if($schedule['second']==0 and $schedule['section']>=4):?>
-        <span class="detail__btn">结束比赛</span>
+        <span class="detail__btn" id="j-over">结束比赛</span>
     <?php endif;?>
     <br>
     <span class="detail__btn double_score" data-type="0">中投命中</span>
@@ -134,14 +134,6 @@
             <div class="modal-body">
                 <div class="detail__team1">
                     <ul style="text-align: left;margin:0;padding:0" id="j-replace-player">
-                        <?php foreach ($homePlayers as $key=>$player):?>
-                            <li class="detail__team-item">
-                                <?php if($playerStatus[$key]['is_playing']==1):?>
-                                    <input type="radio" name="doublePlayer" value="<?php echo $key;?>" />
-                                     <?php echo $player.' #'.$homeNo[$key];?>
-                                <?php endif;?>
-                            </li>
-                        <?php endforeach;?>
                     </ul>
                     <div class="detail__team-item">
                         <input type="button" class="detail__btn" id="j-replace" value="确定" data-dismiss="modal" aria-hidden="true">
