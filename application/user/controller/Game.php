@@ -555,6 +555,7 @@ class Game extends Userbase{
         }
         Db::startTrans();
         $scoreKey = $hometeam==1?'home_score':'visiting_score';
+        $scheduleScore = $type==1?($schedule[$scoreKey]+3):($schedule[$scoreKey]+2);
         $scoreRes = Db::name('player_data')->update($scoreUpdate);
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
@@ -565,7 +566,7 @@ class Game extends Userbase{
             Db::rollback();
             return $this->returnJson('失败，请重试！');
         }
-        $scheduleUpdate = ['Id'=>$scheduleId,$scoreKey=>$score,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
+        $scheduleUpdate = ['Id'=>$scheduleId,$scoreKey=>$scheduleScore,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
         $scheduleUpRes = Db::name('schedule')->update($scheduleUpdate);
         if(!$scheduleUpRes){
             Db::rollback();
@@ -574,7 +575,7 @@ class Game extends Userbase{
         Db::commit();
         $noTrue = $hometeam==0?'home_score':'visiting_score';
         $data[$noTrue] = $schedule[$noTrue];
-        $data[$scoreKey] = $score;
+        $data[$scoreKey] = $scheduleScore;
         $data['logs'] = $logs;
         return $this->returnJson('成功',true,1,$data);
     }
