@@ -21,8 +21,8 @@
                 <div class="detail__team-item">
                     <?php if($playerStatus[$key]['is_playing']==1):?>
                         <input type="radio" name="homePlayer" value="<?php echo $key;?>" />
+                        <?php echo $player.' #'.$homeNo[$key];?>
                     <?php endif;?>
-                    <?php echo $player.' #'.$homeNo[$key];?>
                 </div>
             <?php endforeach;?>
             <div class="detail__team-item">
@@ -40,8 +40,8 @@
         <form action="" method="get"  style="text-align: right;">
             <?php foreach ($visitingPlayers as $key=>$player):?>
                 <div class="detail__team-item">
-                    <?php echo $player.' #'.$visitingNo[$key];?>
                     <?php if($playerStatus[$key]['is_playing']==1):?>
+                        <?php echo $player.' #'.$visitingNo[$key];?>
                         <input type="radio" name="awayPlayer" value="<?php echo $key;?>" />
                     <?php endif;?>
                 </div>

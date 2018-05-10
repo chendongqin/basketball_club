@@ -17,7 +17,7 @@ class Game extends Userbase{
     public function _initialize()
     {
         parent::_initialize();
-        $act = $this->request->action();
+        $act = strtolower($this->request->action());
         if(!in_array($act,$this->_allow)){
             $user = $this->getUser();
             $scheduleId = $this->request->param('id',0,'int');
@@ -41,6 +41,11 @@ class Game extends Userbase{
             if($schedule['acting']==3){
                 header('Content-type: application/json; charset=utf-8');
                 echo json_encode(['msg'=>'比赛已结束，不可操作！','status'=>false,'code'=>0]);
+                die();
+            }
+            if(($act!='stop' and $act !='returnback') and $schedule['acting']!=1){
+                header('Content-type: application/json; charset=utf-8');
+                echo json_encode(['msg'=>'比赛暂停，不可操作！','status'=>false,'code'=>0]);
                 die();
             }
         }
@@ -892,7 +897,7 @@ class Game extends Userbase{
         if( $schedule['acting']==0){
             $stopStr = '比赛开始';
         }elseif( $schedule['acting']== 1){
-            $stopStr = $type==1?($team.'比赛暂停'):'死球暂停';
+            $stopStr = $type==1?($team.'请求暂停'):'死球暂停';
         }else{
             $stopStr = '比赛继续';
         }
@@ -977,7 +982,7 @@ class Game extends Userbase{
         $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
         if($stop)
             $update[$stop] = $schedule[$stop]+1;
-        $logRes = Db::name('player_data')->update($update);
+        $logRes = Db::name('schedule')->update($update);
         if(!$logRes){
             Db::rollback();
             return $this->returnJson('失败，请重试！');
@@ -1019,7 +1024,7 @@ class Game extends Userbase{
         return $this->returnJson('退出成功',true,1);
     }
 
-    //获取球员 type=1在场比赛球员 type=0未上场球员(获取球员出错，没有player_no索引)
+    //获取球员 type=1在场比赛球员 type=0未上场球员
     public function playing(){
         $scheduleId = $this->request->param('id',0,'int');
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
