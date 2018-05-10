@@ -432,7 +432,7 @@ class Game extends Userbase{
 
     /**
      * 犯规
-     * type =0=>普通犯规| 1=>犯规罚球|2=>2+1| 3=> 3+1
+     * type =0=>普通犯规| 1=>犯规罚2球|2=>2+1| 3=> 3+1| 4=>三分犯规
      */
     public function faul(){
         $scheduleId = $this->request->param('id',0,'int');
@@ -450,7 +450,7 @@ class Game extends Userbase{
             return $this->returnJson('球员不存在');
         if(empty($foulPlayer))
             return $this->returnJson('犯规球员不存在');
-        if($type<0 or $type>3)
+        if($type<0 or $type>4)
             return $this->returnJson('参数错误');
         $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$playerId])->find();
         $foulPlayerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$foulId])->find();
@@ -483,6 +483,9 @@ class Game extends Userbase{
         }elseif($type==1){
             array_unshift($logs_act,[$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规！罚球两次!');
+        }elseif($type==4){
+            array_unshift($logs_act,[$foulId=>'foul']);
+            array_unshift($logs,$team.''.$player['name'].' 三分出手造成'.$foulTeam.$foulPlayer['name'].'犯规！罚球3次!');
         }else{
             array_unshift($logs_act,[$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规！前场球！');
@@ -546,12 +549,12 @@ class Game extends Userbase{
             $score = $scorePlayerData['score']+2;
             $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+3,'three_shoot'=>$scorePlayerData['three_shoot']+1,'three_hit'=>$scorePlayerData['three_hit']];
             array_unshift($logs_act,[$scoreId=>'three_hit',$playerId=>'assists']);
-            array_unshift($logs,$team.''.$player['name'].' 把球传给'.$team.$scorePlayer['name'].',三分线外出手!'."\n稳稳命中!");
+            array_unshift($logs,$team.''.$player['name'].' 把球传给'.$scorePlayer['name'].',三分线外出手!'."\n稳稳命中!");
         }else{
             $score = $scorePlayerData['score']+3;
             $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+2,'shoot'=>$scorePlayerData['shoot']+1,'hit'=>$scorePlayerData['hit']];
             array_unshift($logs_act,[$scoreId=>'hit',$playerId=>'assists']);
-            array_unshift($logs,$team.''.$player['name'].' 把球传给'.$team.$scorePlayer['name'].'!'."\n".$team.$scorePlayer['name'].'稳稳命中!');
+            array_unshift($logs,$team.''.$player['name'].' 把球传给'.$scorePlayer['name'].'!'."\n".$scorePlayer['name'].'稳稳命中!');
         }
         Db::startTrans();
         $scoreKey = $hometeam==1?'home_score':'visiting_score';
