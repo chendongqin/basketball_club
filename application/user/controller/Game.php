@@ -973,6 +973,7 @@ class Game extends Userbase{
         $stop = '';
         $score = 0;
         $scoreKey = 'home_score';
+        $notrue = 'visiting_score';
         if(!empty($unsetLogs)){
             foreach ($unsetLogs as $userId=>$log){
                 if($log=='stop'){
@@ -987,6 +988,7 @@ class Game extends Userbase{
                 if(in_array($log,['hit','three_hit','penalty_hit'])){
                     $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$userId])->find();
                     $scoreKey = $playerData['club_id']==$schedule['home_team']?'home_score':'visiting_score';
+                    $notrue = $playerData['club_id']==$schedule['home_team']?'visiting_score':'home_score';
                     switch ($log){
                         case 'three_hit':
                             $score += 3;
@@ -1002,18 +1004,22 @@ class Game extends Userbase{
             }
         }
         array_shift($logs);
+        $data['logs'] = $logs;
         $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
         if($stop)
             $update[$stop] = $schedule[$stop]+1;
-        if($score!=0)
+        if($score!=0){
             $update[$scoreKey] = $schedule[$scoreKey]-$score;
+            $data[$scoreKey] = $schedule[$scoreKey]-$score;
+            $data[$notrue] = $schedule[$notrue];
+        }
         $logRes = Db::name('schedule')->update($update);
         if(!$logRes){
             Db::rollback();
             return $this->returnJson('失败，请重试！');
         }
         Db::commit();
-        return $this->returnJson('成功',true,1);
+        return $this->returnJson('成功',true,1,$data);
     }
 
     //撤销执行
