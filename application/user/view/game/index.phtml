@@ -1,5 +1,7 @@
 {load href="/static/css/user/game/index.css" /}
 {load href="/static/js/jq.js" /}
+{load href="/static/css/model.css" /}
+{load href="/static/js/index/model.js" /}
 {load href="/static/js/user/game/index.js" /}
 <div class="header__info">
     <div class="header__team-name home-name"><?php echo $home['name'];?></div>
@@ -57,8 +59,8 @@
     </select>
     <span class="detail__btn">换人</span>
     <span class="detail__btn">撤销</span>
-    <span class="detail__btn start_to_stop" data-type="1" id="j-start"><?php echo $schedule['acting']==1?'暂停':'开始';?></span>
-    <span class="detail__btn start_to_stop" data-type="0">死球停止</span>
+    <span class="detail__btn start_to_stop" data-type="1" id="j-start">暂停</span>
+    <span class="detail__btn start_to_stop" data-type="0"><?php echo $schedule['acting']==1?'死球停止':'开始';?></span>
     <?php if($schedule['second']==0):?>
         <span class="detail__btn"><?php echo ($schedule['section']+1)>4?'进入第'.($schedule['section']-3).'加时':'进入第'.($schedule['section']+1).'节'?></span>
     <?php endif;?>
@@ -81,6 +83,7 @@
     <span class="detail__btn one_score" data-type="0">罚球未中</span>
     <br>
     <span class="detail__btn" id="j-assists">助攻</span>
+    <span class="detail__btn" id="j-assists">三分助攻</span>
     <span class="detail__btn" id="j-lost">失误</span>
     <span class="detail__btn" id="j-rebounds">篮板</span>
     <span class="detail__btn" id="j-steals">抢断</span>
@@ -94,4 +97,23 @@
     <span class="detail__btn faul" data-type="2">2+1</span>
     <span class="detail__btn faul" data-type="3">3+1</span>
 </div>
-</body>
+
+<div class="modal fade" id="modelAssist">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">助攻</h4>
+            </div>
+            <div id="error" style="display: none;color: red">
+                <span class="tc_error"></span>
+            </div>
+            <div class="modal-body">
+                <form  method="post" class="" name="" id="">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

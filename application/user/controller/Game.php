@@ -554,14 +554,13 @@ class Game extends Userbase{
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
         }
-        //错误，插入这里player_data表中没有相应的home_score字段
-        $update = ['Id'=>$playerData['Id'],$scoreKey=>$score,'update_time'=>time(),'rebounds'=>$playerData['rebounds']+1];
+        $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'assists'=>$playerData['assists']+1];
         $res = Db::name('player_data')->update($update);
         if(!$res){
             Db::rollback();
             return $this->returnJson('失败，请重试！');
         }
-        $scheduleUpdate = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
+        $scheduleUpdate = ['Id'=>$scheduleId,$scoreKey=>$score,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
         $scheduleUpRes = Db::name('schedule')->update($scheduleUpdate);
         if(!$scheduleUpRes){
             Db::rollback();
