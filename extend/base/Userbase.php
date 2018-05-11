@@ -7,7 +7,8 @@
  */
 namespace base;
 use think\Session;
-class Userbase extends Base {
+use think\Controller;
+class Userbase extends Controller {
     protected $_ec = array(
 //        'user'=>array( 'index'),
     );
@@ -16,7 +17,9 @@ class Userbase extends Base {
     );
     private  $_user = '';
     protected function _initialize() {
-        $user = Session::pull('user');
+//        parent::_initialize();
+        $user = Session::get('user');
+        $user = isset($user[0])?$user[0]:$user;
         if($this->isFilter()===false){
             if(empty($user)){
                 return $this->redirect('/user/login');
@@ -25,6 +28,7 @@ class Userbase extends Base {
         $user = isset($user[0])?$user[0]:$user;
         $this->assign('user',$user);
         $this->setUser($user);
+        Session::delete('user');
         Session::push('user',$user);
     }
 
@@ -57,4 +61,8 @@ class Userbase extends Base {
         return $this->_user;
     }
 
+    protected function returnJson($msg='',$status = false,$code=0,$data=array()){
+        $jsonData = array('status'=>$status,'msg'=>$msg,'code'=>$code,'data'=>$data);
+        return json($jsonData);
+    }
 }

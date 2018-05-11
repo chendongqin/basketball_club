@@ -24,7 +24,7 @@ return [
     // 密码
     // 'password'        => 'r7i!2khIi:dg1995',
     //测试
-   'password'        => '123456',
+   'password'        => 'root',
     // 端口
     'hostport'        => '',
     // 连接dsn
