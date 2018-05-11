@@ -4,7 +4,7 @@ $(function(){
     var timer;    //定时器
     // 倒计时方法 
     function CountDown() {
-        if (maxtime >= 0) {
+        if (maxtime > 0) {
             --maxtime;
             minutes = Math.floor(maxtime / 60);
             seconds = Math.floor(maxtime % 60);
@@ -389,7 +389,7 @@ $(function(){
         }
     })
     // 助攻
-    $('.assists').on("click",function(){
+    $('.assists').on("click",function(){                                
         var data_type = 0;
         if(choose_check().flag){
             data_type = $(this).attr('data-type');
@@ -411,7 +411,6 @@ $(function(){
                     $('#j-get-player').html(data);
                     $('#modelAssist').modal('show');
                 }
-                console.log($(this).attr('data-type'));
                 $('#j-assists').attr('data-type',data_type);
             })
             .catch(function(e){
@@ -448,23 +447,168 @@ $(function(){
                 console.log(e);
             });
     })
-    // 撤销(撤销接口分数没变化，未返回数据)
+    // 撤销
     $('#j-returnBack').on("click",function(){
         http.post("/user/game/returnBack",
         {
             id:$('.schedule_id').text(),
         })
         .then(function(res){
-            // if(res.data!=""){
-            //     var logs = "";
-            //     // 成功函数
-            //     for(var i = 0;i<res.data.logs.length; i++){
-            //         logs +="<p>"+res.data.logs[i]+"</p>"
-            //     }
-            //     $('.detail__character').html(logs);
-            // }else{
-            //     alert(res.msg);
-            // }
+            if(res.data!=""){
+                $('.home-score').text(res.data.home_score);
+                $('.away-score').text(res.data.visiting_score);
+                var logs = "";
+                // 成功函数
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+            }else{
+                alert(res.msg);
+            }
+        })
+        .catch(function(e){
+            // 失败函数
+            console.log(e);
+        });
+    })
+    // 换人
+    $('.replace').on("click",function(){
+        if(choose_check().flag){
+            http.post("/user/game/playing",
+            {
+                id:$('.schedule_id').text(),
+                hometeam:choose_check().hometeam,
+                type:0
+            })
+            .then(function(res){
+                if(res.data!=""){
+                    $('#j-replace-player').text("");
+                    var data = "";
+                    for(var i= 0;i<res.data.length;i++){
+                        if(res.data[i].user_id != choose_check().playerId){
+                            data += "<li class='detail__team-item'><input type='radio' name='replacePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #1</li>"
+                        }
+                    }
+                    $('#j-replace-player').html(data);
+                    $('#modelReplace').modal('show');
+                }
+            })
+            .catch(function(e){
+                // 失败函数
+                console.log(e);
+            });
+        }
+    })
+    $('#j-replace').on('click',function(){ 
+        http.post("/user/game/replace",
+        {
+            id:$('.schedule_id').text(),
+            oldId:choose_check().playerId,
+            newId:$('input[name="replacePlayer"]:checked').val(),
+            hometeam:choose_check().hometeam,
+        })
+        .then(function(res){
+            if(res.data!=""){
+                // $('.home-score').text(res.data.home_score);
+                // $('.away-score').text(res.data.visiting_score);
+                var logs = "";
+                // 成功函数
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+                window.location.reload();
+            }else{
+                alert(res.msg);
+            }
+        })
+        .catch(function(e){
+            // 失败函数
+            console.log(e);
+        });
+    })
+    // 进入下一节
+    $('#j-next').on('click',function(){ 
+        http.post("/user/game/next",
+        {
+            id:$('.schedule_id').text(),
+        })
+        .then(function(res){
+            if(res.data!=""){
+                // $('.home-score').text(res.data.home_score);
+                // $('.away-score').text(res.data.visiting_score);
+                var logs = "";
+                // 成功函数
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+                window.location.reload();
+            }else{
+                alert(res.msg); 
+            }
+        })
+        .catch(function(e){
+            // 失败函数
+            console.log(e);
+        });
+    })
+    // 结束比赛
+    $('#j-over').on('click',function(){ 
+        http.post("/user/game/over",
+        {
+            id:$('.schedule_id').text(),
+            clear:0
+        })
+        .then(function(res){
+            if(res.data!=""){
+                var logs = "";
+                // 成功函数
+                for(var i = 0;i<res.data.logs.length; i++){
+                    logs +="<p>"+res.data.logs[i]+"</p>"
+                }
+                $('.detail__character').html(logs);
+                http.post("/user/game/stop",
+                    {
+                        id:$('.schedule_id').text(),
+                        hometeam:select_value,
+                        second:maxtime,
+                        type:0
+                    })
+                    .then(function(res){
+                        if(res.data!=""){
+                            var logs = "";
+                            $('.home-score').text(res.data.home_score);
+                            $('.away-score').text(res.data.visiting_score);
+                            for(var i = 0;i<res.data.logs.length; i++){
+                                logs +="<p>"+res.data.logs[i]+"</p>"
+                            }
+                            $('.detail__character').html(logs);
+                            clearInterval(timer);
+                            if(res.data.logs[0] == "比赛继续"){
+                                $('#j-start').text("死球暂停");
+                                timer = setInterval(function(){
+                                    CountDown();
+                                }, 1000); 
+                            }else if(res.data.logs[0] == "死球暂停"){
+                                $('#j-start').text("开始"); 
+                                clearInterval(timer);
+                            }else{
+                                $('#j-start').text("开始"); 
+                                clearInterval(timer);
+                            }
+                        }else{
+                            alert(res.msg);
+                        }
+                    })
+                    .catch(function(e){
+                        // 失败函数
+                        console.log(e);
+                    });
+            }else{
+                alert(res.msg); 
+            }
         })
         .catch(function(e){
             // 失败函数
