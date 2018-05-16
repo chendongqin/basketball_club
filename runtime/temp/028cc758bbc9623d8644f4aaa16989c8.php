@@ -1,12 +1,13 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:81:"D:\phpstudy\WWW\basketballClub\public/../application/admin\view\index\index.phtml";i:1526238368;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>管理员登陆</title>
-    {load href="/static/js/jq.js" /}
-    {load href="/static/js/admin/login.js" /}
-    {load href="/assets/css/amazeui.min.css" /}
-    {load href="/assets/css/app.css" /}
+    <script type="text/javascript" src="/static/js/jq.js"></script>
+    <script type="text/javascript" src="/static/js/admin/login.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/amazeui.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/app.css" />
     <style>
         .bg{
             background: url(/assets/i/bg/login1.jpg);

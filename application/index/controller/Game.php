@@ -76,7 +76,8 @@ class Game extends Base{
         }
         $logs = json_decode($schedule['logs'],true);
         Cache::set($this->_logKey.$scheduleId,time(),36000);
-        return $this->returnJson('更新',true,1,$logs);
+        $data = ['logs'=>$logs,'second'=>$schedule['second'],'homeScore'=>$schedule['home_score'],'visitingScore'=>$schedule['visiting_score'],];
+        return $this->returnJson('更新',true,1,$data);
     }
 
     public function upplayerData(){
@@ -91,8 +92,9 @@ class Game extends Base{
             $playerData = [];
             $playerData['home']=Db::name('player_data')->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['home_team']])->order(['starter'=>'desc'])->select();
             $playerData['visiting']=Db::name('player_data')->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['visiting_team']])->order(['starter'=>'desc'])->select();
-//            Cache::set($this->_dataTimeKey.$scheduleId,time(),36000);
-            return $this->returnJson('成功',true,1,$playerData);
+            Cache::set($this->_dataTimeKey.$scheduleId,time(),36000);
+            $data = ['logs'=>$playerData,'second'=>$schedule['second'],'homeScore'=>$schedule['home_score'],'visitingScore'=>$schedule['visiting_score'],];
+            return $this->returnJson('更新',true,1,$data);
         }
         return $this->returnJson('未更新',false,1);
     }

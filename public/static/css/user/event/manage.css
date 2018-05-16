@@ -48,7 +48,7 @@ th,td{
     font-size: 25px;
 }
 .title-r{
-    width: 200px;
+    width: 300px;
     height: 45px;
     text-align: center;
     float: right;
@@ -83,7 +83,7 @@ th,td{
     font-size: 18px;
     width: 150px;
 }
-.event-alter button,.title a,.event-apply a{
+.event-alter button,.title a,.event-apply a,.modal-footer a{
     text-decoration: none;
     text-align: center;
     color: white;
@@ -94,7 +94,7 @@ th,td{
     border: 3px green;
     border-radius: 15px;
 }
-.title a{
+.title a,.modal-footer a{
     background: #7cff7a;
 }
 .pass {

@@ -14,6 +14,16 @@ class User extends Adminbase{
 
 
     public function index(){
+        $name = $this->request->param('name','','string');
+        $ban = $this->request->param('ban',0,'int');
+        $this->assign('name',$name);
+        $this->assign('ban',$ban);
+        $where = ['ban'=>$ban];
+        if(!empty($name))
+            $where['name'] = $name;
+        $users = Db::name('user')->where($where)->paginate(15,false)->toArray();
+        $this->assign('pager',$users);
+        return $this->fetch();
 
     }
 

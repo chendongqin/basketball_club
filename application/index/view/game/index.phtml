@@ -6,7 +6,7 @@
     <div class="header__team-score home-score"><span id="homeScore"><?php echo $schedule['home_score'];?></span></div>
     <div class="header__time-box fl">
         <div class="header__picth"><span id="section"><?php echo $schedule['section']>4?'第'.($schedule['section']-4).'加时':'第'.$schedule['section'].'节'?></span></div>
-        <div class="header__time"><span id="second"><?php echo str_pad($schedule['second']/60,2,0);?>:<?php echo str_pad($schedule['second']%60,2,0);?></span></div>
+        <div class="header__time"><span id="second"><?php echo (int)($schedule['second']/60);?>:<?php echo str_pad($schedule['second']%60,2,0);?></span></div>
     </div>
     <div class="header__team-name away-name"><?php echo $visiting['name'];?></div>
     <div class="header__team-score away-score"><span id="visitingScore"><?php echo $schedule['visiting_score'];?></span></div>

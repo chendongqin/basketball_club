@@ -18,7 +18,15 @@ $(function(){
             $('.header__time').text(msg);
         } else{
             clearInterval(timer);
+            http.post("/user/game/stop",
+                {
+                    id:$('.schedule_id').text(),
+                    hometeam:select_value,
+                    second:maxtime,
+                    type:5
+                });
             alert("时间到，结束!");
+            location.reload();
         }
     }
     // 选择一个球员校验
@@ -487,7 +495,7 @@ $(function(){
                     var data = "";
                     for(var i= 0;i<res.data.length;i++){
                         if(res.data[i].user_id != choose_check().playerId){
-                            data += "<li class='detail__team-item'><input type='radio' name='replacePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #1</li>"
+                            data += "<li class='detail__team-item'><input type='radio' name='replacePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #"+res.data[i].player_no+"</li>"
                         }
                     }
                     $('#j-replace-player').html(data);
@@ -559,7 +567,7 @@ $(function(){
         http.post("/user/game/over",
         {
             id:$('.schedule_id').text(),
-            clear:0
+            clear:1
         })
         .then(function(res){
             if(res.data!=""){
@@ -615,4 +623,14 @@ $(function(){
             console.log(e);
         });
     })
-})
+});
+
+$('#out').click(function(){
+    $.post("/user/game/broadcastOut", {id:$('.schedule_id').text(),},function (returnData) {
+        if(returnData.status == true){
+            window.location.href="/user";
+        }else{
+            alert(res.msg);
+        }
+    })
+});

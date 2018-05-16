@@ -1,20 +1,51 @@
-{load href="/static/js/jq.js" /}
-{load href="/static/js/user/event/manage.js" /}
-{load href="/static/css/user/event/manage.css" /}
-{load href="/static/css/model.css" /}
-{load href="/static/js/index/model.js" /}
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:85:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\event\management.phtml";i:1526216480;s:65:"D:\phpstudy\WWW\basketballClub\application\user\view\layout.phtml";i:1520356497;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title><?php if (isset($title) && $title): ?><?php echo $title; else: ?><?php echo '篮球赛事管理';endif;?></title>
+    <link rel="stylesheet" type="text/css" href="/static/css/header.css" />
+    <div class="top-divide">
+        <div><h2>让比赛变得更简单 让数据变得更清晰</h2></div>
+    </div>
+    <div class="nav-full">
+        <div class="nav">
+            <div class="nav-left">
+                <span>BasketballClubs篮球赛事系统</span>
+            </div>
+            <div class="nav-right">
+                <ul class="clearfix">
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/index/index/event">赛事</a></li>
+                    <li><a href="/index/index/clubs">球队</a></li>
+                    <?php if(!empty($user)):?>
+                        <li><a href="/user">个人中心</a></li>
+                        <li><a href="/user/logout">登出</a></li>
+                    <?php else:?>
+                        <li><a href="/user/login">登陆</a></li>
+                        <li><a href="/user/regist">注册</a></li>
+                    <?php endif;?>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="/static/js/jq.js"></script>
+<script type="text/javascript" src="/static/js/user/event/manage.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/user/event/manage.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/model.css" />
+<script type="text/javascript" src="/static/js/index/model.js"></script>
 <div class="title">
     <span><?php echo $event['name'];?></span>
     <div class="title-r">
-    <?php if(empty($schedules)):?>
-        <?php if($event['type']===0):?>
+    <?php if(empty($schedules)):if($event['type']===0):?>
                 <a href="javascript:;" id="addSchedules" data-id="<?php $event['Id']?>">安排赛程</a>
                 <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
         <?php elseif($event['type']===2):?>
                 <a href="/user/schedule/outSchedule" >安排赛程</a>
                 <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
-        <?php endif;?>
-    <?php elseif($event['type']!==0):?>
+        <?php endif;elseif($event['type']!==0):?>
             <a href="javascript:;" id="overGroup" data-id="<?php $event['Id']?>">下一轮</a>
     <?php endif;?>
         <a href="javascript:;" id="eventWork" data-id="<?php $event['Id']?>">直播管理</a>
@@ -41,8 +72,7 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <?php if(!empty($applys)):?>
-                <?php foreach ($applys as $key=>$apply):?>
+            <?php if(!empty($applys)):foreach ($applys as $key=>$apply):?>
                     <thead>
                     <tr>
                         <td><?php echo $key+1;?></td>
@@ -55,8 +85,7 @@
                         </td>
                     </tr>
                     </thead>
-                <?php endforeach;?>
-            <?php endif;?>
+                <?php endforeach;endif;?>
         </table>
     </div>
 </div>
@@ -74,8 +103,7 @@
             <th>操作</th>
         </tr>
         </tbody>
-        <?php if (!empty($joins)):?>
-            <?php foreach ($joins as $key =>$join):?>
+        <?php if (!empty($joins)):foreach ($joins as $key =>$join):?>
                 <tbody>
                 <tr>
                     <td><img src="<?php echo $join['mark'];?>" width="100"></td>
@@ -91,8 +119,7 @@
                     </td>
                 </tr>
                 </tbody>
-            <?php endforeach;?>
-        <?php else:?>
+            <?php endforeach;else:?>
             <td colspan="16"><center>没有球队加入</center></td>
         <?php endif;?>
     </table>
@@ -113,9 +140,7 @@
             <th>操作</th>
         </tr>
         </thead>
-        <?php if(!empty($schedules)):?>
-            <?php $group=range('A','Z');?>
-            <?php foreach ($schedules as $key=>$schedule):?>
+        <?php if(!empty($schedules)):$group=range('A','Z');foreach ($schedules as $key=>$schedule):?>
                 <thead>
                 <tr>
                     <?php if($event['type']==0):?>
@@ -136,8 +161,7 @@
                     </td>
                 </tr>
                 </thead>
-            <?php endforeach;?>
-        <?php endif;?>
+            <?php endforeach;endif;?>
     </table>
 </div>
 
@@ -245,3 +269,30 @@
 <input type="hidden" id="eventId" value="<?php echo $event['Id'];?>">
 
 
+
+<link rel="stylesheet" type="text/css" href="/static/css/footer.css" />
+<div class="footer">
+    <div class=" footer-top">
+        <div class="footer-top-left" >
+            <div class="image-text">
+                <img src="/static/image/logo.png" width="100px">
+                <span>BasketballClubs</span>
+            </div>
+            <div class="footer-top-left-div">@篮球赛事系统</div>
+        </div>
+        <div class="footer-top-right" >
+            <div>关于我们</div>
+            <img src="/static/image/jmu.png"width="100px">
+        </div>
+        <div class="footer-top-left footer-top-right2" >
+            <span>集美大学计算机工程学院毕业设计</span>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div>厦门市集美区集美大学计算机工程学院</div>
+        <div>@jmu201421121047</div>
+    </div>
+</div>
+
+</body>
+</html>

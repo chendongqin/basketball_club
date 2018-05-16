@@ -20,6 +20,7 @@ class Userbase extends Controller {
 //        parent::_initialize();
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
+        //$this->isFilter()判断该访问方法是否为过滤访问方法
         if($this->isFilter()===false){
             if(empty($user)){
                 return $this->redirect('/user/login');

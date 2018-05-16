@@ -7,11 +7,11 @@
         <a href="/admin/management"><i class="entypo-home"></i>首页</a>
     </li>
     <li class="active">
-        <strong>管理员列表</strong>
+        <strong>用户列表</strong>
     </li>
 </ol>
 
-<h2>管理员列表</h2>
+<h2>用户列表</h2>
 
 <div class="dataTables_wrapper form-inline">
     <div class="row screen-sm">
@@ -22,6 +22,13 @@
                         <i class="entypo-search"></i>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">状态</label>
+                        <select class="form-control"  name="ban">
+                            <option value="0" <?php echo $ban == 0? 'selected':''?>>正常用户</option>
+                            <option value="1" <?php echo $ban == 1? 'selected':''?>>禁用用户</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <input type="text" name="name" value="<?php echo empty($name)?'':$name;?>" placeholder="请输入管理员名称" class="form-control">
                     </div>
                     <div class="form-group">
@@ -29,7 +36,6 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-2" ><a href="javascript:;" class="btn btn-green" id="addAdmin">添加</a></div>
         </div>
     </div>
 </div>
@@ -38,8 +44,11 @@
         <thead class="th-color">
         <tr>
             <th>ID</th>
-            <th>用户名</th>
-            <th>联系方式</th>
+            <th>姓名</th>
+            <th>身份证</th>
+            <th>邮箱</th>
+            <th>状态</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody class="td-color" id="dataTable">
@@ -48,11 +57,19 @@
                 <tr>
                     <td><?php echo $value['Id'];?></td>
                     <td><?php echo $value['name'];?></td>
-                    <td><?php echo $value['mobile'];?></td>
+                    <td><?php echo $value['idcard'];?></td>
+                    <td><?php echo $value['email'];?></td>
+                    <?php if($value['ban']==0):?>
+                        <td>正常</td>
+                        <td><a href="javascript:;" class="btn btn-red  btn-xs  ban"  data-id="<?php echo $value['Id'];?>" data-ban="1">禁用</a></td>
+                    <?php else:?>
+                        <td>禁用</td>
+                        <td><a href="javascript:;" class="btn btn-green  btn-xs  noban"  data-id="<?php echo $value['Id'];?>" data-ban="0">禁用</a></td>
+                    <?php endif;?>
                 </tr>
             <?php endforeach;?>
         <?php else:?>
-            <td colspan="17"><center>没有找到管理员</center></td>
+            <td colspan="17"><center>没有找到用户</center></td>
         <?php endif;?>
         </tbody>
     </table>

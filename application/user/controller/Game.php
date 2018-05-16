@@ -12,6 +12,7 @@ use think\Db;
 class Game extends Userbase{
 
     private $_allow =['index','broadcastOut','playing'];
+    private $_noVirefy = ['stop','over','returnback','replace','faul','getone','next','setstart'];
 
     //比赛ID传输字段统一用id作为验证
     public function _initialize()
@@ -24,28 +25,28 @@ class Game extends Userbase{
             $schedule =Db::name('schedule')->where('Id',$scheduleId)->find();
             if(empty($schedule)){
                 header('Content-type: application/json; charset=utf-8');
-                echo json_encode(['msg'=>'比赛不存在','status'=>false,'code'=>0]);
+                echo json_encode(['msg'=>'比赛不存在','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
             $event = Db::name('event')->where('Id',$schedule['event_id'])->find();
             if(empty($event)) {
                 header('Content-type: application/json; charset=utf-8');
-                echo json_encode(['msg'=>'赛事不存在','status'=>false,'code'=>0]);
+                echo json_encode(['msg'=>'赛事不存在','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
             if($schedule['broadcast']!=$user['Id']){
                 header('Content-type: application/json; charset=utf-8');
-                echo json_encode(['msg'=>'您不是当前直播员！','status'=>false,'code'=>0]);
+                echo json_encode(['msg'=>'您不是当前直播员！','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
             if($schedule['acting']==3){
                 header('Content-type: application/json; charset=utf-8');
-                echo json_encode(['msg'=>'比赛已结束，不可操作！','status'=>false,'code'=>0]);
+                echo json_encode(['msg'=>'比赛已结束，不可操作！','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
-            if(($act!='stop' and $act !='returnback' and $act !='replace' and $act !='over') and $schedule['acting']!=1){
+            if((!in_array($act,$this->_noVirefy)) and $schedule['acting']!=1){
                 header('Content-type: application/json; charset=utf-8');
-                echo json_encode(['msg'=>'比赛暂停，不可操作！','status'=>false,'code'=>0]);
+                echo json_encode(['msg'=>'比赛暂停，不可操作！','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
         }
@@ -500,13 +501,16 @@ class Game extends Userbase{
         if($hometeam ==0){
             $str = 'home_foul';
             $fouls = json_decode($schedule['home_foul'],true);
+            $fourKey = 'section_home_foul';
         }else{
             $str = 'visiting_foul';
             $fouls = json_decode($schedule['visiting_foul'],true);
+            $fourKey = 'section_visiting_foul';
         }
         $fouls = empty($fouls)?[]:$fouls;
         $fouls[$schedule['section']] = isset($fouls[$schedule['section']])?$fouls[$schedule['section']]+1:1;
         $scheduleUpdate[$str] = json_encode($fouls);
+        $scheduleUpdate[$fourKey] = $schedule[$fourKey]+1;
         $scheduleUpRes = Db::name('schedule')->update($scheduleUpdate);
         if(!$scheduleUpRes){
             Db::rollback();
@@ -867,14 +871,33 @@ class Game extends Userbase{
             return $this->returnJson('比赛不存在');
         if($schedule['second']!=0)
             return $this->returnJson('本节时间未结束');
-        $str = $schedule['section']>4?'进入第'.($schedule['section']-4).'加时':'进入第'.$schedule['section'].'节';
+        $str = $schedule['section']>4?'进入第'.($schedule['section']-4).'加时':'进入第'.($schedule['section']+1).'节';
         $logs = json_decode($schedule['logs'],true);
         $logs = empty($logs)?array():$logs;
         array_unshift($logs,$str);
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
         array_unshift($logs_act,'');
-        $update = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act),'second'=>$schedule['section_time'],'section'=>$schedule['section']+1];
+        $update = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act),'second'=>$schedule['section_time'],'section'=>$schedule['section']+1,'section_home_foul'=>0,'section_visiting_foul'=>0];
+        $sectionHScore = $schedule['home_score'];
+        $sectionVScore = $schedule['visiting_score'];
+        $sectionHScores = json_decode($schedule['home_section_score'],true);
+        $sectionVScores = json_decode($schedule['visiting_section_score'],true);
+        if($schedule['section']!=1){
+            foreach ($sectionHScores as $HScore){
+                $sectionHScore -= $HScore;
+            }
+            foreach ($sectionVScores as $VScore){
+                $sectionVScore -= $VScore;
+            }
+            $sectionHScores[$schedule['section']]=$sectionHScore;
+            $sectionVScores [$schedule['section']]=$sectionVScore;
+        }else{
+            $sectionHScores = [1=>$sectionHScore];
+            $sectionVScores = [1=>$sectionVScore];
+        }
+        $update['home_section_score'] = json_encode($sectionHScores);
+        $update['visiting_section_score'] = json_encode($sectionVScores);
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败,请重试');
@@ -901,7 +924,11 @@ class Game extends Userbase{
         if( $schedule['acting']==0){
             $stopStr = '比赛开始';
         }elseif( $schedule['acting']== 1){
-            $stopStr = $type==1?($team.'请求暂停'):'死球暂停';
+            if($type==5){
+                $stopStr = '比赛时间到!';
+            }else{
+                $stopStr = $type==1?($team.'请求暂停'):'死球暂停';
+            }
         }else{
             $stopStr = '比赛继续';
         }
@@ -937,7 +964,7 @@ class Game extends Userbase{
             return $this->returnJson('比赛不存在');
         if($schedule['section']<4 or $schedule['second']!=0)
             return $this->returnJson('比赛时间或节数未结束');
-        $update = ['acting'=>3,'Id'=>$scheduleId,'update'=>time()];
+        $update = ['acting'=>3,'over'=>1,'Id'=>$scheduleId,'update'=>time()];
         $logs = json_decode($schedule['logs'],true);
         $logs = empty($logs)?array():$logs;
         array_unshift($logs,'比赛结束');
@@ -1005,7 +1032,7 @@ class Game extends Userbase{
         }
         array_shift($logs);
         $data['logs'] = $logs;
-        $update = ['Id'=>$scheduleId,'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
+        $update = ['Id'=>$scheduleId,'update_time'=>time(),'logs_act'=>json_encode($actLogs),'logs'=>json_encode($logs)];
         if($stop)
             $update[$stop] = $schedule[$stop]+1;
         if($score!=0){
@@ -1035,7 +1062,9 @@ class Game extends Userbase{
                 $num = 1;
                 break;
         }
-        $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$userId])->find();
+        $playerData = Db::name('player_data')
+            ->where(['schedule_id'=>$scheduleId,'user_id'=>$userId])
+            ->find();
         if(empty($playerData))
             return false;
         $update = ['Id'=>$playerData['Id'],$log=>$playerData[$log]-$num];
@@ -1048,6 +1077,9 @@ class Game extends Userbase{
         $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
         if(empty($schedule))
             return $this->returnJson('比赛不存在');
+        $user = $this->getUser();
+        if($schedule['broadcast']!=$user['Id'])
+            return $this->returnJson('您不是该比赛的直播员无权操作!');
         $update = ['Id'=>$scheduleId,'broadcast'=>0];
         $res = Db::name('schedule')->update($update);
         if(!$res)
