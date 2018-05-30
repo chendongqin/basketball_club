@@ -39,7 +39,9 @@
     height: 297px;
     margin: auto;
     border-bottom: 3px solid #e8e8e8;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
 }
 
 .club-right{
@@ -50,7 +52,9 @@
     text-align: center;
     border: 3px solid #e8e8e8;
     background-color: greenyellow;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
 }
 .club-right li{
     list-style-type: none;
@@ -82,7 +86,9 @@
     margin: auto;
     text-align: center;
     border-bottom: 3px solid #e8e8e8;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
 }
 .club-apply table{
     border-collapse: collapse;
@@ -91,7 +97,7 @@
 }
 th,td{
     border: 1px solid rgb(230, 231, 231);
-    width: auto;
+    width: 150px;
     padding: 5px 5px;
     height: 30px;
     border-collapse: collapse;

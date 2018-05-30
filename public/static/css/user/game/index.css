@@ -4,75 +4,75 @@
   /*margin: 0;*/
 /*}*/
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
+/*table {*/
+  /*border-collapse: collapse;*/
+  /*border-spacing: 0;*/
+/*}*/
 
-del, ins {
-  text-decoration: none;
-}
+/*del, ins {*/
+  /*text-decoration: none;*/
+/*}*/
 
-fieldset, img {
-  border: 0;
-}
+/*fieldset, img {*/
+  /*border: 0;*/
+/*}*/
 
-body, button, input, select, textarea {
-  font: 14px "microsoft YaHei","simsun",Tahoma,Helvetica,Arial;
-}
+/*body, button, input, select, textarea {*/
+  /*font: 14px "microsoft YaHei","simsun",Tahoma,Helvetica,Arial;*/
+/*}*/
 
-input, select, img {
-  vertical-align: middle;
-}
+/*input, select, img {*/
+  /*vertical-align: middle;*/
+/*}*/
 
-input, select {
-  outline: none;
-}
+/*input, select {*/
+  /*outline: none;*/
+/*}*/
 
-input, button, select, textarea {
-  outline: none;
-}
+/*input, button, select, textarea {*/
+  /*outline: none;*/
+/*}*/
 
-textarea {
-  resize: none;
-  overflow: hidden;
-}
+/*textarea {*/
+  /*resize: none;*/
+  /*overflow: hidden;*/
+/*}*/
 
-ul, ol {
-  list-style: none;
-}
+/*ul, ol {*/
+  /*list-style: none;*/
+/*}*/
 
-h1, h2, h3, h4, h5, h6 {
-  font-size: 12px;
-  font-weight: 400;
-}
+/*h1, h2, h3, h4, h5, h6 {*/
+  /*font-size: 12px;*/
+  /*font-weight: 400;*/
+/*}*/
 
-address, cite, dfn, em, var {
-  font-style: normal;
-}
+/*address, cite, dfn, em, var {*/
+  /*font-style: normal;*/
+/*}*/
 
-legend {
-  display: none;
-}
+/*legend {*/
+  /*display: none;*/
+/*}*/
 
-td {
-  font-size: 12px;
-  line-height: 160%;
-}
+/*td {*/
+  /*font-size: 12px;*/
+  /*line-height: 160%;*/
+/*}*/
 
-input::-moz-focus-inner, button::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
+/*input::-moz-focus-inner, button::-moz-focus-inner {*/
+  /*border: 0;*/
+  /*padding: 0;*/
+/*}*/
 
-a {
-  text-decoration: none;
-}
+/*a {*/
+  /*text-decoration: none;*/
+/*}*/
 
-input, button {
-  background: none;
-  border: none;
-}
+/*input, button {*/
+  /*background: none;*/
+  /*border: none;*/
+/*}*/
 
 .clearfix {
   zoom: 1;

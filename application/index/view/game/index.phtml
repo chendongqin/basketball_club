@@ -1,6 +1,7 @@
 {load href="/static/css/user/game/index.css" /}
 {load href="/static/css/index/game/index.css" /}
 {load href="/static/js/jq.js" /}
+{load href="/static/js/index/game/index.js" /}
 <div class="header__info">
     <div class="header__team-name home-name"><?php echo $home['name'];?></div>
     <div class="header__team-score home-score"><span id="homeScore"><?php echo $schedule['home_score'];?></span></div>
@@ -19,3 +20,4 @@
             <p><?php echo $gameLog;?></p>
         <?php endforeach;?>
     </div>
+<input type="hidden" id="scheduleId" value="<?php echo $schedule['Id'];?>">

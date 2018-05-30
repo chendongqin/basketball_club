@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:83:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\schedule\group.phtml";i:1526209071;s:65:"D:\phpstudy\WWW\basketballClub\application\user\view\layout.phtml";i:1520356497;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:83:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\schedule\group.phtml";i:1527334994;s:65:"D:\phpstudy\WWW\basketballClub\application\user\view\layout.phtml";i:1520356497;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +34,7 @@
 
 <script type="text/javascript" src="/static/js/jq.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/model.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/user/schedule/table.css" />
 <script type="text/javascript" src="/static/js/index/model.js"></script>
 <script type="text/javascript" src="/static/js/user/schedule/group.js"></script>
 <style>

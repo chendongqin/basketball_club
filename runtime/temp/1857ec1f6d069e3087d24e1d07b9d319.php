@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:80:"D:\phpstudy\WWW\basketballClub\public/../application/index\view\game\index.phtml";i:1526237404;s:66:"D:\phpstudy\WWW\basketballClub\application\index\view\layout.phtml";i:1523168499;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:80:"D:\phpstudy\WWW\basketballClub\public/../application/index\view\game\index.phtml";i:1527338117;s:66:"D:\phpstudy\WWW\basketballClub\application\index\view\layout.phtml";i:1523168499;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +34,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/user/game/index.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/index/game/index.css" />
 <script type="text/javascript" src="/static/js/jq.js"></script>
+<script type="text/javascript" src="/static/js/index/game/index.js"></script>
 <div class="header__info">
     <div class="header__team-name home-name"><?php echo $home['name'];?></div>
     <div class="header__team-score home-score"><span id="homeScore"><?php echo $schedule['home_score'];?></span></div>
@@ -52,6 +53,8 @@
             <p><?php echo $gameLog;?></p>
         <?php endforeach;?>
     </div>
+<input type="hidden" id="scheduleId" value="<?php echo $schedule['Id'];?>">
+
 <link rel="stylesheet" type="text/css" href="/static/css/footer.css" />
 <div class="footer">
     <div class=" footer-top">

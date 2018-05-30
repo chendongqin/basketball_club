@@ -51,13 +51,16 @@ class Game extends Base{
         $this->assign('visiting',$visiting);
         $homeData = Db::name('player_data')
             ->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['home_team']])
+            ->order('starter','desc')
             ->select();
         $this->assign('homeData',$homeData);
         $visitingData = Db::name('player_data')
             ->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['visiting_team']])
+            ->order('starter','desc')
             ->select();
         $this->assign('visitingData',$visitingData);
         $this->assign('title','球员数据');
+        $this->assign('schedule',$schedule);
         return $this->fetch();
     }
 
@@ -92,8 +95,14 @@ class Game extends Base{
             $playerData = [];
             $playerData['home']=Db::name('player_data')->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['home_team']])->order(['starter'=>'desc'])->select();
             $playerData['visiting']=Db::name('player_data')->where(['schedule_id'=>$scheduleId,'club_id'=>$schedule['visiting_team']])->order(['starter'=>'desc'])->select();
+            foreach ($playerData['home'] as $key=>$home){
+                $playerData['home'][$key]['player_name'] = idOfFiler('user',['Id'=>$home['user_id']]);
+            }
+            foreach ($playerData['visiting'] as $key=>$visiting){
+                $playerData['visiting'][$key]['player_name'] = idOfFiler('user',['Id'=>$visiting['user_id']]);
+            }
             Cache::set($this->_dataTimeKey.$scheduleId,time(),36000);
-            $data = ['logs'=>$playerData,'second'=>$schedule['second'],'homeScore'=>$schedule['home_score'],'visitingScore'=>$schedule['visiting_score'],];
+            $data = ['players'=>$playerData,'second'=>$schedule['second'],'homeScore'=>$schedule['home_score'],'visitingScore'=>$schedule['visiting_score'],];
             return $this->returnJson('更新',true,1,$data);
         }
         return $this->returnJson('未更新',false,1);

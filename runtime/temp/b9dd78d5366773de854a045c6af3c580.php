@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\login\index.phtml";i:1523335525;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:80:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\login\index.phtml";i:1527335797;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +11,7 @@
     <style>
         .bg{
             background: url(/assets/i/bg/login1.jpg);
-            background-size:1400px;
+            background-size:100%;
             background-repeat:no-repeat;
         }
         .header {

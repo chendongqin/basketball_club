@@ -518,7 +518,12 @@ class Game extends Userbase{
         }
         Db::commit();
         $data['logs'] = $logs;
-        return $this->returnJson('成功',true,1,$data);
+        $data['foul'] = $foulPlayerData['foul']+1;
+        $str = '成功';
+        if($data['foul'] ==5){
+            $str = idOfFiler('user',['Id'=>$foulId]).'五犯！';
+        }
+        return $this->returnJson($str,true,1,$data);
     }
 
     //助攻
@@ -732,7 +737,7 @@ class Game extends Userbase{
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
         array_unshift($logs,$team.' '.$player['name'].' 失误了，直接将球权送给了对方！'."\n".'后场球！');
-        array_unshift($logs_act,[$playerId=>'rebounds']);
+        array_unshift($logs_act,[$playerId=>'lost']);
         $scheduleUpdate = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
         $scheduleUpRes = Db::name('schedule')->update($scheduleUpdate);
         if(!$scheduleUpRes){
@@ -1018,13 +1023,13 @@ class Game extends Userbase{
                     $notrue = $playerData['club_id']==$schedule['home_team']?'visiting_score':'home_score';
                     switch ($log){
                         case 'three_hit':
-                            $score += 3;
+                            $score = 3;
                             break ;
                         case 'hit':
-                            $score += 2;
+                            $score = 2;
                             break ;
                         default:
-                            $score += 1;
+                            $score = 1;
                             break;
                     }
                 }
@@ -1058,8 +1063,11 @@ class Game extends Userbase{
             case 'hit':
                 $num = 2;
                 break ;
-            default:
+            case 'penalty_hit':
                 $num = 1;
+                break ;
+            default:
+                $num = 0;
                 break;
         }
         $playerData = Db::name('player_data')
@@ -1067,7 +1075,12 @@ class Game extends Userbase{
             ->find();
         if(empty($playerData))
             return false;
-        $update = ['Id'=>$playerData['Id'],$log=>$playerData[$log]-$num];
+        $update = ['Id'=>$playerData['Id'],$log=>$playerData[$log]-1];
+        if($num!==0){
+            $update['score'] = $playerData['score']-$num;
+            $str = str_replace('hit','shoot',$log);
+            $update[$str] = $playerData[$str]-1;
+        }
         return Db::name('player_data')->update($update);
     }
 

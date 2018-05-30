@@ -1,3 +1,79 @@
+@charset "UTF-8";
+/* CSS reset@ */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td, a {
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+del, ins {
+    text-decoration: none;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+body, button, input, select, textarea {
+    font: 14px "microsoft YaHei","simsun",Tahoma,Helvetica,Arial;
+}
+
+input, select, img {
+    vertical-align: middle;
+}
+
+input, select {
+    outline: none;
+}
+
+input, button, select, textarea {
+    outline: none;
+}
+
+textarea {
+    resize: none;
+    overflow: hidden;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+/*h1, h2, h3, h4, h5, h6 {*/
+    /*font-size: 12px;*/
+    /*font-weight: 400;*/
+/*}*/
+
+address, cite, dfn, em, var {
+    font-style: normal;
+}
+
+legend {
+    display: none;
+}
+
+td {
+    font-size: 12px;
+    line-height: 160%;
+}
+
+input::-moz-focus-inner, button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*input, button {*/
+    /*background: none;*/
+    /*border: none;*/
+/*}*/
 .top-divide{
     width: 100%;
     height: 40px;
@@ -20,6 +96,7 @@
 .nav,.nav-full{
     height: 50px;
     border: 1px solid springgreen;
+
 }
 .nav-right{
     width:550px;
@@ -41,6 +118,7 @@
     width: 100px;
     margin: auto;
     text-align: center;
+    padding-top: 18px;
 }
 .nav-right a:link,.nav-right a:visited{
     text-decoration: none;
@@ -51,4 +129,8 @@
     color: white;
     background-color: #7effec;
     padding: 18px 15px 13px 15px;
+}
+.top-divide h2{
+    color: black;
+    font-size: 24px;
 }

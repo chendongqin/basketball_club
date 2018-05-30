@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:81:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\regist\index.phtml";i:1523335538;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:81:"D:\phpstudy\WWW\basketballClub\public/../application/user\view\regist\index.phtml";i:1527335719;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +11,7 @@
     <style>
         .bg-regist{
             background: url(/assets/i/bg/regist.jpg);
-            background-size:1400px;
+            background-size:100%;
             background-repeat:no-repeat;
         }
         .header {

@@ -1,5 +1,10 @@
 $(function () {
    $('#joinGame').click(function () {
+       var eventStatus = $(this).attr('event-status');
+       if(eventStatus !=0){
+           alter('赛事已开始，无法加入比赛!');
+           return false;
+       }
        $('.error').hide();
        var id = $('#eventId').val();
        var str = '<label class="" for="clubId">参加球队：</label>';

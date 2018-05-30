@@ -3,7 +3,9 @@
     width: 600px;
     height: 500px;
     margin: 5px auto 20px auto;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
     border: 1px solid #e3e3e3;
     left: 50%;
     text-align: center;

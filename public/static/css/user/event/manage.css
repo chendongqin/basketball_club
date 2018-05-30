@@ -3,7 +3,9 @@
     height: 350px;
     margin: 10px auto;
     padding: 20px 30px;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
     border: #e8e8e8 2px solid;
 }
 .schedule-title{
@@ -59,7 +61,9 @@ th,td{
     height:500px;
     margin: 10px auto;
     text-align: center;
-    overflow: scroll;
+    /*overflow: scroll;*/
+    -ms-overflow-style: none;
+    overflow: auto;
     border: #e8e8e8 3px solid;
 }
 .joins-table h3{
@@ -126,5 +130,7 @@ th,td{
     height:350px;
     width:690px;
     float: right;
-    overflow:scroll ;
+    /*overflow:scroll ;*/
+    -ms-overflow-style: none;
+    overflow: auto;
 }

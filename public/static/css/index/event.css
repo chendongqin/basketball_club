@@ -4,8 +4,12 @@
     margin: 15px auto 0 auto;
     background: url("/static/image/bk/search.png");
 }
-.event-seacher,.seacher-select,.seacher-logo,.seacher-text{
+.event-seacher,.seacher-logo,.seacher-text{
     height: 70px;
+}
+.seacher-select{
+    padding-top: 15px;
+    height:55px;
 }
 .seacher-logo{
     width: 100px;
@@ -91,9 +95,10 @@
     background: url("/static/image/bk/juanzhou.jpg") no-repeat center;
 }
 .list-main-silder-r ul{
+    margin:35px 40px 0 40px;
     width: 160px;
     height: 160px;
-    margin-top:40px;
+    /*margin-top:40px;*/
     text-align: left;
 }
 .list-main-silder-r li{
@@ -105,7 +110,7 @@
 }
 #event-hot{
     color: red;
-    font-size: 20px;
+    font-size: 18px;
 }
 .list-main-top img{
     width: 430px;

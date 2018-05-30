@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:81:"D:\phpstudy\WWW\basketballClub\public/../application/index\view\event\index.phtml";i:1526237169;s:66:"D:\phpstudy\WWW\basketballClub\application\index\view\layout.phtml";i:1523168499;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:81:"D:\phpstudy\WWW\basketballClub\public/../application/index\view\event\index.phtml";i:1527337113;s:66:"D:\phpstudy\WWW\basketballClub\application\index\view\layout.phtml";i:1523168499;s:45:"../application/index/view/public/header.phtml";i:1525752071;s:45:"../application/index/view/public/footer.phtml";i:1523070513;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +37,7 @@
 <script type="text/javascript" src="/static/js/index/event/add_game.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/index/event/index.css" />
 <div class="add">
-    <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?>">加入比赛</a><br>
+    <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?> " event-status="<?php echo $event['status'];?>">加入比赛</a><br>
 </div>
 <div class="event-main">
     <div class="event">
@@ -88,7 +88,7 @@
                     <td><?php echo date('Y-m-d H:i:s',$schedule['game_time']);?></td>
                     <td><?php echo idOfFiler('club',['Id'=>$schedule['home_team']],'name')?></td>
                     <td><?php echo idOfFiler('club',['Id'=>$schedule['visiting_team']],'name')?></td>
-                    <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
+                    <td><?php echo $schedule['acting']!=0?$schedule['home_score'].' : '.$schedule['visiting_score']:'未开赛';?></td>
                     <td>
                         <?php if($schedule['over']==1):?>
                             <a href="/index/game/index?id=<?php echo $schedule['Id'];?>">查看详情</a>
