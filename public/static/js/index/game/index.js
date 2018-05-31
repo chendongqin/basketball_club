@@ -10,6 +10,14 @@ setInterval(function working(){
             $('.broadcast').append(str);
             $('.home-score').html(json.data.homeScore);
             $('.away-score').html(json.data.visitingScore);
+            var secondstr = parseInt(json.data.second/60);
+            var secondmod = json.data.second - secondstr * 60;
+            if(secondmod<10){
+                secondstr = secondstr+':0'+secondmod;
+            }else{
+                secondstr = secondstr+':'+secondmod;
+            }
+            $('#second').html(secondstr);
         }
     });
 },10000);

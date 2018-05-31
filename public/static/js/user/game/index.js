@@ -386,6 +386,9 @@ $(function(){
                         logs +="<p>"+res.data.logs[i]+"</p>"
                     }
                     $('.detail__character').html(logs);
+                    if(res.data.foul==5){
+                        alert(res.msg);
+                    }
                 }else{
                     alert(res.msg);
                 }
@@ -413,7 +416,7 @@ $(function(){
                     var data = "";
                     for(var i= 0;i<res.data.length;i++){
                         if(res.data[i].user_id != choose_check().playerId){
-                            data += "<li class='detail__team-item'><input type='radio' name='doublePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #1</li>"
+                            data += "<li class='detail__team-item'><input type='radio' name='doublePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #'+res.data[i].player_no+'</li>"
                         }
                     }
                     $('#j-get-player').html(data);

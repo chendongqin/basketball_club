@@ -62,6 +62,7 @@
         <option value ="0">客队</option>
     </select>
     <span class="detail__btn replace">换人</span>
+    <span class="detail__btn"><a href="/index/game/playerData?id=<?php echo $schedule['Id'];?>" style="color: white" target="_blank">查看数据</a></span>
     <span class="detail__btn" id="j-returnBack">撤销</span>
     <span class="detail__btn start_to_stop" data-type="1">暂停</span>
     <span class="detail__btn start_to_stop" data-type="0" id="j-start"><?php echo $schedule['acting']==1?'死球停止':'开始';?></span>

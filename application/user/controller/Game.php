@@ -39,7 +39,7 @@ class Game extends Userbase{
                 echo json_encode(['msg'=>'您不是当前直播员！','status'=>false,'code'=>0,'data'=>[]]);
                 die();
             }
-            if($schedule['acting']==3){
+            if($schedule['acting']==3 and $act!='over'){
                 header('Content-type: application/json; charset=utf-8');
                 echo json_encode(['msg'=>'比赛已结束，不可操作！','status'=>false,'code'=>0,'data'=>[]]);
                 die();
@@ -466,8 +466,10 @@ class Game extends Userbase{
         $logs = empty($logs)?array():$logs;
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
+        $addScore = 0;
         Db::startTrans();
         if($type==2){
+            $addScore = 2;
             $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+2,'shoot'=>$playerData['shoot']+1,'hit'=>$playerData['hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
@@ -475,6 +477,7 @@ class Game extends Userbase{
             array_unshift($logs_act,[$playerId=>'hit',$foulId=>'foul']);
             array_unshift($logs,$team.''.$player['name'].' 造成'.$foulTeam.$foulPlayer['name'].'犯规,球进！加罚一次!');
         }elseif($type==3){
+            $addScore = 3;
             $update = ['Id'=>$playerData['Id'],'update_time'=>time(),'score'=>$playerData['score']+3,'three_shoot'=>$playerData['three_shoot']+1,'three_hit'=>$playerData['three_hit']+1];
             $res = Db::name('player_data')->update($update);
             if(!$res)
@@ -497,15 +500,21 @@ class Game extends Userbase{
             Db::rollback();
             return $this->returnJson('失败，请重试！');
         }
+        if(($foulPlayerData['foul']+1) >= 5){
+            array_unshift($logs_act,'');
+            array_unshift($logs,$foulTeam.$foulPlayer['name'].'五犯离场！');
+        }
         $scheduleUpdate = ['Id'=>$scheduleId,'update_time'=>time(),'logs'=>json_encode($logs),'logs_act'=>json_encode($logs_act)];
         if($hometeam ==0){
             $str = 'home_foul';
             $fouls = json_decode($schedule['home_foul'],true);
             $fourKey = 'section_home_foul';
+            $scheduleUpdate['visiting_score'] = $schedule['visiting_score'] + $addScore;
         }else{
             $str = 'visiting_foul';
             $fouls = json_decode($schedule['visiting_foul'],true);
             $fourKey = 'section_visiting_foul';
+            $scheduleUpdate['home_score'] = $schedule['home_score'] + $addScore;
         }
         $fouls = empty($fouls)?[]:$fouls;
         $fouls[$schedule['section']] = isset($fouls[$schedule['section']])?$fouls[$schedule['section']]+1:1;
@@ -555,19 +564,23 @@ class Game extends Userbase{
         $logs_act = json_decode($schedule['logs_act'],true);
         $logs_act = empty($logs_act)?array():$logs_act;
         if($type ==1){
-            $score = $scorePlayerData['score']+2;
-            $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+3,'three_shoot'=>$scorePlayerData['three_shoot']+1,'three_hit'=>$scorePlayerData['three_hit']];
+//            $score = $scorePlayerData['score']+3;
+            $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+3,'three_shoot'=>$scorePlayerData['three_shoot']+1,'three_hit'=>$scorePlayerData['three_hit']+1];
             array_unshift($logs_act,[$scoreId=>'three_hit',$playerId=>'assists']);
             array_unshift($logs,$team.''.$player['name'].' 把球传给'.$scorePlayer['name'].',三分线外出手!'."\n稳稳命中!");
         }else{
-            $score = $scorePlayerData['score']+3;
-            $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+2,'shoot'=>$scorePlayerData['shoot']+1,'hit'=>$scorePlayerData['hit']];
+//            $score = $scorePlayerData['score']+2;
+            $scoreUpdate = ['Id'=>$scorePlayerData['Id'],'update_time'=>time(),'score'=>$scorePlayerData['score']+2,'shoot'=>$scorePlayerData['shoot']+1,'hit'=>$scorePlayerData['hit']+1];
             array_unshift($logs_act,[$scoreId=>'hit',$playerId=>'assists']);
             array_unshift($logs,$team.''.$player['name'].' 把球传给'.$scorePlayer['name'].'!'."\n".$scorePlayer['name'].'稳稳命中!');
         }
         Db::startTrans();
         $scoreKey = $hometeam==1?'home_score':'visiting_score';
-        $scheduleScore = $type==1?($schedule[$scoreKey]+3):($schedule[$scoreKey]+2);
+        if($type == 1){
+            $scheduleScore =$schedule[$scoreKey]+3;
+        }else{
+            $scheduleScore = $schedule[$scoreKey]+2;
+        }
         $scoreRes = Db::name('player_data')->update($scoreUpdate);
         if(!$scoreRes){
             return $this->returnJson('失败，请重试');
@@ -830,6 +843,9 @@ class Game extends Userbase{
         Db::startTrans();
         $timeTotal = ($schedule['section'])*$schedule['section_time']-$schedule['second'];
         $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$newPlayerId])->find();
+        if($playerData['foul'] >=5){
+            return $this->returnJson('失败，'.idOfFiler('user',['Id'=>$newPlayerId]).'五犯无法上场！');
+        }
         if(empty($playerData))
             return $this->returnJson($newPlayerId.'数据不存在');
         $update = ['Id'=>$playerData['Id'],'is_playing'=>1,'enter_time'=>$timeTotal];
@@ -838,8 +854,9 @@ class Game extends Userbase{
             Db::rollback();
             return $this->returnJson('失败，请重试！');
         }
-        $newuser = Db::name('user')->where('Id',$newPlayerId)->find();
-        $newname = empty($newuser)?$newuser['name']:'';
+//        $newuser = Db::name('user')->where('Id',$newPlayerId)->find();
+//        $newname = empty($newuser)?$newuser['name']:'';
+        $newname = idOfFiler('user',['Id'=>$newPlayerId]);
         $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$playerId])->find();
         if(empty($playerData))
             return $this->returnJson($playerId.'数据不存在');
@@ -877,6 +894,8 @@ class Game extends Userbase{
         if($schedule['second']!=0)
             return $this->returnJson('本节时间未结束');
         $str = $schedule['section']>4?'进入第'.($schedule['section']-4).'加时':'进入第'.($schedule['section']+1).'节';
+        if($schedule['section']>=4 and $schedule['home_score'] != $schedule['visiting_score'])
+            return $this->returnJson('未达到相同比分，无法进入加时！');
         $logs = json_decode($schedule['logs'],true);
         $logs = empty($logs)?array():$logs;
         array_unshift($logs,$str);
@@ -903,15 +922,40 @@ class Game extends Userbase{
         }
         $update['home_section_score'] = json_encode($sectionHScores);
         $update['visiting_section_score'] = json_encode($sectionVScores);
+        Db::startTrans();
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败,请重试');
+//        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
+//        $change = $this->changeTime($schedule);
+//        if($change === false){
+//            Db::rollback();
+//            return $this->returnJson('失败,请重试');
+//        }
+        Db::commit();
         $data['logs'] = $logs;
         $data['section'] = $schedule['section']+1;
         $data['second']=$schedule['section_time'];
         return $this->returnJson('成功',true,1,$data);
     }
 
+    public function changeTime($schedule){
+        $playerDatas = Db::name('player_data')->where(['schedule_id'=>$schedule['Id'],'is_playing'=>1])->select();
+        $timeTotal = ($schedule['section'])*$schedule['section_time']-$schedule['second'];
+        foreach ($playerDatas as $playerData){
+//            $playerData = Db::name('player_data')->where(['schedule_id'=>$scheduleId,'user_id'=>$newPlayerId])->find();
+//            if(empty($playerData))
+//                return $this->returnJson($newPlayerId.'数据不存在');
+            $playing_time = $playerData['playing_time']+$timeTotal-$playerData['enter_time'];
+            $update = ['Id'=>$playerData['Id'],'enter_time'=>$timeTotal,'playing_time'=>$playing_time];
+            $newRes = Db::name('player_data')->update($update);
+            if(!$newRes){
+                return false;
+            }
+        }
+        return true;
+
+    }
 
     //开始或暂停
     public function stop(){
@@ -954,9 +998,19 @@ class Game extends Userbase{
             array_unshift($logs_act,'');
         }
         $update['logs_act']=json_encode($logs_act);
+        Db::startTrans();
         $res = Db::name('schedule')->update($update);
         if(!$res)
             return $this->returnJson('失败，请重试!');
+        if($schedule['acting'] ===1){
+            $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
+            $change = $this->changeTime($schedule);
+            if($change === false){
+                Db::rollback();
+                return $this->returnJson('失败,请重试');
+            }
+        }
+        Db::commit();
         $data['logs'] = $logs;
         return $this->returnJson('成功',true,1,$data);
     }
@@ -969,7 +1023,7 @@ class Game extends Userbase{
             return $this->returnJson('比赛不存在');
         if($schedule['section']<4 or $schedule['second']!=0)
             return $this->returnJson('比赛时间或节数未结束');
-        $update = ['acting'=>3,'over'=>1,'Id'=>$scheduleId,'update'=>time()];
+        $update = ['acting'=>3,'over'=>1,'Id'=>$scheduleId,'update_time'=>time()];
         $logs = json_decode($schedule['logs'],true);
         $logs = empty($logs)?array():$logs;
         array_unshift($logs,'比赛结束');
@@ -984,6 +1038,12 @@ class Game extends Userbase{
         if(!$dataRes){
             Db::rollback();
             return $this->returnJson('失败，请重试！');
+        }
+        $schedule = Db::name('schedule')->where('Id',$scheduleId)->find();
+        $change = $this->changeTime($schedule);
+        if($change === false){
+            Db::rollback();
+            return $this->returnJson('失败,请重试');
         }
         Db::commit();
         $data['logs'] = $logs;
