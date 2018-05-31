@@ -4,5 +4,5 @@ composer.lock
 runtime
 #thinkphp
 #public/uploads
-/application/config.php
-/application/database.php
+application/config.php
+application/database.php
