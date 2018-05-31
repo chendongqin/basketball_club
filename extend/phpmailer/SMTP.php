@@ -265,7 +265,7 @@ class SMTP
                 "Connection: stream_socket_client not available, falling back to fsockopen",
                 self::DEBUG_CONNECTION
             );
-            $this->smtp_conn = fsockopen(
+            $this->smtp_conn = stream_socket_client(
                 $host,
                 $port,
                 $errno,
