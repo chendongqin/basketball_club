@@ -207,7 +207,8 @@ class PHPMailer
      * The default SMTP server port.
      * @var integer
      */
-    public $Port = 25;
+//    public $Port = 25;
+    public $Port = 465;
 
     /**
      * The SMTP HELO of the message.

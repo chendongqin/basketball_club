@@ -241,7 +241,7 @@ class SMTP
         }
         if (empty($port)) {
             $port = self::DEFAULT_SMTP_PORT;
-        }var_dump($port);
+        }
         // Connect to the SMTP server
         $this->edebug(
             "Connection: opening to $host:$port, timeout=$timeout, options=".var_export($options, true),
