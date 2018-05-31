@@ -30,7 +30,7 @@ class Email{
             //设置邮件使用SMTP
             $mail->isSMTP();
             // 设置邮件程序以使用SMTP
-            $mail->Host = 'smtp.qq.com';
+            $mail->Host = 'ssl://smtp.qq.com';
             // 设置邮件内容的编码
             $mail->CharSet='UTF-8';
             // 启用SMTP验证
