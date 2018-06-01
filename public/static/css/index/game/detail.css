@@ -1,0 +1,71 @@
+.player-data{
+    width:940px;
+    height:30px;
+    margin: 20px auto 0 auto;
+    padding: 5px;
+    border: #e8e8e8 2px solid;
+}
+
+.player-detail{
+    color: #4f5259;
+    font-size: 14px;
+    line-height: 30px;
+    margin-left: 50px ;
+}
+
+.player-main{
+    width:840px;
+    height:600px;
+    margin: 10px auto 20px auto;
+    padding: 10px;
+    border: #e8e8e8 2px solid;
+}
+.data-list{
+    height: 100px;
+    width:900px;
+    margin: 10px auto;
+}
+
+.data-one{
+    height: 76px;
+    width: 116px;
+    float: left;
+    margin: 10px 24px;
+    border: green 2px solid;
+}
+.data-two{
+    height: 76px;
+    width: 140px;
+    float: left;
+    margin: 10px 32px;
+    border: green 2px solid;
+}
+
+.data-desc{
+    padding: 3px 5px;
+    color: #4f5259;
+    font-size: 16px;
+}
+
+.data-avg{
+    padding-left: 45px;
+    color: blue;
+    font-size: 40px;
+}
+.data-avg2{
+    padding-left: 15px;
+    color: red;
+    font-size: 35px;
+}
+
+.per-data{
+    width: 500px;
+    height: 400px;
+    margin: 60px auto 0 auto;
+}
+.game-data{
+    padding: 15px 5px;
+    text-align: center;
+    -ms-overflow-style: none;
+    overflow: auto;
+}

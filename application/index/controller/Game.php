@@ -118,32 +118,56 @@ class Game extends Base{
         $total['score'] = $total['rebounds']= $total['assists']= $total['steals']= $total['blocks']= $total['lost']
             = $total['shoot']= $total['hit']= $total['three_shoot']= $total['three_hit']
             = $total['penalty_shoot']= $total['penalty_hit']= $total['foul']= $total['playing_time']=0;
-        $perData = [];
+        $showData = [];
         $i = 0;
-        $perData[] = 0;
+//        $perData[] = 0;
         foreach ($datas as $data){
             foreach ($total as $key=>$value){
                 $total[$key] +=$data[$key];
             }
             if($i<10)
-                $perData[] = (($data['score'] +$data['rebounds'] +$data['assists']+$data['steals']+$data['blocks'])-($data['shoot']-$data['hit'])-($data['penalty_shoot']-$data['penalty_hit'])-$data['lost']);
+                $showData[] = $data;
+//                $perData[] = (($data['score'] +$data['rebounds'] +$data['assists']+$data['steals']+$data['blocks'])-($data['shoot']-$data['hit'])-($data['penalty_shoot']-$data['penalty_hit'])-$data['lost']);
             $i++;
         }
         /*计算这个效率准则的公式为：
         [(得分+篮板+助攻+抢断+封盖)-(出手次数-命中次数)-(罚球次数-罚球命中次数)-失误次数]/球员上场比赛的场次*/
         $count = count($datas)==0?1:count($datas);
-        $per = (($total['score'] +$total['rebounds'] +$total['assists']+$total['steals']+$total['blocks'])-($total['shoot']-$total['hit'])-($total['penalty_shoot']-$total['penalty_hit'])-$total['lost'])/$count;
+//        $per = (($total['score'] +$total['rebounds'] +$total['assists']+$total['steals']+$total['blocks'])-($total['shoot']-$total['hit'])-($total['penalty_shoot']-$total['penalty_hit'])-$total['lost'])/$count;
         $avg = [];
         foreach ($total as $key=>$value){
             $avg[$key] = (float)number_format($value/$count,1,'.','');
         }
-        $this->assign('datas',$datas);
+        $clubNum = count(json_decode($user['club']));
+        $this->assign('clubNum',$clubNum);
+        $this->assign('count',$count);
+        $this->assign('player',$user);
+        $this->assign('datas',$showData);
         $this->assign('total',$total);
         $this->assign('avg',$avg);
-        $this->assign('per',number_format($per,2,'.',''));
-        $this->assign('perData',$perData);
+//        $this->assign('per',number_format($per,2,'.',''));
+//        $this->assign('perData',$perData);
+        $this->assign('title','球员数据预览');
         return $this->fetch();
     }
 
+    public function per(){
+        $userId = $this->request->param('userId',0,'int');
+        $user = Db::name('user')->where('Id',$userId)->find();
+        if(empty($user))
+            return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'用户不存在']);
+        $datas = Db::name('player_data')->where(['user_id'=>$userId,'is_playing'=>2])->order('schedule_id','desc')->limit(10)->select();
+        $perData = [];
+        $perData[] = 0;
+        foreach ($datas as $data){
+            $perData[] = (($data['score'] +$data['rebounds'] +$data['assists']+$data['steals']+$data['blocks'])-($data['shoot']-$data['hit'])-($data['penalty_shoot']-$data['penalty_hit'])-$data['lost']);
+        }
+//        for ($i=0;$i<=10;$i++){
+//            if(!isset($perData[$i])){
+//                $perData[$i] = 0;
+//            }
+//        }
+        return $this->returnJson('成功',true,1,$perData);
+    }
 
 }

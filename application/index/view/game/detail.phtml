@@ -1,0 +1,212 @@
+{load href="/static/css/index/game/detail.css" /}
+{load href="/static/css/table.css" /}
+{load href="/static/js/jq.js" /}
+<div class="player-data">
+    <span class="player-detail">姓名：</span><?php echo $player['name'];?>
+    <span class="player-detail">邮箱：</span><?php echo $player['email'];?>
+    <span class="player-detail">城市：</span><?php echo $player['city'];?>
+    <span class="player-detail">比赛总场数：</span><?php echo $count;?>
+    <span class="player-detail">加入队伍数：</span><?php echo $clubNum;?>
+</div>
+<div class="player-main">
+    <div class="data-list">
+        <div class="data-two">
+            <div class="data-desc">投篮命中率:</div>
+            <span class="data-avg2"><?php echo number_format(($avg['hit']+$avg['three_hit'])/($avg['shoot']+$avg['three_shoot']),4,'.','')*100;?>%</span>
+        </div>
+        <div class="data-two">
+            <div class="data-desc">三分命中率:</div>
+            <span class="data-avg2"><?php echo number_format($avg['three_hit']/$avg['three_shoot'],4,'.','')*100;?>%</span>
+        </div>
+        <div class="data-two">
+            <div class="data-desc">罚篮命中率:</div>
+            <span class="data-avg2"><?php echo number_format($avg['penalty_hit']/$avg['penalty_shoot'],4,'.','')*100;?>%</span>
+        </div>
+        <div class="data-two">
+            <div class="data-desc">场均上场时间:</div>
+            <span class="data-avg"><?php echo number_format($avg['playing_time']/60,1,'.','');?></span>
+        </div>
+    </div>
+    <div class="data-list">
+        <div class="data-one">
+            <div class="data-desc">场均得分:</div>
+            <span class="data-avg"><?php echo $avg['score'];?></span>
+        </div>
+        <div class="data-one">
+            <div class="data-desc">场均篮板:</div>
+            <span class="data-avg"><?php echo $avg['rebounds'];?></span>
+        </div>
+        <div class="data-one">
+            <div class="data-desc">场均助攻:</div>
+            <span class="data-avg"><?php echo $avg['assists'];?></span>
+        </div>
+        <div class="data-one">
+            <div class="data-desc">场均抢断:</div>
+            <span class="data-avg"><?php echo $avg['steals'];?></span>
+        </div>
+        <div class="data-one">
+            <div class="data-desc">场均盖帽:</div>
+            <span class="data-avg"><?php echo $avg['blocks'];?></span>
+        </div>
+    </div>
+
+<!--    <div class="per-data">-->
+<!--        <canvas  width="400px" height="350px"></canvas>-->
+<!--    </div>-->
+    <div class="game-data">
+        <h3>最近比赛数据统计</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>上场时间</th>
+                <th>得分</th>
+                <th>篮板</th>
+                <th>助攻</th>
+                <th>投篮</th>
+                <th>三分</th>
+                <th>罚球</th>
+                <th>盖帽</th>
+                <th>抢断</th>
+                <th>失误</th>
+                <th>犯规</th>
+            </tr>
+            </thead>
+            <thead>
+            <?php foreach ($datas as $value):?>
+                <tr>
+                    <td><?php echo number_format($value['playing_time']/60,1,'.','');?></td>
+                    <td><?php echo $value['score'];?></td>
+                    <td><?php echo $value['rebounds'];?></td>
+                    <td><?php echo $value['assists'];?></td>
+                    <td><?php echo $value['hit'].'/'.$value['shoot'];?></td>
+                    <td><?php echo  $value['three_hit'].'/'.$value['three_shoot'];?></td>
+                    <td><?php echo $value['penalty_hit'].'/'.$value['penalty_shoot'];?></td>
+                    <td><?php echo $value['blocks'];?></td>
+                    <td><?php echo $value['steals'];?></td>
+                    <td><?php echo $value['lost'];?></td>
+                    <td><?php echo $value['foul'];?></td>
+                </tr>
+            <?php endforeach;?>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+<!--<script>
+    //获取canvas的dom元素
+    var cvs=document.querySelector("canvas");
+    //创建绘制环境
+    var cxt=cvs.getContext("2d");
+    /*
+      * constructor { LineChart } 折线图构造函数
+      * param { ctx: Context } 绘图上下文
+      * param { paddingArr: Array } 折线图到画布四边的距离，存储顺序为上右下左
+      * param { arrowArr: Array } 折线图中箭头的宽和高
+      * param { data: Array } 存储了折线图中所需的数据
+      * */
+    function LineChart(ctx,paddingArr,arrowArr,data){
+        this.ctx=ctx;
+        this.paddingArr=paddingArr;
+        this.arrowArr=arrowArr;
+        this.data=data;
+        this.arrowHeight=arrowArr[0];
+        this.arrowWidth=arrowArr[1];
+
+        //计算上顶点的距离
+        this.vertexTop={
+            x:this.paddingArr[3],
+            y:this.paddingArr[0]
+        };
+        //计算原点的距离
+        this.origin={
+            x:this.paddingArr[3],
+            y:this.ctx.canvas.height-this.paddingArr[2]
+        };
+        //计算右边点的距离
+        this.vertexRight={
+            x:this.ctx.canvas.width-this.paddingArr[1],
+            y:this.ctx.canvas.height-this.paddingArr[2]
+        };
+        this.process();
+    }
+
+    LineChart.prototype={
+        //设置构造函数
+        constructor:LineChart,
+        //绘制坐标轴中的两条线
+        drawZuobiao:function(){
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.vertexTop.x, this.vertexTop.y);
+            this.ctx.lineTo(this.origin.x, this.origin.y);
+            this.ctx.lineTo(this.vertexRight.x, this.vertexRight.y);
+            this.ctx.stroke();
+        },
+        drawArrow:function(){
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.vertexTop.x, this.vertexTop.y);
+            this.ctx.lineTo(this.vertexTop.x-this.arrowWidth/2, this.vertexTop.y+this.arrowHeight);
+            this.ctx.lineTo(this.vertexTop.x, this.vertexTop.y+this.arrowHeight/2);
+            this.ctx.lineTo(this.vertexTop.x+this.arrowWidth/2, this.vertexTop.y+this.arrowHeight);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.vertexRight.x, this.vertexRight.y);
+            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight, this.vertexRight.y-this.arrowWidth/2);
+            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight/2, this.vertexRight.y);
+            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight, this.vertexRight.y+this.arrowWidth/2);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+
+        },
+
+        process:function(){
+            this.processData=[];
+            //在这一部分将画布认识的坐标转化为本坐标系的坐标
+            for (var i = 0; i < this.data.length; i+=2) {
+                this.processData.push(this.origin.x+this.data[i]);
+                this.processData.push(this.origin.y-this.data[i+1]);
+            };
+
+        },
+
+        drawOrcle:function(){
+            this.ctx.beginPath();
+            for (var i = 0; i < this.processData.length; i+=2) {
+                this.ctx.arc(this.processData[i],this.processData[i+1], 5, 0, Math.PI*2);
+                this.ctx.fill();
+
+            };
+        },
+
+        drawLine:function(){
+            this.ctx.beginPath();
+            for (var i = 0; i < this.processData.length; i+=2) {
+                this.ctx.lineTo(this.processData[i], this.processData[i+1]);
+            };
+            this.ctx.stroke();
+
+        },
+        draw:function(){
+            this.drawZuobiao();
+            this.drawArrow();
+            this.drawOrcle();
+            this.drawLine();
+        }
+    };
+    var data = [];
+    $.post('/index/game/per?userId=1',function (returnJson) {
+       if(returnJson.status ==true){
+           var len=eval(returnJson.data).length;
+           for(var i=0;i<len;i++){
+               data[i]=returnJson.data[i];
+           }
+       }
+    });
+    var linechat=new LineChart(cxt,[20,20,20,20],[10,10],data);
+    linechat.draw();
+
+</script>-->
