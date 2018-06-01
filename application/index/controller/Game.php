@@ -133,7 +133,7 @@ class Game extends Base{
         /*计算这个效率准则的公式为：
         [(得分+篮板+助攻+抢断+封盖)-(出手次数-命中次数)-(罚球次数-罚球命中次数)-失误次数]/球员上场比赛的场次*/
         $count = count($datas)==0?1:count($datas);
-//        $per = (($total['score'] +$total['rebounds'] +$total['assists']+$total['steals']+$total['blocks'])-($total['shoot']-$total['hit'])-($total['penalty_shoot']-$total['penalty_hit'])-$total['lost'])/$count;
+        $per = (($total['score'] +$total['rebounds'] +$total['assists']+$total['steals']+$total['blocks'])-($total['shoot']-$total['hit'])-($total['penalty_shoot']-$total['penalty_hit'])-$total['lost'])/$count;
         $avg = [];
         foreach ($total as $key=>$value){
             $avg[$key] = (float)number_format($value/$count,1,'.','');
@@ -145,7 +145,7 @@ class Game extends Base{
         $this->assign('datas',$showData);
         $this->assign('total',$total);
         $this->assign('avg',$avg);
-//        $this->assign('per',number_format($per,2,'.',''));
+        $this->assign('per',number_format($per,2,'.',''));
 //        $this->assign('perData',$perData);
         $this->assign('title','球员数据预览');
         return $this->fetch();
