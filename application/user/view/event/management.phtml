@@ -14,7 +14,7 @@
                 <a href="/user/schedule/outSchedule" >安排赛程</a>
                 <a href="javascript:;" id="importSchedulesButton" data-id="<?php $event['Id']?>">导入赛程</a>
         <?php endif;?>
-    <?php elseif($event['type']!==0):?>
+    <?php elseif($event['type']==0):?>
             <a href="javascript:;" id="overGroup" data-id="<?php $event['Id']?>">下一轮</a>
     <?php endif;?>
         <a href="javascript:;" id="eventWork" data-id="<?php $event['Id']?>">直播管理</a>
@@ -126,7 +126,7 @@
                     <td><?php echo idOfFiler('club',['Id'=>$schedule['visiting_team']])?></td>
 <!--                    <td><span class="homeTeam" data-id=" --><?php //echo $schedule['home_team'];?><!--"></span></td>-->
 <!--                    <td><span class="visitingTeam" data-id=" --><?php //echo $schedule['visiting_team'];?><!--"></span></td>-->
-                    <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
+                    <td><?php echo $schedule['over']==1?$schedule['home_score'].' : '.$schedule['visiting_score']:'未开赛';?></td>
                     <td>
                         <?php if($schedule['over']==1):?>
                             <a href="/user/schedule/detail?id=<?php echo $schedule['Id'];?>">查看详情</a>

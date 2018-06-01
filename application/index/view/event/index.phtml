@@ -4,7 +4,7 @@
 {load href="/static/js/index/event/add_game.js" /}
 {load href="/static/css/index/event/index.css" /}
 <div class="add">
-    <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?> " event-status="<?php echo $event['status'];?>">加入比赛</a><br>
+    <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'joinGame':'';?>" data-event-status="<?php echo $event['status'];?>">加入比赛</a><br>
 </div>
 <div class="event-main">
     <div class="event">

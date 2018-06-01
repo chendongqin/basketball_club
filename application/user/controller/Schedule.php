@@ -37,7 +37,7 @@ class Schedule extends Userbase{
         if(empty($event))
             return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'赛事不存在']);
         $this->assign('event',$event);
-        if(strtotime($event['start_time'])<time())
+        if(strtotime($event['start_time'])<strtotime('Y-m-d'))
             return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'赛事已开始，如需操作请重新设置比赛时间','url'=>'/user/event/management?id='.$event['Id']]);
         $joins = json_decode($event['join_clubs'],true);
         $joinsId = array_keys($joins);
@@ -209,7 +209,7 @@ class Schedule extends Userbase{
         $clubModel = Db::name('club');
         $joinClubs = json_decode($event['join_clubs'],true);
         foreach ($import as $key=>$schedule){
-            if($schedule['game_time']<time() or $schedule['game_time']<strtotime($event['start_time']) or $schedule['game_time']>strtotime($event['end_time']))
+            if($schedule['game_time']<time() or $schedule['game_time']<strtotime($event['start_time'].' 00:00:00') or $schedule['game_time']>strtotime($event['end_time'].' 23:59:59'))
                 return $this->returnJson('比赛时间必须大于当前时间，并且再比赛时间范围内');
             $home = $clubModel->where('name',trim($schedule['home_team']))->find();
             if(empty($home)){
@@ -295,7 +295,7 @@ class Schedule extends Userbase{
         foreach ($import as $key=>$schedules){
             foreach ($schedules as $k=>$value){
                 foreach ($value as $schedule){
-                    if($schedule['game_time']<time() or $schedule['game_time']<strtotime($event['start_time']) or $schedule['game_time']>strtotime($event['end_time']))
+                    if($schedule['game_time']<time() or $schedule['game_time']<strtotime($event['start_time'].' 00:00:00') or $schedule['game_time']>strtotime($event['end_time'].' 23:59:59'))
                         return $this->returnJson('比赛时间必须大于当前时间，并且再比赛时间范围内');
                     $home = $clubModel->where('Id',trim($schedule['home_team']))->find();
                     if(empty($home)){
@@ -412,7 +412,7 @@ class Schedule extends Userbase{
         $gameTime= $this->request->param('game_time','','string');
         $game_address= $this->request->param('game_address','','string');
         $gameTime = strtotime($gameTime);
-        if($gameTime<time() or $gameTime<strtotime($event['start_time']) or $gameTime>strtotime($event['end_time']))
+        if($gameTime<time() or $gameTime<strtotime($event['start_time'].' 00:00:00') or $gameTime>strtotime($event['end_time'].' 23:59:59'))
             return $this->returnJson('比赛时间必须大于当前时间，并且再比赛时间范围内');
         $data[$id]['game_time'] = $gameTime;
         $data[$id]['game_address'] = $game_address;
@@ -434,7 +434,7 @@ class Schedule extends Userbase{
             return $this->returnJson('修改的赛程不存在');
         $gameTime= $this->request->param('game_time','','string');
         $gameTime = strtotime($gameTime);
-        if($gameTime<time() or $gameTime<strtotime($event['start_time']) or $gameTime>strtotime($event['end_time']))
+        if($gameTime<time() or $gameTime<strtotime($event['start_time'].' 00:00:00') or $gameTime>strtotime($event['end_time'].' 23:59:59'))
             return $this->returnJson('比赛时间必须大于当前时间，并且再比赛时间范围内');
         $data[$key][$k][$my]['game_time'] = $gameTime;
         Cache::set('schedule.system.group.str.'.$eventId,json_encode($data),1200);

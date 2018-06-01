@@ -73,4 +73,13 @@ $(function () {
                 alert(json.msg);
         })
     });
+    $('#outClub').click(function () {
+        var id = $('#clubId').val();
+        $.post('/user/index/outClub',{id:id},function (json) {
+            if(json.status == true)
+                location.reload();
+            else
+                alert(json.msg);
+        })
+    });
 });

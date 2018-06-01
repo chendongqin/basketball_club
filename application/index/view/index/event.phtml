@@ -1,9 +1,13 @@
 {load href="/static/css/index/event.css"}
 {load href="/static/js/jq.js"}
 {load href="/static/js/index/index/event.js"}
-
 <div class="event-seacher">
-    <div class="seacher-logo"><img src="/static/image/logo.png" height="70px"></div>
+<!--    <div class="seacher-logo"><img src="/static/image/logo.png" height="70px"></div>-->
+    <div class="seacher-logo">
+        <div class="add">
+            <a href="<?php echo !empty($user)?'/user/event/add':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">创建赛事</a><br>
+        </div>
+    </div>
     <div class="seacher-select">
         <ul>
             <li>

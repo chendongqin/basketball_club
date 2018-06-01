@@ -103,6 +103,8 @@ class Event extends Userbase{
                 return $this->returnJson('晋级队伍为整数');
             if(empty($data['promotion_num']))
                 return $this->returnJson('晋级队伍不能为0');
+        }else{
+            return $this->returnJson('排名赛和淘汰赛暂时未开放');
         }
         if(empty($data['name']) or empty($data['address']) or empty($data['start_time']) or empty($data['end_time']))
             return $this->returnJson('赛事名、地区、开始、结束时间不能为空');
@@ -432,5 +434,16 @@ class Event extends Userbase{
 //            return $this->returnJson('操作失败，请重试');
 //        return $this->returnJson('操作成功',true,1);
 //    }
+
+    public function overEvent(){
+        $id = $this->request->param('id',0,'int');
+        $event = Db::name('event')->where('Id',$id)->find();
+        if(empty($event))
+            return $this->returnJson('赛事不存在！');
+        $res = Db::name('event')->update(['Id'=>$id,'status'=>2]);
+        if(!$res)
+            return $this->returnJson('失败，请刷新重试！');
+        return $this->returnJson('成功',true,1);
+    }
 
 }

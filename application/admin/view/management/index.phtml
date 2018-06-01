@@ -1,5 +1,5 @@
 {load href="/static/js/jq.js" /}
-{load href="/static/js/admin/event/index.js" /}
+{load href="/static/js/admin/mangement/index.js" /}
 {load href="/adminStatic/style/custom/table-layout.css" /}
 
 <ol class="breadcrumb bc-3">
@@ -59,3 +59,40 @@
 </div>
 {include file="../application/index/view/public/pager.phtml"/}
 </div>
+
+<!-- 添加 显示信息 start -->
+<div class="modal fade" id="moadladdAdmin">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">管理员添加</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-groups-bordered form-static" id="addClubForm">
+                    <div class="form-group">
+                        <label for="name" class="control-label col-md-2">用户名</label>
+                        <div class="col-md-4">
+                            <input type="text" name="name" id="addname" class="form-control" >
+                        </div>
+                    </div><div class="form-group">
+                        <label for="mobile" class="control-label col-md-2">手机</label>
+                        <div class="col-md-4">
+                            <input type="text" name="mobile" id="addmobile" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label col-md-2">密码</label>
+                        <div class="col-md-4">
+                            <input type="password" name="password" id="addpassword" class="form-control" >
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="确认" class="btn btn-green addAdminButton" data-id="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加 显示信息 end -->

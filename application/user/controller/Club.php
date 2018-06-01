@@ -53,9 +53,9 @@ class Club extends Userbase{
             return $this->returnJson('您不是队长，没有权限加入比赛');
         if(strcmp($code,$event['virefy_code'])!==0)
             return $this->returnJson('邀请码错误，请重新确认');
-//        $playerNum = count(json_decode($club['join_clubs'],true));
-//        if($playerNum<7)
-//            return $this->returnJson('球队人数小于7人无法参加比赛');
+        $playerNum = count(json_decode($club['players'],true));
+        if($playerNum<7)
+            return $this->returnJson('球队人数小于7人无法参加比赛');
         $joins = json_decode($event['join_clubs'],true);
         if(isset($joins[$clubId]))
             return $this->returnJson('已经加入比赛，无需重复操作');

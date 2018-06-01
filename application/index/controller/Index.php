@@ -79,6 +79,7 @@ use think\Db;
              $proData[$item['provinceid']] = $item['province'];
          }
          $this->assign('provinces',$proData);
+         $this->assign('name',$name);
          return $this->fetch();
      }
 

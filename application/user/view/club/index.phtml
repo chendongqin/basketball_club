@@ -79,6 +79,10 @@
                 <?php if($user['Id']==$club['captain'] and $userId!=$club['captain']):?>
                     <a href="javascript:;" class="delPlaers" data-id="<?php echo $userId;?>">踢出</a>
                 <?php endif;?>
+                <?php if($user['Id']==$userId and $user['Id']!=$club['captain']):?>
+                    <a href="javascript:;" id="outClub" data-id="<?php echo $userId;?>">退出</a>
+                <?php endif;?>
+
             </li>
         <?php endforeach;?>
         <a href="javascript:;" id="changeNo" >更换号码</a>

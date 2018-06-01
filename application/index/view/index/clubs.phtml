@@ -5,11 +5,27 @@
 {load href="/static/js/index/index/clubs.js" /}
 {load href="/static/js/index/area.js" /}
 
-<div class="main">
-    <div class="add">
-        <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">创建球队</a><br>
+<div class="event-seacher">
+    <div class="seacher-logo">
+        <div class="add">
+            <a href="<?php echo !empty($user)?'javascript:;':'/user/login';?>" id="<?php echo isset($user)?'addClub':'';?>">创建球队</a>
+        </div>
+    </div>
+    <div class="seacher-logo"><img src="/static/image/logo.png" height="70px"></div>
+    <div class="seacher-text">
+        <div class="search-bk">
+            <form action="" method="get">
+                <input type="text" name="name" value="<?php echo $name;?>"  class="search-text-1">
+            </form>
+        </div>
     </div>
 </div>
+
+<!--<div class="main">-->
+<!--    <div class="add">-->
+<!--        <a href="--><?php //echo !empty($user)?'javascript:;':'/user/login';?><!--" id="--><?php //echo isset($user)?'addClub':'';?><!--">创建球队</a><br>-->
+<!--    </div>-->
+<!--</div>-->
         <?php if(!empty($pager['data'])):?>
             <?php foreach ($pager['data'] as $key=>$club):?>
                 <?php if($key % 2==0):?>

@@ -118,3 +118,52 @@
     color: #457780;
     padding-top:5px;
 }
+.seacher-logo a:link,.seacher-logo  a:visited{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    margin-top:5px;
+    border: 3px green;
+    border-radius: 15px;
+    background:green;
+}
+
+.event-seacher{
+    height: 70px;
+    width: 960px;
+    margin: 15px auto 0 auto;
+    background: url("/static/image/bk/search.png");
+}
+.event-seacher,.seacher-logo,.seacher-text{
+    height: 70px;
+}
+.seacher-select{
+    padding-top: 15px;
+    height:55px;
+}
+.seacher-logo{
+    width: 100px;
+    float: left;
+    margin-left: 150px;
+}
+.seacher-text{
+    float: right;
+    width: 300px;
+    margin-right:100px ;
+}
+.search-bk{
+    margin-top: 16px;
+    margin-left: 25px;
+    height: 32px;
+    background: url("/static/image/bk/search_box.png") no-repeat right center;
+    padding-right:30px;
+}
+.search-text-1{
+    height: 30px;
+}
+.search-text-1,.search-bk{
+    width: 190px;
+}

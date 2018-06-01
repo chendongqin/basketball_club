@@ -180,3 +180,35 @@
     height: 350px;
     float: right;
 }
+
+.add-main{
+    width: 960px;
+    min-height: 30px;
+    height:auto!important;
+    _height:30px;
+    margin: 10px auto;
+    text-align: center;
+    /*padding-top: 5px;*/
+}
+.add{
+    height: 40px;
+    text-align: left;
+    margin:10px 50px 0 0;
+}
+
+.seacher-logo a:link,.seacher-logo  a:visited{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display:inline-block;
+    width:80px;
+    line-height:30px;
+    margin-top:5px;
+    border: 3px green;
+    border-radius: 15px;
+    background:green;
+}
+.add a:hover,.add a:active{
+    font-size: 0;
+    background:url("/static/image/bk/into.png")no-repeat center;
+}

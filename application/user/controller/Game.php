@@ -12,7 +12,7 @@ use think\Db;
 class Game extends Userbase{
 
     private $_allow =['index','broadcastOut','playing'];
-    private $_noVirefy = ['stop','over','returnback','replace','faul','getone','next','setstart'];
+    private $_noVirefy = ['stop','over','returnback','replace','faul','getone','next','setstart','broadcastout'];
 
     //比赛ID传输字段统一用id作为验证
     public function _initialize()
@@ -1030,6 +1030,20 @@ class Game extends Userbase{
         $update['logs'] = json_encode($logs);
         if($clear==1)
             $update['logs_act'] = '';
+        $sectionHScore = $schedule['home_score'];
+        $sectionVScore = $schedule['visiting_score'];
+        $sectionHScores = json_decode($schedule['home_section_score'],true);
+        $sectionVScores = json_decode($schedule['visiting_section_score'],true);
+        foreach ($sectionHScores as $HScore){
+            $sectionHScore -= $HScore;
+        }
+        foreach ($sectionVScores as $VScore){
+            $sectionVScore -= $VScore;
+        }
+        $sectionHScores[$schedule['section']]=$sectionHScore;
+        $sectionVScores [$schedule['section']]=$sectionVScore;
+        $update['home_section_score'] = json_encode($sectionHScores);
+        $update['visiting_section_score'] = json_encode($sectionVScores);
         Db::startTrans();
         $res = Db::name('schedule')->update($update);
         if(!$res)

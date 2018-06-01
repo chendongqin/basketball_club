@@ -1,8 +1,8 @@
 $(function () {
-   $('#joinGame').click(function () {
-       var eventStatus = $(this).attr('event-status');
+   $('#joinGame').click(function(){
+       var eventStatus = $(this).attr('data-event-status');
        if(eventStatus !=0){
-           alter('赛事已开始，无法加入比赛!');
+           alert('赛事已开始，无法加入比赛!');
            return false;
        }
        $('.error').hide();

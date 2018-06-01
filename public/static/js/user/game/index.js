@@ -416,7 +416,7 @@ $(function(){
                     var data = "";
                     for(var i= 0;i<res.data.length;i++){
                         if(res.data[i].user_id != choose_check().playerId){
-                            data += "<li class='detail__team-item'><input type='radio' name='doublePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #'+res.data[i].player_no+'</li>"
+                            data += "<li class='detail__team-item'><input type='radio' name='doublePlayer' checked value='"+res.data[i].user_id+"'> "+res.data[i].user_name+" #"+res.data[i].player_no+"</li>"
                         }
                     }
                     $('#j-get-player').html(data);
@@ -627,13 +627,14 @@ $(function(){
         });
     })
 });
-
-$('#out').click(function(){
-    $.post("/user/game/broadcastOut", {id:$('.schedule_id').text(),},function (returnData) {
-        if(returnData.status == true){
-            window.location.href="/user";
-        }else{
-            alert(res.msg);
-        }
-    })
+$(function () {
+    $('#broadcastOut').click(function(){
+        $.post("/user/game/broadcastOut", {id:$('.schedule_id').text(),},function (returnData) {
+            if(returnData.status == true){
+                window.location.href="/user";
+            }else{
+                alert(res.msg);
+            }
+        })
+    });
 });

@@ -27,7 +27,7 @@
                     <td><?php echo idOfFiler('club',['Id'=>$schedule['visiting_team']])?></td>
                     <!--                    <td><span class="homeTeam" data-id=" --><?php //echo $schedule['home_team'];?><!--"></span></td>-->
                     <!--                    <td><span class="visitingTeam" data-id=" --><?php //echo $schedule['visiting_team'];?><!--"></span></td>-->
-                    <td><?php echo $schedule['over']==1?$schedule['home_sorce'].' : '.$schedule['visiting_sorce']:'未开赛';?></td>
+                    <td><?php echo $schedule['over']==1?$schedule['home_score'].' : '.$schedule['visiting_score']:'未开赛';?></td>
                     <td>
                         <?php if($schedule['over']==1):?>
                             <a href="/user/schedule/detail?id=<?php echo $schedule['Id'];?>">查看详情</a>

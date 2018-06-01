@@ -120,6 +120,7 @@ class Game extends Base{
             = $total['penalty_shoot']= $total['penalty_hit']= $total['foul']= $total['playing_time']=0;
         $perData = [];
         $i = 0;
+        $perData[] = 0;
         foreach ($datas as $data){
             foreach ($total as $key=>$value){
                 $total[$key] +=$data[$key];
@@ -134,7 +135,7 @@ class Game extends Base{
         $per = (($total['score'] +$total['rebounds'] +$total['assists']+$total['steals']+$total['blocks'])-($total['shoot']-$total['hit'])-($total['penalty_shoot']-$total['penalty_hit'])-$total['lost'])/$count;
         $avg = [];
         foreach ($total as $key=>$value){
-            $avg[$key] = number_format($value/$count,2,'.','');
+            $avg[$key] = (float)number_format($value/$count,1,'.','');
         }
         $this->assign('datas',$datas);
         $this->assign('total',$total);
