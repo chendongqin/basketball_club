@@ -135,7 +135,7 @@
     height: 70px;
     width: 960px;
     margin: 15px auto 0 auto;
-    background: url("/static/image/bk/search.png");
+    /*background: url("/static/image/bk/search.png");*/
 }
 .event-seacher,.seacher-logo,.seacher-text{
     height: 70px;
