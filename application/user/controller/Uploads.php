@@ -41,10 +41,10 @@ class Uploads extends Userbase{
         if(!$result){
             return $this->returnJson('文件上传失败');
         }
-        $res = Tool::uploadImage($fileName,$fileName);
-        if(!$res){
-            return $this->returnJson('图片重生成错误');
-        }
+//        $res = Tool::uploadImage($fileName,$fileName);
+//        if(!$res){
+//            return $this->returnJson('图片重生成错误');
+//        }
         $fileName = str_replace(PUBLIC_PATH,'',$fileName);
         return $this->returnJson('上传成功',true,1,array('fileName'=>$fileName));
     }
@@ -74,10 +74,10 @@ class Uploads extends Userbase{
         if(!$result){
             return $this->returnJson('文件上传失败');
         }
-        $res = Tool::sizeImage($fileName,$fileName,150);
-        if(!$res){
-            return $this->returnJson('图片重生成错误');
-        }
+//        $res = Tool::sizeImage($fileName,$fileName,150);
+//        if(!$res){
+//            return $this->returnJson('图片重生成错误');
+//        }
         $fileName = str_replace(PUBLIC_PATH,'',$fileName);
         if($fileName != $user['head']){
             $res = Db::name('user')->update(['Id'=>$user['Id'],'head'=>$fileName]);
