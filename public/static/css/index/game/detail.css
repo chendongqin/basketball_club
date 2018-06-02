@@ -64,7 +64,7 @@
     margin: 60px auto 0 auto;
 }
 .game-data{
-    padding: 15px 5px;
+    padding: 0px 5px 15px;
     text-align: center;
     -ms-overflow-style: none;
     overflow: auto;

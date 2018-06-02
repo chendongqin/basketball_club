@@ -145,6 +145,7 @@ class Game extends Base{
         $this->assign('datas',$showData);
         $this->assign('total',$total);
         $this->assign('avg',$avg);
+        $this->assign('playerId',$userId);
         $this->assign('per',number_format($per,2,'.',''));
 //        $this->assign('perData',$perData);
         $this->assign('title','球员数据预览');
@@ -156,17 +157,15 @@ class Game extends Base{
         $user = Db::name('user')->where('Id',$userId)->find();
         if(empty($user))
             return $this->fetch(APP_PATH.'index/view/error.phtml',['error'=>'用户不存在']);
-        $datas = Db::name('player_data')->where(['user_id'=>$userId,'is_playing'=>2])->order('schedule_id','desc')->limit(10)->select();
+        $datas = Db::name('player_data')->where(['user_id'=>$userId,'is_playing'=>2])->order('update_time','asc')->limit(10)->select();
         $perData = [];
-        $perData[] = 0;
         foreach ($datas as $data){
             $perData[] = (($data['score'] +$data['rebounds'] +$data['assists']+$data['steals']+$data['blocks'])-($data['shoot']-$data['hit'])-($data['penalty_shoot']-$data['penalty_hit'])-$data['lost']);
         }
-//        for ($i=0;$i<=10;$i++){
-//            if(!isset($perData[$i])){
-//                $perData[$i] = 0;
-//            }
-//        }
+        $num = count($datas)>=10?0:(10-count($datas));
+        for ($i=0;$i<=$num;$i++){
+            array_unshift($perData,0);
+        }
         return $this->returnJson('成功',true,1,$perData);
     }
 

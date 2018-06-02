@@ -1,6 +1,8 @@
 {load href="/static/css/index/game/detail.css" /}
 {load href="/static/css/table.css" /}
 {load href="/static/js/jq.js" /}
+{load href="/static/echarts/build/dist/echarts.js" /}
+{load href="/static/js/index/game/detail.js" /}
 <div class="player-data">
     <span class="player-detail">姓名：</span><?php echo $player['name'];?>
     <span class="player-detail">邮箱：</span><?php echo $player['email'];?>
@@ -50,9 +52,7 @@
         </div>
     </div>
 
-<!--    <div class="per-data">-->
-<!--        <canvas  width="400px" height="350px"></canvas>-->
-<!--    </div>-->
+    <div id="main" style="height:220px"></div>
     <div class="game-data">
         <h3>最近比赛数据统计（场均效率值：<?php echo $per;?>）</h3>
         <table>
@@ -91,122 +91,4 @@
         </table>
     </div>
 </div>
-
-
-<!--<script>
-    //获取canvas的dom元素
-    var cvs=document.querySelector("canvas");
-    //创建绘制环境
-    var cxt=cvs.getContext("2d");
-    /*
-      * constructor { LineChart } 折线图构造函数
-      * param { ctx: Context } 绘图上下文
-      * param { paddingArr: Array } 折线图到画布四边的距离，存储顺序为上右下左
-      * param { arrowArr: Array } 折线图中箭头的宽和高
-      * param { data: Array } 存储了折线图中所需的数据
-      * */
-    function LineChart(ctx,paddingArr,arrowArr,data){
-        this.ctx=ctx;
-        this.paddingArr=paddingArr;
-        this.arrowArr=arrowArr;
-        this.data=data;
-        this.arrowHeight=arrowArr[0];
-        this.arrowWidth=arrowArr[1];
-
-        //计算上顶点的距离
-        this.vertexTop={
-            x:this.paddingArr[3],
-            y:this.paddingArr[0]
-        };
-        //计算原点的距离
-        this.origin={
-            x:this.paddingArr[3],
-            y:this.ctx.canvas.height-this.paddingArr[2]
-        };
-        //计算右边点的距离
-        this.vertexRight={
-            x:this.ctx.canvas.width-this.paddingArr[1],
-            y:this.ctx.canvas.height-this.paddingArr[2]
-        };
-        this.process();
-    }
-
-    LineChart.prototype={
-        //设置构造函数
-        constructor:LineChart,
-        //绘制坐标轴中的两条线
-        drawZuobiao:function(){
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.vertexTop.x, this.vertexTop.y);
-            this.ctx.lineTo(this.origin.x, this.origin.y);
-            this.ctx.lineTo(this.vertexRight.x, this.vertexRight.y);
-            this.ctx.stroke();
-        },
-        drawArrow:function(){
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.vertexTop.x, this.vertexTop.y);
-            this.ctx.lineTo(this.vertexTop.x-this.arrowWidth/2, this.vertexTop.y+this.arrowHeight);
-            this.ctx.lineTo(this.vertexTop.x, this.vertexTop.y+this.arrowHeight/2);
-            this.ctx.lineTo(this.vertexTop.x+this.arrowWidth/2, this.vertexTop.y+this.arrowHeight);
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.stroke();
-
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.vertexRight.x, this.vertexRight.y);
-            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight, this.vertexRight.y-this.arrowWidth/2);
-            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight/2, this.vertexRight.y);
-            this.ctx.lineTo(this.vertexRight.x-this.arrowHeight, this.vertexRight.y+this.arrowWidth/2);
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.stroke();
-
-        },
-
-        process:function(){
-            this.processData=[];
-            //在这一部分将画布认识的坐标转化为本坐标系的坐标
-            for (var i = 0; i < this.data.length; i+=2) {
-                this.processData.push(this.origin.x+this.data[i]);
-                this.processData.push(this.origin.y-this.data[i+1]);
-            };
-
-        },
-
-        drawOrcle:function(){
-            this.ctx.beginPath();
-            for (var i = 0; i < this.processData.length; i+=2) {
-                this.ctx.arc(this.processData[i],this.processData[i+1], 5, 0, Math.PI*2);
-                this.ctx.fill();
-
-            };
-        },
-
-        drawLine:function(){
-            this.ctx.beginPath();
-            for (var i = 0; i < this.processData.length; i+=2) {
-                this.ctx.lineTo(this.processData[i], this.processData[i+1]);
-            };
-            this.ctx.stroke();
-
-        },
-        draw:function(){
-            this.drawZuobiao();
-            this.drawArrow();
-            this.drawOrcle();
-            this.drawLine();
-        }
-    };
-    var data = [];
-    $.post('/index/game/per?userId=1',function (returnJson) {
-       if(returnJson.status ==true){
-           var len=eval(returnJson.data).length;
-           for(var i=0;i<len;i++){
-               data[i]=returnJson.data[i];
-           }
-       }
-    });
-    var linechat=new LineChart(cxt,[20,20,20,20],[10,10],data);
-    linechat.draw();
-
-</script>-->
+<input type="hidden" id="playerId" value="<?php echo $playerId;?>">
