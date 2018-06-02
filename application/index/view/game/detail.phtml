@@ -14,15 +14,15 @@
     <div class="data-list">
         <div class="data-two">
             <div class="data-desc">投篮命中率:</div>
-            <span class="data-avg2"><?php echo number_format(($avg['hit']+$avg['three_hit'])/($avg['shoot']+$avg['three_shoot']),4,'.','')*100;?>%</span>
+            <span class="data-avg2"><?php echo ($avg['three_shoot']+$avg['shoot'])==0?0:number_format(($avg['hit']+$avg['three_hit'])/($avg['shoot']+$avg['three_shoot']),4,'.','')*100;?>%</span>
         </div>
         <div class="data-two">
             <div class="data-desc">三分命中率:</div>
-            <span class="data-avg2"><?php echo number_format($avg['three_hit']/$avg['three_shoot'],4,'.','')*100;?>%</span>
+            <span class="data-avg2"><?php echo $avg['three_shoot']==0?0:number_format($avg['three_hit']/$avg['three_shoot'],4,'.','')*100;?>%</span>
         </div>
         <div class="data-two">
             <div class="data-desc">罚篮命中率:</div>
-            <span class="data-avg2"><?php echo number_format($avg['penalty_hit']/$avg['penalty_shoot'],4,'.','')*100;?>%</span>
+            <span class="data-avg2"><?php echo $avg['penalty_shoot']==0?0:number_format($avg['penalty_hit']/$avg['penalty_shoot'],4,'.','')*100;?>%</span>
         </div>
         <div class="data-two">
             <div class="data-desc">场均上场时间:</div>
