@@ -30,7 +30,7 @@
                     <td><?php echo $schedule['over']==1?$schedule['home_score'].' : '.$schedule['visiting_score']:'未开赛';?></td>
                     <td>
                         <?php if($schedule['over']==1):?>
-                            <a href="/user/schedule/detail?id=<?php echo $schedule['Id'];?>">查看详情</a>
+                            <a href="/index/game/index?id=<?php echo $schedule['Id'];?>">查看详情</a>
                         <?php else:?>
                             <a href="/user/game?id=<?php echo $schedule['Id'];?>">进入比赛</a>
                         <?php endif;?>
